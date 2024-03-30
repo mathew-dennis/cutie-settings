@@ -52,9 +52,10 @@ CutiePage {
 			CutieListItem {
 				Layout.fillWidth: true
 				visible: CutieWifiSettings.activeAccessPoint
-				icon.source: visible ? ("image://icon/network-wireless-signal-" +
+				icon.name: visible ? ("network-wireless-signal-" +
 					iconHelper.names[Math.floor((CutieWifiSettings.activeAccessPoint.data["Strength"] - 1) / 20)]
 				+ "-symbolic") : ""
+				icon.color: Atmosphere.textColor
 				text: visible ? CutieWifiSettings.activeAccessPoint.data["Ssid"] : ""
 				subText: visible ? ((CutieWifiSettings.activeAccessPoint.data["Frequency"] > 4 ? "5GHz " : "2.4GHz ") 
 					+ ((CutieWifiSettings.activeAccessPoint.data["Flags"] & 0x1) == 0 ? "Open" : 
@@ -80,9 +81,10 @@ CutiePage {
 			width: parent ? parent.width : 0
 			CutieListItem {
 				id: litem
-				icon.source: ("image://icon/network-wireless-signal-" +
+				icon.name: ("network-wireless-signal-" +
 					iconHelper.names[Math.floor((modelData.data["Strength"] - 1) / 20)]
 				+ "-symbolic")
+				icon.color: Atmosphere.textColor
 				text: modelData.data["Ssid"]
 				subText: ((modelData.data["Frequency"] > 4000 ? "5GHz " : "2.4GHz ") 
 					+ ((modelData.data["Flags"] & 0x1) == 0 ? "Open" : 

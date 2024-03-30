@@ -29,17 +29,18 @@ CutiePage {
 				((CutieWifiSettings.accessPoints.filter(
 				e => e.data["Ssid"] == modelData.data.connection.id)
 				.length > 0) ? qsTr("Available") : qsTr("Unavailable"))) : ""
-			icon.source: CutieWifiSettings.activeAccessPoint 
+			icon.name: CutieWifiSettings.activeAccessPoint 
 				&& "Ssid" in CutieWifiSettings.activeAccessPoint.data 
 				&& "connection" in modelData.data &&
 				(CutieWifiSettings.accessPoints.filter(
 				e => e.data["Ssid"] == modelData.data.connection.id)
-				.length > 0) ? ("image://icon/network-wireless-signal-" +
+				.length > 0) ? ("network-wireless-signal-" +
 				iconHelper.names[Math.floor((CutieWifiSettings.accessPoints.filter(
 				e => e.data["Ssid"] == modelData.data.connection.id
 				)[0].data["Strength"] - 1) / 20)]
 				+ "-symbolic") 
-				: "image://icon/network-wireless-offline-symbolic"
+				: "network-wireless-offline-symbolic"
+			icon.color: Atmosphere.textColor
 			onClicked: {
 				menu.open();
 			}

@@ -11,22 +11,22 @@ CutieWindow {
 	property var pages: [
 		{
 			text: qsTr("Wi-Fi"),
-			icon: "image://icon/network-wireless-symbolic",
+			icon: "network-wireless-symbolic",
 			component: Qt.createComponent("Wifi.qml")
 		},
 		{
 			text: qsTr("Mobile Network"),
-			icon: "image://icon/network-cellular-symbolic",
+			icon: "network-cellular-symbolic",
 			component: Qt.createComponent("MobileNetwork.qml")
 		},
 		{
 			text: qsTr("Audio"),
-			icon: "image://icon/audio-speakers-symbolic",
+			icon: "audio-speakers-symbolic",
 			component: Qt.createComponent("Audio.qml")
 		},
 		{
 			text: qsTr("About"),
-			icon: "image://icon/help-about-symbolic",
+			icon: "help-about-symbolic",
 			component: Qt.createComponent("About.qml")
 		}
 	]
@@ -44,7 +44,8 @@ CutieWindow {
 
 			delegate: CutieListItem {
 				text: mainWindow.pages[index]["text"]
-				icon.source: mainWindow.pages[index]["icon"]
+				icon.name: mainWindow.pages[index]["icon"]
+				icon.color: Atmosphere.textColor
 
 				onClicked: {
 					if (mainWindow.pages[index]["component"].status === Component.Ready) {
