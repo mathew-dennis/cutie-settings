@@ -126,7 +126,7 @@ CutiePage {
 		}
 	}
 
-	Text {
+	CutieLabel {
 		visible: !CutieWifiSettings.wirelessEnabled
 		text: qsTr("Wi-Fi is disabled")
 		anchors.centerIn: parent
@@ -134,9 +134,6 @@ CutiePage {
 		font.pixelSize: 24
 		horizontalAlignment: Text.AlignHCenter
 		verticalAlignment: Text.AlignVCenter
-		font.family: "Lato"
-		font.weight: Font.Normal
-		color: (Atmosphere.variant == "dark") ? "white" : "black"
 		elide: Text.ElideRight
 	}
 }
