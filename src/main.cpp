@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	QGuiApplication app(argc, argv);
 	QString locale = QLocale::system().name();
 	QTranslator translator;
-	translator.load(QString(":/i18n/cutie-settings_") + locale);
+	(void)translator.load(QString(":/i18n/cutie-settings_") + locale);
 	app.installTranslator(&translator);
 	QQmlApplicationEngine engine;
 	const QUrl url(QStringLiteral("qrc:/main.qml"));
