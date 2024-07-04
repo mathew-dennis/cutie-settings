@@ -1,4 +1,5 @@
 import Cutie
+import Cutie.Networking
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
