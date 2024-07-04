@@ -23,6 +23,7 @@ Depends: ${misc:Depends},
          ${shlibs:Depends},
          qml6-module-cutie,
          qml6-module-cutievolume,
+         qml6-module-cutienetworking,
          polkit-kde-agent-1,
 Description: This package contains Cutie Settings app.
 
