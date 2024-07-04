@@ -19,6 +19,10 @@ Package: cutie-settings
 Architecture: any
 Multi-Arch: foreign
 Pre-Depends: ${misc:Pre-Depends}
-Depends: ${misc:Depends}, ${shlibs:Depends}, qml6-module-cutie, polkit-kde-agent-1
+Depends: ${misc:Depends}, 
+         ${shlibs:Depends},
+         qml6-module-cutie,
+         qml6-module-cutievolume,
+         polkit-kde-agent-1,
 Description: This package contains Cutie Settings app.
 
