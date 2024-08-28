@@ -23,6 +23,11 @@ CutieWindow {
 			text: qsTr("Audio"),
 			icon: "audio-speakers-symbolic",
 			component: Qt.createComponent("Audio.qml")
+		},		
+		{
+			text: qsTr("Home Screen"),
+			icon: "audio-speakers-symbolic",
+			component: Qt.createComponent("HomeScreen.qml")
 		},
 		{
 			text: qsTr("About"),
