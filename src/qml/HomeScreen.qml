@@ -39,8 +39,8 @@ CutiePage {
 
     function toggleVisibility() {
         let data = favoriteStore.data;
-        let visibility = data["visibility"];
-        data["visibility"] = !visibility;
+        let visibility = data.visibility;
+        data.visibility = !visibility;
         favoriteStore.data = data;
     }
 }
