@@ -26,7 +26,7 @@ CutieWindow {
 		},		
 		{
 			text: qsTr("Home Screen"),
-			icon: "audio-speakers-symbolic",
+			icon: "user-home-symbolic",
 			component: Qt.createComponent("HomeScreen.qml")
 		},
 		{
