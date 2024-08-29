@@ -8,6 +8,6 @@
         <file>Audio.qml</file>
         <file>MobileNetwork.qml</file>
         <file>ApnCfg.qml</file>
-        <file>HomeSreen.qml</file>
+        <file>HomeScreen.qml</file>
     </qresource>
 </RCC>
