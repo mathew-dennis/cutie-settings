@@ -33,7 +33,7 @@ CutiePage {
 
     CutieStore {
         id: favoriteStore
-        appName: "cutie-settings"
+        appName: "cutie-launcher"
         storeName: "favoriteItems"
     }
 
