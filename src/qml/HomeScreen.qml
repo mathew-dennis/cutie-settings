@@ -37,11 +37,18 @@ CutiePage {
         storeName: "favoriteItems"
     }
 
+    Component.onCompleted: {
+        if (!favoriteStore.data.hasOwnProperty("visibility")) {
+            let data = favoriteStore.data;
+            data.visibility = true;
+            favoriteStore.data = data;
+        }
+    }
+
     function toggleVisibility() {
         let data = favoriteStore.data;
         data.visibility = !data.visibility;
         favoriteStore.data = data;
-        console.log(" settingds app: Visibility toggled. Current state:", favoriteStore.data.visibility);
-
+        console.log("settings app: Visibility toggled. Current state:", favoriteStore.data.visibility);
     }
 }
