@@ -41,5 +41,7 @@ CutiePage {
         let data = favoriteStore.data;
         data.visibility = !data.visibility;
         favoriteStore.data = data;
+        console.log(" settingds app: Visibility toggled. Current state:", favoriteStore.data.visibility);
+
     }
 }
