@@ -18,10 +18,10 @@ CutiePage {
             
             Item {
                 id: showFavouritsText
-				leftPadding: 20
-				rightPadding: 20
-				topPadding: 10
-				bottomPadding: 10
+				leftMargin: 20
+				rightMargin: 20
+				topMargin: 10
+				bottomMargin: 10
                 width: parent.width - 35
                 height: visibilityToggle.height
                     
