@@ -35,7 +35,6 @@ CutiePage {
                         id: visibilityToggle
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.verticalCenterOffset: 5
                         anchors.rightMargin: 15
                         checked: "visibility" in favoriteStore.data ? favoriteStore.data["visibility"] : true
 
