@@ -14,14 +14,16 @@ CutiePage {
                 id: header
                 title: qsTr("Home Screen")
                 width: parent.width
-
-                Item {
-                    id: showFavouritsText
-                    Layout.leftMargin: 20
-                    Layout.topMargin: 10
-                    Layout.bottomMargin: 3
-                    width: parent.width - 35
-                    height: visibilityToggle.height
+            }
+            
+            Item {
+                id: showFavouritsText
+				leftPadding: 20
+				rightPadding: 20
+				topPadding: 10
+				bottomPadding: 10
+                width: parent.width - 35
+                height: visibilityToggle.height
                     
                     CutieLabel {
                         text: qsTr("Favorites Dock")
@@ -47,7 +49,7 @@ CutiePage {
                         }
                     }
                 }
-            }
+           
         }
     }
 
