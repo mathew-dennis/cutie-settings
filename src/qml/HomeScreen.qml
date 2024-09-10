@@ -16,14 +16,13 @@ CutiePage {
                 width: parent.width
             }
             
-            Item {
-                id: showFavouritsText
-				leftMargin: 20
-				rightMargin: 20
-				topMargin: 10
-				bottomMargin: 10
-                width: parent.width - 35
-                height: visibilityToggle.height
+                Item {
+                    id: showFavouritsText
+                    Layout.leftMargin: 20
+                    Layout.topMargin: 10
+                    Layout.bottomMargin: 3
+                    width: parent.width - 35
+                    height: visibilityToggle.height
                     
                     CutieLabel {
                         text: qsTr("Favorites Dock")
