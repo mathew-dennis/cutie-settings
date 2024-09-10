@@ -27,6 +27,8 @@ CutiePage {
                     CutieLabel {
                         text: qsTr("Favorites Dock")
                         horizontalAlignment: Text.AlignLeft
+                        leftPadding: 20
+				        rightPadding: 20
                         topPadding: 10
                         bottomPadding: 10
                         anchors.left: parent.left
