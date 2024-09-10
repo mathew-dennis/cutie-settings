@@ -21,10 +21,14 @@ CutiePage {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.verticalCenterOffset: 5
                     anchors.rightMargin: 15
-                    checked: favoriteStore.data["visibility"]
+                    checked: "visibility" in favoriteStore.data ? favoriteStore.data["visibility"] : true
 
                     onToggled: {
-                        toggleVisibility();
+                        let data = favoriteStore.data;
+                        data.visibility = visibilityToggle.checked;
+                        favoriteStore.data = data;
+                        console.log("Settings app: Visibility toggled. Current state:", favoriteStore.data.visibility);
+
                     }
                 }
             }
@@ -35,20 +39,5 @@ CutiePage {
         id: favoriteStore
         appName: "cutie-launcher"
         storeName: "favoriteItems"
-    }
-
-    Component.onCompleted: {
-        if (!favoriteStore.data.hasOwnProperty("visibility")) {
-            let data = favoriteStore.data;
-            data.visibility = true;
-            favoriteStore.data = data;
-        }
-    }
-
-    function toggleVisibility() {
-        let data = favoriteStore.data;
-        data.visibility = !data.visibility;
-        favoriteStore.data = data;
-        console.log("settings app: Visibility toggled. Current state:", favoriteStore.data.visibility);
     }
 }
