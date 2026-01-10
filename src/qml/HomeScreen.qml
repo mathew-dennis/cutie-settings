@@ -10,7 +10,8 @@ CutiePage {
     // --- Variables ---
     property int commonHeight: 60
     property int commonRadius: 6
-    property color boxColor: "white"
+    // Changed boxColor to transparent
+    property color boxColor: "transparent" 
     property color commonBorderColor: "#cccccc"
     property int innerGap: 10 
 
@@ -53,9 +54,6 @@ CutiePage {
                 id: masterGreenBox
                 width: parent.width * 0.6
                 anchors.horizontalCenter: parent.horizontalCenter
-                
-                // Fixed height to ensure children are visible
-                // Calculation: Inner boxes + padding on top/bottom
                 height: commonHeight + (innerGap * 2)
                 
                 color: "transparent"
@@ -69,11 +67,11 @@ CutiePage {
                     anchors.margins: innerGap 
                     spacing: innerGap 
 
-                    // BLUE GROUP (3 boxes)
+                    // BLUE GROUP
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 3
-                        height: commonHeight // Explicit height
+                        height: commonHeight
                         color: "transparent"
                         border.color: "blue"
                         radius: 8
@@ -83,35 +81,38 @@ CutiePage {
                             anchors.margins: 4
                             spacing: 4
 
-                            // Small Box 1
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
-                                color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                                Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20 }
+                                color: boxColor
+                                border.color: commonBorderColor
+                                radius: commonRadius
+                                Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20; color: "black" }
                             }
-                            // Small Box 2
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
-                                color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                                color: boxColor
+                                border.color: commonBorderColor
+                                radius: commonRadius
                                 Rectangle {
                                     width: Math.min(parent.width * 0.7, 40); height: 4; color: "black"; opacity: 0.2; radius: 2 
                                     anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
                                 }
                             }
-                            // Small Box 3
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
-                                color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                                Text { text: "apps"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20 }
+                                color: boxColor
+                                border.color: commonBorderColor
+                                radius: commonRadius
+                                Text { text: "apps"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20; color: "black" }
                             }
                         }
                     }
 
-                    // RED GROUP (2 boxes)
+                    // RED GROUP
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 2
-                        height: commonHeight // Explicit height
+                        height: commonHeight
                         color: "transparent"
                         border.color: "red"
                         radius: 8
@@ -121,18 +122,20 @@ CutiePage {
                             anchors.margins: 4
                             spacing: 4
 
-                            // Small Box 4
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
-                                color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                                Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20 }
+                                color: boxColor
+                                border.color: commonBorderColor
+                                radius: commonRadius
+                                Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20; color: "black" }
                             }
-                            // Small Box 5
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
-                                color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                                color: boxColor
+                                border.color: commonBorderColor
+                                radius: commonRadius
                                 Text { 
-                                    text: "apps"; font.pixelSize: 8; 
+                                    text: "apps"; font.pixelSize: 8; color: "black"
                                     anchors.top: parent.top; anchors.topMargin: 5; 
                                     anchors.horizontalCenter: parent.horizontalCenter; 
                                     visible: parent.width > 20 
@@ -145,7 +148,7 @@ CutiePage {
                         }
                     }
                 } 
-            } // End Green Box
+            }
         }
     }
 
