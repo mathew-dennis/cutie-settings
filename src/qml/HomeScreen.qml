@@ -93,7 +93,7 @@ CutiePage {
                         }
 
                         CutieLabel {
-                            text: qsTr("split")
+                            text: qsTr("Split")
                             Layout.alignment: Qt.AlignHCenter
                             font.pixelSize: 16 
                             font.bold: isSplitMode
