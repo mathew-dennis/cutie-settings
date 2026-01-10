@@ -7,14 +7,16 @@ import Cutie.Store
 CutiePage {
     id: homeScreenPage
 
-    // --- Variables (Adjust these to change the look) ---
-    property int commonWidth: 90
-    property int commonHeight: 100
-    property int commonRadius: 12
-    property int commonSpacing: 8
+    // --- Dynamic Variables (Responsive Scaling) ---
+    // This calculates width based on the window. 0.15 means each small box takes 15% of the screen.
+    property real boxWidthMultiplier: 0.16 
+    property int commonWidth: Math.max(60, parent.width * boxWidthMultiplier) 
+    property int commonHeight: 80
+    property int commonRadius: 8
+    property int commonSpacing: 4
     property color boxColor: "white"
     property color commonBorderColor: "#cccccc"
-    property int groupPadding: 12
+    property int groupPadding: 8
 
     Flickable {
         anchors.fill: parent
@@ -52,7 +54,6 @@ CutiePage {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.rightMargin: 15
                     checked: "visibility" in favoriteStore.data ? favoriteStore.data["visibility"] : true
-
                     onToggled: {
                         let data = favoriteStore.data;
                         data.visibility = visibilityToggle.checked;
@@ -61,23 +62,20 @@ CutiePage {
                 }
             }
 
-            // --- RESPONSIVE GROUPED BOXES SECTION ---
-            // Flow acts like a Row that wraps to a new line if it runs out of width
-            Flow {
-                width: parent.width
-                padding: 15
-                spacing: 20
-                flow: Flow.LeftToRight
+            // --- RESPONSIVE ROW (FORCED SINGLE LINE) ---
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 15 // Gap between the Blue and Red groups
 
                 // BIG BOX 1: Group of 3
                 Rectangle {
                     id: bigBox1
-                    width: Math.min(parent.width - 30, (commonWidth * 3) + (commonSpacing * 2) + (groupPadding * 2))
+                    width: (commonWidth * 3) + (commonSpacing * 2) + (groupPadding * 2)
                     height: commonHeight + (groupPadding * 2)
                     color: "transparent"
                     border.color: "blue"
                     border.width: 1
-                    radius: 15
+                    radius: 12
 
                     Row {
                         anchors.centerIn: parent
@@ -87,24 +85,24 @@ CutiePage {
                         Rectangle {
                             width: commonWidth; height: commonHeight; color: boxColor; border.color: commonBorderColor; radius: commonRadius
                             Text {
-                                text: "notifications"; font.pixelSize: 9; color: "black"
-                                anchors.top: parent.top; anchors.left: parent.left; anchors.margins: 8 
+                                text: "notif"; font.pixelSize: 8; color: "black"
+                                anchors.top: parent.top; anchors.left: parent.left; anchors.margins: 5 
                             }
                         }
                         // Box 2
                         Rectangle {
                             width: commonWidth; height: commonHeight; color: boxColor; border.color: commonBorderColor; radius: commonRadius
                             Rectangle {
-                                width: parent.width * 0.7; height: 5; color: "black"; opacity: 0.2; radius: 3 
-                                anchors.bottom: parent.bottom; anchors.bottomMargin: 12; anchors.horizontalCenter: parent.horizontalCenter
+                                width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
+                                anchors.bottom: parent.bottom; anchors.bottomMargin: 8; anchors.horizontalCenter: parent.horizontalCenter
                             }
                         }
                         // Box 3
                         Rectangle {
                             width: commonWidth; height: commonHeight; color: boxColor; border.color: commonBorderColor; radius: commonRadius
                             Text { 
-                                text: "no running apps"; font.pixelSize: 9; color: "black"
-                                anchors.centerIn: parent; horizontalAlignment: Text.AlignHCenter; width: parent.width - 10; wrapMode: Text.WordWrap
+                                text: "apps"; font.pixelSize: 8; color: "black"
+                                anchors.centerIn: parent; horizontalAlignment: Text.AlignHCenter; width: parent.width - 4; wrapMode: Text.WordWrap
                             }
                         }
                     }
@@ -113,12 +111,12 @@ CutiePage {
                 // BIG BOX 2: Group of 2
                 Rectangle {
                     id: bigBox2
-                    width: Math.min(parent.width - 30, (commonWidth * 2) + commonSpacing + (groupPadding * 2))
+                    width: (commonWidth * 2) + commonSpacing + (groupPadding * 2)
                     height: commonHeight + (groupPadding * 2)
                     color: "transparent"
                     border.color: "red"
                     border.width: 1
-                    radius: 15
+                    radius: 12
 
                     Row {
                         anchors.centerIn: parent
@@ -128,25 +126,25 @@ CutiePage {
                         Rectangle {
                             width: commonWidth; height: commonHeight; color: boxColor; border.color: commonBorderColor; radius: commonRadius
                             Text {
-                                text: "notifications"; font.pixelSize: 9; color: "black"
-                                anchors.top: parent.top; anchors.left: parent.left; anchors.margins: 8 
+                                text: "notif"; font.pixelSize: 8; color: "black"
+                                anchors.top: parent.top; anchors.left: parent.left; anchors.margins: 5 
                             }
                         }
                         // Box 5
                         Rectangle {
                             width: commonWidth; height: commonHeight; color: boxColor; border.color: commonBorderColor; radius: commonRadius
                             Text { 
-                                text: "no running apps"; font.pixelSize: 9; color: "black"
-                                anchors.centerIn: parent; horizontalAlignment: Text.AlignHCenter; width: parent.width - 10; wrapMode: Text.WordWrap
+                                text: "apps"; font.pixelSize: 8; color: "black"
+                                anchors.centerIn: parent; horizontalAlignment: Text.AlignHCenter; width: parent.width - 4; wrapMode: Text.WordWrap
                             }
                             Rectangle {
-                                width: parent.width * 0.7; height: 5; color: "black"; opacity: 0.2; radius: 3 
-                                anchors.bottom: parent.bottom; anchors.bottomMargin: 12; anchors.horizontalCenter: parent.horizontalCenter
+                                width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
+                                anchors.bottom: parent.bottom; anchors.bottomMargin: 8; anchors.horizontalCenter: parent.horizontalCenter
                             }
                         }
                     }
                 }
-            } // End of Flow
+            } // End of Row
         }
     }
 
