@@ -48,87 +48,98 @@ CutiePage {
                 }
             }
 
-            // --- THE FIX: Using RowLayout to prevent overflow ---
-            RowLayout {
+            // --- THE MASTER GREEN BOX ---
+            Rectangle {
+                id: masterGreenBox
                 width: parent.width
-                spacing: 10
-                // Adds a small margin on the left/right of the whole row
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: 10
-                anchors.rightMargin: 10
+                // Height calculates based on the content inside + padding
+                height: innerLayout.height + 40 
+                color: "transparent"
+                border.color: "green"
+                border.width: 2
+                radius: 10
 
-                // BIG BOX 1 (Group of 3)
-                Rectangle {
-                    Layout.fillWidth: true // Allows this big box to shrink
-                    Layout.preferredWidth: 3 // Gives it more "weight" than the second box
-                    height: commonHeight + (groupPadding * 2)
-                    color: "transparent"
-                    border.color: "blue"
-                    radius: 8
-
-                    RowLayout {
-                        anchors.fill: parent
-                        anchors.margins: groupPadding
-                        spacing: 4
-
-                        // Small Box 1
-                        Rectangle {
-                            Layout.fillWidth: true; Layout.fillHeight: true
-                            color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                            Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 30 }
-                        }
-                        // Small Box 2
-                        Rectangle {
-                            Layout.fillWidth: true; Layout.fillHeight: true
-                            color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                            Rectangle {
-                                width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
-                                anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
-                            }
-                        }
-                        // Small Box 3
-                        Rectangle {
-                            Layout.fillWidth: true; Layout.fillHeight: true
-                            color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                            Text { text: "apps"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 30 }
-                        }
-                    }
-                }
-
-                // BIG BOX 2 (Group of 2)
-                Rectangle {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 2 // Slightly smaller than group 1
-                    height: commonHeight + (groupPadding * 2)
-                    color: "transparent"
-                    border.color: "red"
-                    radius: 8
+                // Inner Container to handle the 20% side padding
+                Item {
+                    id: paddingContainer
+                    // 20% padding on each side = 60% total width
+                    width: parent.width * 0.6 
+                    height: parent.height
+                    anchors.horizontalCenter: parent.horizontalCenter
 
                     RowLayout {
+                        id: innerLayout
                         anchors.fill: parent
-                        anchors.margins: groupPadding
-                        spacing: 4
+                        spacing: 10
 
-                        // Small Box 4
+                        // BIG BOX 1 (Group of 3 - Blue)
                         Rectangle {
-                            Layout.fillWidth: true; Layout.fillHeight: true
-                            color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                            Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 30 }
-                        }
-                        // Small Box 5
-                        Rectangle {
-                            Layout.fillWidth: true; Layout.fillHeight: true
-                            color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                            Text { text: "apps"; font.pixelSize: 8; anchors.top: parent.top; anchors.topMargin: 5; anchors.horizontalCenter: parent.horizontalCenter; visible: parent.width > 30 }
-                            Rectangle {
-                                width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
-                                anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 3
+                            height: commonHeight + (groupPadding * 2)
+                            color: "transparent"
+                            border.color: "blue"
+                            radius: 8
+
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.margins: groupPadding
+                                spacing: 4
+
+                                Rectangle {
+                                    Layout.fillWidth: true; Layout.fillHeight: true
+                                    color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                                    Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 25 }
+                                }
+                                Rectangle {
+                                    Layout.fillWidth: true; Layout.fillHeight: true
+                                    color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                                    Rectangle {
+                                        width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
+                                        anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                }
+                                Rectangle {
+                                    Layout.fillWidth: true; Layout.fillHeight: true
+                                    color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                                    Text { text: "apps"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 25 }
+                                }
                             }
                         }
-                    }
-                }
-            } // End of RowLayout
+
+                        // BIG BOX 2 (Group of 2 - Red)
+                        Rectangle {
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 2
+                            height: commonHeight + (groupPadding * 2)
+                            color: "transparent"
+                            border.color: "red"
+                            radius: 8
+
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.margins: groupPadding
+                                spacing: 4
+
+                                Rectangle {
+                                    Layout.fillWidth: true; Layout.fillHeight: true
+                                    color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                                    Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 25 }
+                                }
+                                Rectangle {
+                                    Layout.fillWidth: true; Layout.fillHeight: true
+                                    color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                                    Text { text: "apps"; font.pixelSize: 8; anchors.top: parent.top; anchors.topMargin: 5; anchors.horizontalCenter: parent.horizontalCenter; visible: parent.width > 25 }
+                                    Rectangle {
+                                        width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
+                                        anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
+                                    }
+                                }
+                            }
+                        }
+                    } // End of RowLayout
+                } // End of Padding Container
+            } // End of Green Box
         }
     }
 
