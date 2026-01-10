@@ -17,7 +17,7 @@ CutiePage {
     // Helper to read the current mode from the store
     property bool isSplitMode: ("InterfaceMode" in favoriteStore.data) 
                                ? (favoriteStore.data["InterfaceMode"] === split) 
-                               : split
+                               : merged
 
     Flickable {
         anchors.fill: parent
