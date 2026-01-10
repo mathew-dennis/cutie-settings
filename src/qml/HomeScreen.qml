@@ -123,7 +123,7 @@ CutiePage {
 
             CutieLabel {
                 id: layoutDescription
-                text: qsTr("Note: Choose 'Split' to separate notifications and apps into distinct views, or 'Merged' to combine them into a single streamlined dashboard.")
+                text: qsTr("Note: Choose 'Split' to separate favorite apps and running apps into distinct views, or 'Merged' to combine them into a single streamlined view.")
                 font.pixelSize: 11; opacity: 0.6; width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
                 wrapMode: Text.WordWrap
