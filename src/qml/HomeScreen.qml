@@ -11,7 +11,7 @@ CutiePage {
     property int commonHeight: 60
     property int innerGap: 10 
     
-    // Helper to check current state easily
+    // Helper to check current state
     property bool isSplit: "visibility" in favoriteStore.data ? favoriteStore.data["visibility"] : true
 
     Flickable {
@@ -58,19 +58,27 @@ CutiePage {
                 id: masterGreenBox
                 width: parent.width * 0.6
                 anchors.horizontalCenter: parent.horizontalCenter
-                // Increased height slightly to accommodate text labels
-                height: commonHeight + (innerGap * 4) 
-                color: "transparent"; border.color: "green"; border.width: 2; radius: 10
+                
+                // Uses implicitHeight to fit the buttons + labels + internal gaps
+                height: innerLayout.implicitHeight + (innerGap * 2)
+                
+                color: "transparent"
+                // #80 is 50% transparency in Hex (ARGB)
+                border.color: "#80008000" 
+                border.width: 2
+                radius: 10
 
                 RowLayout {
+                    id: innerLayout
                     anchors.fill: parent
-                    anchors.margins: innerGap; spacing: innerGap 
+                    anchors.margins: innerGap
+                    spacing: innerGap 
 
                     // --- BLUE SECTION (SPLIT) ---
                     ColumnLayout {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 3
-                        spacing: 5
+                        spacing: 8
 
                         CutieButton {
                             id: blueGroupButton
@@ -84,7 +92,7 @@ CutiePage {
                             background: Rectangle {
                                 color: "transparent"
                                 border.color: "blue"
-                                border.width: isSplit ? 2 : 1 // Highlight border if active
+                                border.width: isSplit ? 2 : 1
                                 radius: 8
                             }
                             contentItem: RowLayout {
@@ -100,7 +108,7 @@ CutiePage {
                             Layout.alignment: Qt.AlignHCenter
                             font.pixelSize: 10
                             font.bold: isSplit
-                            opacity: isSplit ? 1.0 : 0.5
+                            opacity: isSplit ? 1.0 : 0.4 // Text also uses transparency when inactive
                         }
                     }
 
@@ -108,7 +116,7 @@ CutiePage {
                     ColumnLayout {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 2
-                        spacing: 5
+                        spacing: 8
 
                         CutieButton {
                             id: redGroupButton
@@ -122,7 +130,7 @@ CutiePage {
                             background: Rectangle {
                                 color: "transparent"
                                 border.color: "red"
-                                border.width: !isSplit ? 2 : 1 // Highlight border if active
+                                border.width: !isSplit ? 2 : 1
                                 radius: 8
                             }
                             contentItem: RowLayout {
@@ -137,7 +145,7 @@ CutiePage {
                             Layout.alignment: Qt.AlignHCenter
                             font.pixelSize: 10
                             font.bold: !isSplit
-                            opacity: !isSplit ? 1.0 : 0.5
+                            opacity: !isSplit ? 1.0 : 0.4
                         }
                     }
                 } 
