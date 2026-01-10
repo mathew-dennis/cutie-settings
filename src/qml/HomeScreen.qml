@@ -14,10 +14,9 @@ CutiePage {
     property int commonHeight: 60
     property int innerGap: 10 
     
-    // Helper to read the current mode from the store
     property bool isSplitMode: ("InterfaceMode" in favoriteStore.data) 
                                ? (favoriteStore.data["InterfaceMode"] === split) 
-                               : merged
+                               : merged 
 
     Flickable {
         anchors.fill: parent
@@ -27,7 +26,7 @@ CutiePage {
         Column {
             id: mainColumn
             width: parent.width
-            spacing: 30 // Increased spacing for a cleaner look
+            spacing: 20
 
             CutiePageHeader {
                 id: header
@@ -35,14 +34,32 @@ CutiePage {
                 width: parent.width
             }
 
+            // --- INTERFACE LAYOUT SECTION ---
+            Column {
+                width: parent.width * 0.7
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 8
+
+                CutieLabel {
+                    text: qsTr("Interface Layout")
+                    font.pixelSize: 18
+                    font.bold: true
+                }
+
+                CutieLabel {
+                    text: qsTr("Note: Choose 'Split' to separate notifications and apps into distinct views, or 'Merged' to combine them into a single streamlined dashboard.")
+                    font.pixelSize: 11
+                    opacity: 0.6
+                    width: parent.width
+                    wrapMode: Text.WordWrap
+                }
+            }
+
             // --- THE MASTER GREEN BOX ---
-            // This now serves as the primary interface for changing modes
             Rectangle {
                 id: masterGreenBox
                 width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
-                
-                // Height adapts to the buttons and labels inside
                 height: innerLayout.implicitHeight + (innerGap * 2)
                 
                 color: "transparent"
@@ -58,90 +75,59 @@ CutiePage {
 
                     // --- BLUE SECTION (SPLIT) ---
                     ColumnLayout {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 3
-                        spacing: 12
-
+                        Layout.fillWidth: true; Layout.preferredWidth: 3; spacing: 12
                         CutieButton {
-                            id: blueGroupButton
-                            Layout.fillWidth: true
-                            implicitHeight: commonHeight
-                            
+                            Layout.fillWidth: true; implicitHeight: commonHeight
                             onClicked: {
                                 let data = favoriteStore.data;
                                 data.InterfaceMode = split;
                                 favoriteStore.data = data;
-                                console.log("home - InterfaceMode set to split");
                             }
-
                             background: Rectangle {
                                 color: "transparent"
                                 border.color: "blue"
-                                // Thicker border when selected
                                 border.width: isSplitMode ? 2 : 1
                                 radius: 8
                             }
-
                             contentItem: RowLayout {
-                                anchors.fill: parent
-                                anchors.margins: 4
-                                spacing: 4
+                                anchors.fill: parent; anchors.margins: 4; spacing: 4
                                 Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
                                 Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
                                 Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
                             }
                         }
-
                         CutieLabel {
-                            text: qsTr("Split")
-                            Layout.alignment: Qt.AlignHCenter
-                            font.pixelSize: 16 
-                            font.bold: isSplitMode
-                            // Fades text if not selected
+                            text: qsTr("split"); Layout.alignment: Qt.AlignHCenter
+                            font.pixelSize: 16; font.bold: isSplitMode
                             opacity: isSplitMode ? 1.0 : 0.4
                         }
                     }
 
                     // --- RED SECTION (MERGED) ---
                     ColumnLayout {
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 2
-                        spacing: 12
-
+                        Layout.fillWidth: true; Layout.preferredWidth: 2; spacing: 12
                         CutieButton {
-                            id: redGroupButton
-                            Layout.fillWidth: true
-                            implicitHeight: commonHeight
-                            
+                            Layout.fillWidth: true; implicitHeight: commonHeight
                             onClicked: {
                                 let data = favoriteStore.data;
                                 data.InterfaceMode = merged;
                                 favoriteStore.data = data;
-                                console.log("home - InterfaceMode set to merged");
                             }
-
                             background: Rectangle {
                                 color: "transparent"
                                 border.color: "red"
-                                // Thicker border when selected
                                 border.width: !isSplitMode ? 2 : 1
                                 radius: 8
                             }
-
                             contentItem: RowLayout {
-                                anchors.fill: parent
-                                anchors.margins: 4
-                                spacing: 4
+                                anchors.fill: parent; anchors.margins: 4; spacing: 4
                                 Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
                                 Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
                             }
                         }
-
                         CutieLabel {
-                            text: qsTr("merged")
-                            Layout.alignment: Qt.AlignHCenter
-                            font.pixelSize: 16
-                            font.bold: !isSplitMode
+                            text: qsTr("merged"); Layout.alignment: Qt.AlignHCenter
+                            font.pixelSize: 16; font.bold: !isSplitMode
                             opacity: !isSplitMode ? 1.0 : 0.4
                         }
                     }
