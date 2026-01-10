@@ -12,8 +12,6 @@ CutiePage {
     property int commonRadius: 6
     property color boxColor: "white"
     property color commonBorderColor: "#cccccc"
-    
-    // Consistent spacing: gap inside boxes and gap between boxes
     property int innerGap: 10 
 
     Flickable {
@@ -24,7 +22,7 @@ CutiePage {
         Column {
             id: mainColumn
             width: parent.width
-            spacing: 15
+            spacing: 20
 
             CutiePageHeader {
                 id: header
@@ -50,16 +48,17 @@ CutiePage {
                 }
             }
 
-            // --- THE MASTER GREEN BOX ---
+            // --- THE MASTER GREEN BOX (FIXED) ---
             Rectangle {
                 id: masterGreenBox
-                // Apply 20% padding OUTSIDE the green box
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.leftMargin: parent.width * 0.2
-                anchors.rightMargin: parent.width * 0.2
+                // Calculate width to be exactly 60% (leaving 20% on each side)
+                width: parent.width * 0.6
+                // Center it horizontally within the Column
+                anchors.horizontalCenter: parent.horizontalCenter
                 
-                height: innerLayout.height + (innerGap * 2)
+                // Height fits the RowLayout + the top/bottom gap
+                height: innerLayout.implicitHeight + (innerGap * 2)
+                
                 color: "transparent"
                 border.color: "green"
                 border.width: 2
@@ -67,24 +66,23 @@ CutiePage {
 
                 RowLayout {
                     id: innerLayout
-                    // Using anchors.fill with margins creates the INSIDE padding
+                    // Fill the green box and apply the internal padding
                     anchors.fill: parent
                     anchors.margins: innerGap 
-                    // This spacing matches the gap between the two boxes
                     spacing: innerGap 
 
-                    // BIG BOX 1 (Group of 3 - Blue)
+                    // BLUE GROUP (3 boxes)
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 3
-                        height: commonHeight
+                        Layout.fillHeight: true
                         color: "transparent"
                         border.color: "blue"
                         radius: 8
 
                         RowLayout {
                             anchors.fill: parent
-                            anchors.margins: 4 // Internal box margin
+                            anchors.margins: 4
                             spacing: 4
 
                             Rectangle {
@@ -96,7 +94,7 @@ CutiePage {
                                 Layout.fillWidth: true; Layout.fillHeight: true
                                 color: boxColor; border.color: commonBorderColor; radius: commonRadius
                                 Rectangle {
-                                    width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
+                                    width: Math.min(parent.width * 0.7, 40); height: 4; color: "black"; opacity: 0.2; radius: 2 
                                     anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
                                 }
                             }
@@ -108,11 +106,11 @@ CutiePage {
                         }
                     }
 
-                    // BIG BOX 2 (Group of 2 - Red)
+                    // RED GROUP (2 boxes)
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 2
-                        height: commonHeight
+                        Layout.fillHeight: true
                         color: "transparent"
                         border.color: "red"
                         radius: 8
@@ -130,16 +128,21 @@ CutiePage {
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
                                 color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                                Text { text: "apps"; font.pixelSize: 8; anchors.top: parent.top; anchors.topMargin: 5; anchors.horizontalCenter: parent.horizontalCenter; visible: parent.width > 20 }
+                                Text { 
+                                    text: "apps"; font.pixelSize: 8; 
+                                    anchors.top: parent.top; anchors.topMargin: 5; 
+                                    anchors.horizontalCenter: parent.horizontalCenter; 
+                                    visible: parent.width > 20 
+                                }
                                 Rectangle {
-                                    width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
+                                    width: Math.min(parent.width * 0.7, 40); height: 4; color: "black"; opacity: 0.2; radius: 2 
                                     anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
                                 }
                             }
                         }
                     }
-                } // End of RowLayout
-            } // End of Green Box
+                } 
+            } // End Green Box
         }
     }
 
