@@ -48,16 +48,15 @@ CutiePage {
                 }
             }
 
-            // --- THE MASTER GREEN BOX (FIXED) ---
+            // --- THE MASTER GREEN BOX ---
             Rectangle {
                 id: masterGreenBox
-                // Calculate width to be exactly 60% (leaving 20% on each side)
                 width: parent.width * 0.6
-                // Center it horizontally within the Column
                 anchors.horizontalCenter: parent.horizontalCenter
                 
-                // Height fits the RowLayout + the top/bottom gap
-                height: innerLayout.implicitHeight + (innerGap * 2)
+                // Fixed height to ensure children are visible
+                // Calculation: Inner boxes + padding on top/bottom
+                height: commonHeight + (innerGap * 2)
                 
                 color: "transparent"
                 border.color: "green"
@@ -66,7 +65,6 @@ CutiePage {
 
                 RowLayout {
                     id: innerLayout
-                    // Fill the green box and apply the internal padding
                     anchors.fill: parent
                     anchors.margins: innerGap 
                     spacing: innerGap 
@@ -75,7 +73,7 @@ CutiePage {
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 3
-                        Layout.fillHeight: true
+                        height: commonHeight // Explicit height
                         color: "transparent"
                         border.color: "blue"
                         radius: 8
@@ -85,11 +83,13 @@ CutiePage {
                             anchors.margins: 4
                             spacing: 4
 
+                            // Small Box 1
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
                                 color: boxColor; border.color: commonBorderColor; radius: commonRadius
                                 Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20 }
                             }
+                            // Small Box 2
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
                                 color: boxColor; border.color: commonBorderColor; radius: commonRadius
@@ -98,6 +98,7 @@ CutiePage {
                                     anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
                                 }
                             }
+                            // Small Box 3
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
                                 color: boxColor; border.color: commonBorderColor; radius: commonRadius
@@ -110,7 +111,7 @@ CutiePage {
                     Rectangle {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 2
-                        Layout.fillHeight: true
+                        height: commonHeight // Explicit height
                         color: "transparent"
                         border.color: "red"
                         radius: 8
@@ -120,11 +121,13 @@ CutiePage {
                             anchors.margins: 4
                             spacing: 4
 
+                            // Small Box 4
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
                                 color: boxColor; border.color: commonBorderColor; radius: commonRadius
                                 Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20 }
                             }
+                            // Small Box 5
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
                                 color: boxColor; border.color: commonBorderColor; radius: commonRadius
