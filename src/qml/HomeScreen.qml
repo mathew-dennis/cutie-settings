@@ -7,7 +7,6 @@ import Cutie.Store
 CutiePage {
     id: homeScreenPage
 
-    // --- Configuration Constants ---
     readonly property bool split: true
     readonly property bool merged: false
 
@@ -20,6 +19,7 @@ CutiePage {
 
     Flickable {
         anchors.fill: parent
+        // contentHeight handles the growing list of toggles automatically
         contentHeight: mainColumn.height + 40
         clip: true
 
@@ -34,28 +34,15 @@ CutiePage {
                 width: parent.width
             }
 
-            // --- INTERFACE LAYOUT SECTION ---
-            Column {
+            // --- SECTION 1: INTERFACE LAYOUT ---
+            CutieLabel {
+                text: qsTr("Interface Layout")
+                font.pixelSize: 18
+                font.bold: true
                 width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 8
-
-                CutieLabel {
-                    text: qsTr("Interface Layout")
-                    font.pixelSize: 18
-                    font.bold: true
-                }
-
-                CutieLabel {
-                    text: qsTr("Note: Choose 'Split' to separate notifications and apps into distinct views, or 'Merged' to combine them into a single streamlined dashboard.")
-                    font.pixelSize: 11
-                    opacity: 0.6
-                    width: parent.width
-                    wrapMode: Text.WordWrap
-                }
             }
 
-            // --- THE MASTER GREEN BOX ---
             Rectangle {
                 id: masterGreenBox
                 width: parent.width * 0.7
@@ -73,7 +60,7 @@ CutiePage {
                     anchors.margins: innerGap
                     spacing: 20
 
-                    // --- BLUE SECTION (SPLIT) ---
+                    // Split Button
                     ColumnLayout {
                         Layout.fillWidth: true; Layout.preferredWidth: 3; spacing: 12
                         CutieButton {
@@ -103,7 +90,7 @@ CutiePage {
                         }
                     }
 
-                    // --- RED SECTION (MERGED) ---
+                    // Merged Button
                     ColumnLayout {
                         Layout.fillWidth: true; Layout.preferredWidth: 2; spacing: 12
                         CutieButton {
@@ -132,6 +119,14 @@ CutiePage {
                         }
                     }
                 } 
+            }
+
+            CutieLabel {
+                id: layoutDescription
+                text: qsTr("Note: Choose 'Split' to separate notifications and apps into distinct views, or 'Merged' to combine them into a single streamlined dashboard.")
+                font.pixelSize: 11; opacity: 0.6; width: parent.width * 0.7
+                anchors.horizontalCenter: parent.horizontalCenter
+                wrapMode: Text.WordWrap
             }
         }
     }
