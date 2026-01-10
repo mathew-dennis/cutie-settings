@@ -7,16 +7,12 @@ import Cutie.Store
 CutiePage {
     id: homeScreenPage
 
-    // --- Dynamic Variables (Responsive Scaling) ---
-    // This calculates width based on the window. 0.15 means each small box takes 15% of the screen.
-    property real boxWidthMultiplier: 0.16 
-    property int commonWidth: Math.max(60, parent.width * boxWidthMultiplier) 
-    property int commonHeight: 80
-    property int commonRadius: 8
-    property int commonSpacing: 4
+    // --- Variables ---
+    property int commonHeight: 60
+    property int commonRadius: 6
     property color boxColor: "white"
     property color commonBorderColor: "#cccccc"
-    property int groupPadding: 8
+    property int groupPadding: 6
 
     Flickable {
         anchors.fill: parent
@@ -26,7 +22,7 @@ CutiePage {
         Column {
             id: mainColumn
             width: parent.width
-            spacing: 20
+            spacing: 15
 
             CutiePageHeader {
                 id: header
@@ -38,113 +34,101 @@ CutiePage {
             Item {
                 id: showFavouritsText
                 width: parent.width
-                height: visibilityToggle.height
-                
+                height: 40
                 CutieLabel {
                     text: qsTr("Favorites Dock")
-                    horizontalAlignment: Text.AlignLeft
-                    leftPadding: 20
-                    anchors.left: parent.left
+                    anchors.left: parent.left; anchors.leftMargin: 20
                     anchors.verticalCenter: parent.verticalCenter
                 }
-
                 CutieToggle {
                     id: visibilityToggle
-                    anchors.right: parent.right
+                    anchors.right: parent.right; anchors.rightMargin: 15
                     anchors.verticalCenter: parent.verticalCenter
-                    anchors.rightMargin: 15
-                    checked: "visibility" in favoriteStore.data ? favoriteStore.data["visibility"] : true
-                    onToggled: {
-                        let data = favoriteStore.data;
-                        data.visibility = visibilityToggle.checked;
-                        favoriteStore.data = data;
-                    }
+                    checked: true
                 }
             }
 
-            // --- RESPONSIVE ROW (FORCED SINGLE LINE) ---
-            Row {
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 15 // Gap between the Blue and Red groups
+            // --- THE FIX: Using RowLayout to prevent overflow ---
+            RowLayout {
+                width: parent.width
+                spacing: 10
+                // Adds a small margin on the left/right of the whole row
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: 10
+                anchors.rightMargin: 10
 
-                // BIG BOX 1: Group of 3
+                // BIG BOX 1 (Group of 3)
                 Rectangle {
-                    id: bigBox1
-                    width: (commonWidth * 3) + (commonSpacing * 2) + (groupPadding * 2)
+                    Layout.fillWidth: true // Allows this big box to shrink
+                    Layout.preferredWidth: 3 // Gives it more "weight" than the second box
                     height: commonHeight + (groupPadding * 2)
                     color: "transparent"
                     border.color: "blue"
-                    border.width: 1
-                    radius: 12
+                    radius: 8
 
-                    Row {
-                        anchors.centerIn: parent
-                        spacing: commonSpacing
-                        
-                        // Box 1
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.margins: groupPadding
+                        spacing: 4
+
+                        // Small Box 1
                         Rectangle {
-                            width: commonWidth; height: commonHeight; color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                            Text {
-                                text: "notif"; font.pixelSize: 8; color: "black"
-                                anchors.top: parent.top; anchors.left: parent.left; anchors.margins: 5 
-                            }
+                            Layout.fillWidth: true; Layout.fillHeight: true
+                            color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                            Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 30 }
                         }
-                        // Box 2
+                        // Small Box 2
                         Rectangle {
-                            width: commonWidth; height: commonHeight; color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                            Layout.fillWidth: true; Layout.fillHeight: true
+                            color: boxColor; border.color: commonBorderColor; radius: commonRadius
                             Rectangle {
                                 width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
-                                anchors.bottom: parent.bottom; anchors.bottomMargin: 8; anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
                             }
                         }
-                        // Box 3
+                        // Small Box 3
                         Rectangle {
-                            width: commonWidth; height: commonHeight; color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                            Text { 
-                                text: "apps"; font.pixelSize: 8; color: "black"
-                                anchors.centerIn: parent; horizontalAlignment: Text.AlignHCenter; width: parent.width - 4; wrapMode: Text.WordWrap
-                            }
+                            Layout.fillWidth: true; Layout.fillHeight: true
+                            color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                            Text { text: "apps"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 30 }
                         }
                     }
                 }
 
-                // BIG BOX 2: Group of 2
+                // BIG BOX 2 (Group of 2)
                 Rectangle {
-                    id: bigBox2
-                    width: (commonWidth * 2) + commonSpacing + (groupPadding * 2)
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 2 // Slightly smaller than group 1
                     height: commonHeight + (groupPadding * 2)
                     color: "transparent"
                     border.color: "red"
-                    border.width: 1
-                    radius: 12
+                    radius: 8
 
-                    Row {
-                        anchors.centerIn: parent
-                        spacing: commonSpacing
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.margins: groupPadding
+                        spacing: 4
 
-                        // Box 4
+                        // Small Box 4
                         Rectangle {
-                            width: commonWidth; height: commonHeight; color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                            Text {
-                                text: "notif"; font.pixelSize: 8; color: "black"
-                                anchors.top: parent.top; anchors.left: parent.left; anchors.margins: 5 
-                            }
+                            Layout.fillWidth: true; Layout.fillHeight: true
+                            color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                            Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 30 }
                         }
-                        // Box 5
+                        // Small Box 5
                         Rectangle {
-                            width: commonWidth; height: commonHeight; color: boxColor; border.color: commonBorderColor; radius: commonRadius
-                            Text { 
-                                text: "apps"; font.pixelSize: 8; color: "black"
-                                anchors.centerIn: parent; horizontalAlignment: Text.AlignHCenter; width: parent.width - 4; wrapMode: Text.WordWrap
-                            }
+                            Layout.fillWidth: true; Layout.fillHeight: true
+                            color: boxColor; border.color: commonBorderColor; radius: commonRadius
+                            Text { text: "apps"; font.pixelSize: 8; anchors.top: parent.top; anchors.topMargin: 5; anchors.horizontalCenter: parent.horizontalCenter; visible: parent.width > 30 }
                             Rectangle {
                                 width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
-                                anchors.bottom: parent.bottom; anchors.bottomMargin: 8; anchors.horizontalCenter: parent.horizontalCenter
+                                anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
                             }
                         }
                     }
                 }
-            } // End of Row
+            } // End of RowLayout
         }
     }
 
