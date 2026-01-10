@@ -27,7 +27,6 @@ CutiePage {
                 width: parent.width
             }
             
-            // Favorites Dock Toggle Section
             Item {
                 id: showFavouritsText
                 width: parent.width
@@ -41,7 +40,14 @@ CutiePage {
                     id: visibilityToggle
                     anchors.right: parent.right; anchors.rightMargin: 15
                     anchors.verticalCenter: parent.verticalCenter
-                    checked: true
+                    // Syncs with store:
+                    checked: "visibility" in favoriteStore.data ? favoriteStore.data["visibility"] : true
+
+                    onToggled: {
+                        let data = favoriteStore.data;
+                        data.visibility = visibilityToggle.checked;
+                        favoriteStore.data = data;
+                    }
                 }
             }
 
@@ -51,95 +57,58 @@ CutiePage {
                 width: parent.width * 0.6
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: commonHeight + (innerGap * 2)
-                color: "transparent"
-                border.color: "green"
-                border.width: 2
-                radius: 10
+                color: "transparent"; border.color: "green"; border.width: 2; radius: 10
 
                 RowLayout {
-                    id: innerLayout
                     anchors.fill: parent
-                    anchors.margins: innerGap 
-                    spacing: innerGap 
+                    anchors.margins: innerGap; spacing: innerGap 
 
-                    // --- BLUE CUTIE BUTTON (Container for 3 boxes) ---
+                    // --- BLUE BUTTON: SET TO TRUE ---
                     CutieButton {
                         id: blueGroupButton
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 3
-                        implicitHeight: commonHeight
+                        Layout.fillWidth: true; Layout.preferredWidth: 3; implicitHeight: commonHeight
                         
-                        // Customizing background to show Blue Border & Transparency
+                        // Action: Set visibility to TRUE
+                        onClicked: {
+                            let data = favoriteStore.data;
+                            data.visibility = true;
+                            favoriteStore.data = data;
+                            console.log("Button Clicked: Visibility set to TRUE");
+                        }
+
                         background: Rectangle {
-                            color: "transparent"
-                            border.color: "blue"
-                            border.width: 1
-                            radius: 8
+                            color: "transparent"; border.color: "blue"; border.width: 1; radius: 8
                         }
 
                         contentItem: RowLayout {
-                            anchors.fill: parent
-                            anchors.margins: 4
-                            spacing: 4
-
-                            Rectangle {
-                                Layout.fillWidth: true; Layout.fillHeight: true
-                                color: "transparent"; border.color: "#cccccc"; radius: 4
-                                Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; color: "black" }
-                            }
-                            Rectangle {
-                                Layout.fillWidth: true; Layout.fillHeight: true
-                                color: "transparent"; border.color: "#cccccc"; radius: 4
-                                Rectangle {
-                                    width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
-                                    anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
-                                }
-                            }
-                            Rectangle {
-                                Layout.fillWidth: true; Layout.fillHeight: true
-                                color: "transparent"; border.color: "#cccccc"; radius: 4
-                                Text { text: "apps"; font.pixelSize: 8; anchors.centerIn: parent; color: "black" }
-                            }
+                            anchors.fill: parent; anchors.margins: 4; spacing: 4
+                            Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
+                            Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
+                            Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
                         }
                     }
 
-                    // --- RED CUTIE BUTTON (Container for 2 boxes) ---
+                    // --- RED BUTTON: SET TO FALSE ---
                     CutieButton {
                         id: redGroupButton
-                        Layout.fillWidth: true
-                        Layout.preferredWidth: 2
-                        implicitHeight: commonHeight
+                        Layout.fillWidth: true; Layout.preferredWidth: 2; implicitHeight: commonHeight
                         
-                        // Customizing background to show Red Border & Transparency
+                        // Action: Set visibility to FALSE
+                        onClicked: {
+                            let data = favoriteStore.data;
+                            data.visibility = false;
+                            favoriteStore.data = data;
+                            console.log("Button Clicked: Visibility set to FALSE");
+                        }
+
                         background: Rectangle {
-                            color: "transparent"
-                            border.color: "red"
-                            border.width: 1
-                            radius: 8
+                            color: "transparent"; border.color: "red"; border.width: 1; radius: 8
                         }
 
                         contentItem: RowLayout {
-                            anchors.fill: parent
-                            anchors.margins: 4
-                            spacing: 4
-
-                            Rectangle {
-                                Layout.fillWidth: true; Layout.fillHeight: true
-                                color: "transparent"; border.color: "#cccccc"; radius: 4
-                                Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; color: "black" }
-                            }
-                            Rectangle {
-                                Layout.fillWidth: true; Layout.fillHeight: true
-                                color: "transparent"; border.color: "#cccccc"; radius: 4
-                                Text { 
-                                    text: "apps"; font.pixelSize: 8; color: "black"
-                                    anchors.top: parent.top; anchors.topMargin: 5; anchors.horizontalCenter: parent.horizontalCenter 
-                                }
-                                Rectangle {
-                                    width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
-                                    anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
-                                }
-                            }
+                            anchors.fill: parent; anchors.margins: 4; spacing: 4
+                            Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
+                            Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
                         }
                     }
                 } 
