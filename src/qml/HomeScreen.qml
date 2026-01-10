@@ -30,15 +30,17 @@ CutiePage {
                 width: parent.width
             }
             
-            // Toggle Section
+            // Toggle Section (The Reference for size)
             Item {
                 id: showFavouritsText
                 width: parent.width
                 height: 40
                 CutieLabel {
+                    id: refLabel // Our reference label
                     text: qsTr("Favorites Dock")
                     anchors.left: parent.left; anchors.leftMargin: 20
                     anchors.verticalCenter: parent.verticalCenter
+                    // Default CutieLabel size is usually 16, but we'll match it explicitly
                 }
                 CutieToggle {
                     id: visibilityToggle
@@ -56,15 +58,12 @@ CutiePage {
             // --- THE MASTER GREEN BOX ---
             Rectangle {
                 id: masterGreenBox
-                width: parent.width * 0.6
+                width: parent.width * 0.7 // Widened slightly to fit the larger text better
                 anchors.horizontalCenter: parent.horizontalCenter
-                
-                // Uses implicitHeight to fit the buttons + labels + internal gaps
                 height: innerLayout.implicitHeight + (innerGap * 2)
                 
                 color: "transparent"
-                // #80 is 50% transparency in Hex (ARGB)
-                border.color: "#80008000" 
+                border.color: "#80008000" // 50% transparent green
                 border.width: 2
                 radius: 10
 
@@ -72,13 +71,13 @@ CutiePage {
                     id: innerLayout
                     anchors.fill: parent
                     anchors.margins: innerGap
-                    spacing: innerGap 
+                    spacing: 20 // Increased spacing between the two main options
 
                     // --- BLUE SECTION (SPLIT) ---
                     ColumnLayout {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 3
-                        spacing: 8
+                        spacing: 12 // Space between button and label
 
                         CutieButton {
                             id: blueGroupButton
@@ -106,9 +105,10 @@ CutiePage {
                         CutieLabel {
                             text: qsTr("split")
                             Layout.alignment: Qt.AlignHCenter
-                            font.pixelSize: 10
+                            // Matched to common CutieLabel size
+                            font.pixelSize: 16 
                             font.bold: isSplit
-                            opacity: isSplit ? 1.0 : 0.4 // Text also uses transparency when inactive
+                            opacity: isSplit ? 1.0 : 0.4
                         }
                     }
 
@@ -116,7 +116,7 @@ CutiePage {
                     ColumnLayout {
                         Layout.fillWidth: true
                         Layout.preferredWidth: 2
-                        spacing: 8
+                        spacing: 12
 
                         CutieButton {
                             id: redGroupButton
@@ -143,7 +143,7 @@ CutiePage {
                         CutieLabel {
                             text: qsTr("merged")
                             Layout.alignment: Qt.AlignHCenter
-                            font.pixelSize: 10
+                            font.pixelSize: 16
                             font.bold: !isSplit
                             opacity: !isSplit ? 1.0 : 0.4
                         }
