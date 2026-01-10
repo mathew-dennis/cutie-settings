@@ -84,7 +84,7 @@ CutiePage {
                             }
                         }
                         CutieLabel {
-                            text: qsTr("split"); Layout.alignment: Qt.AlignHCenter
+                            text: qsTr("Split"); Layout.alignment: Qt.AlignHCenter
                             font.pixelSize: 16; font.bold: isSplitMode
                             opacity: isSplitMode ? 1.0 : 0.4
                         }
@@ -113,7 +113,7 @@ CutiePage {
                             }
                         }
                         CutieLabel {
-                            text: qsTr("merged"); Layout.alignment: Qt.AlignHCenter
+                            text: qsTr("Merged"); Layout.alignment: Qt.AlignHCenter
                             font.pixelSize: 16; font.bold: !isSplitMode
                             opacity: !isSplitMode ? 1.0 : 0.4
                         }
