@@ -9,10 +9,6 @@ CutiePage {
 
     // --- Variables ---
     property int commonHeight: 60
-    property int commonRadius: 6
-    // Changed boxColor to transparent
-    property color boxColor: "transparent" 
-    property color commonBorderColor: "#cccccc"
     property int innerGap: 10 
 
     Flickable {
@@ -55,7 +51,6 @@ CutiePage {
                 width: parent.width * 0.6
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: commonHeight + (innerGap * 2)
-                
                 color: "transparent"
                 border.color: "green"
                 border.width: 2
@@ -67,81 +62,81 @@ CutiePage {
                     anchors.margins: innerGap 
                     spacing: innerGap 
 
-                    // BLUE GROUP
-                    Rectangle {
+                    // --- BLUE CUTIE BUTTON (Container for 3 boxes) ---
+                    CutieButton {
+                        id: blueGroupButton
                         Layout.fillWidth: true
                         Layout.preferredWidth: 3
-                        height: commonHeight
-                        color: "transparent"
-                        border.color: "blue"
-                        radius: 8
+                        implicitHeight: commonHeight
+                        
+                        // Customizing background to show Blue Border & Transparency
+                        background: Rectangle {
+                            color: "transparent"
+                            border.color: "blue"
+                            border.width: 1
+                            radius: 8
+                        }
 
-                        RowLayout {
+                        contentItem: RowLayout {
                             anchors.fill: parent
                             anchors.margins: 4
                             spacing: 4
 
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
-                                color: boxColor
-                                border.color: commonBorderColor
-                                radius: commonRadius
-                                Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20; color: "black" }
+                                color: "transparent"; border.color: "#cccccc"; radius: 4
+                                Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; color: "black" }
                             }
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
-                                color: boxColor
-                                border.color: commonBorderColor
-                                radius: commonRadius
+                                color: "transparent"; border.color: "#cccccc"; radius: 4
                                 Rectangle {
-                                    width: Math.min(parent.width * 0.7, 40); height: 4; color: "black"; opacity: 0.2; radius: 2 
+                                    width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
                                     anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
                                 }
                             }
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
-                                color: boxColor
-                                border.color: commonBorderColor
-                                radius: commonRadius
-                                Text { text: "apps"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20; color: "black" }
+                                color: "transparent"; border.color: "#cccccc"; radius: 4
+                                Text { text: "apps"; font.pixelSize: 8; anchors.centerIn: parent; color: "black" }
                             }
                         }
                     }
 
-                    // RED GROUP
-                    Rectangle {
+                    // --- RED CUTIE BUTTON (Container for 2 boxes) ---
+                    CutieButton {
+                        id: redGroupButton
                         Layout.fillWidth: true
                         Layout.preferredWidth: 2
-                        height: commonHeight
-                        color: "transparent"
-                        border.color: "red"
-                        radius: 8
+                        implicitHeight: commonHeight
+                        
+                        // Customizing background to show Red Border & Transparency
+                        background: Rectangle {
+                            color: "transparent"
+                            border.color: "red"
+                            border.width: 1
+                            radius: 8
+                        }
 
-                        RowLayout {
+                        contentItem: RowLayout {
                             anchors.fill: parent
                             anchors.margins: 4
                             spacing: 4
 
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
-                                color: boxColor
-                                border.color: commonBorderColor
-                                radius: commonRadius
-                                Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; visible: parent.width > 20; color: "black" }
+                                color: "transparent"; border.color: "#cccccc"; radius: 4
+                                Text { text: "notif"; font.pixelSize: 8; anchors.centerIn: parent; color: "black" }
                             }
                             Rectangle {
                                 Layout.fillWidth: true; Layout.fillHeight: true
-                                color: boxColor
-                                border.color: commonBorderColor
-                                radius: commonRadius
+                                color: "transparent"; border.color: "#cccccc"; radius: 4
                                 Text { 
                                     text: "apps"; font.pixelSize: 8; color: "black"
-                                    anchors.top: parent.top; anchors.topMargin: 5; 
-                                    anchors.horizontalCenter: parent.horizontalCenter; 
-                                    visible: parent.width > 20 
+                                    anchors.top: parent.top; anchors.topMargin: 5; anchors.horizontalCenter: parent.horizontalCenter 
                                 }
                                 Rectangle {
-                                    width: Math.min(parent.width * 0.7, 40); height: 4; color: "black"; opacity: 0.2; radius: 2 
+                                    width: parent.width * 0.7; height: 4; color: "black"; opacity: 0.2; radius: 2 
                                     anchors.bottom: parent.bottom; anchors.bottomMargin: 5; anchors.horizontalCenter: parent.horizontalCenter
                                 }
                             }
