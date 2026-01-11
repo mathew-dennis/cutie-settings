@@ -49,6 +49,7 @@ CutiePage {
                 width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: layoutRow.implicitHeight + innerGap * 2
+                color: "transparent"
                 border.color: "#80008000"
                 border.width: 2
                 radius: 10
