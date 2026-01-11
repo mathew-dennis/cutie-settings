@@ -49,7 +49,6 @@ CutiePage {
                 width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: layoutRow.implicitHeight + innerGap * 2
-                color: "transparent"
                 border.color: "#80008000"
                 border.width: 2
                 radius: 10
@@ -92,7 +91,6 @@ CutiePage {
                                         Rectangle {
                                             Layout.preferredWidth: 40   // 🔹 same size for all boxes
                                             Layout.fillHeight: true
-                                            color: "transparent"
                                             border.color: "#cccccc"
                                             radius: 4
                                         }
