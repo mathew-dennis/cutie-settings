@@ -11,15 +11,20 @@ CutiePage {
     readonly property bool merged: false
 
     property int commonHeight: 60
-    property int innerGap: 10 
-    
-    property bool isSplitMode: ("InterfaceMode" in favoriteStore.data) 
-                               ? (favoriteStore.data["InterfaceMode"] === split) 
-                               : merged 
+    property int innerGap: 10
+
+    property bool isSplitMode: ("InterfaceMode" in favoriteStore.data)
+                               ? favoriteStore.data.InterfaceMode === split
+                               : merged
+
+    function setInterfaceMode(mode) {
+        let data = favoriteStore.data
+        data.InterfaceMode = mode
+        favoriteStore.data = data
+    }
 
     Flickable {
         anchors.fill: parent
-        // contentHeight handles the growing list of toggles automatically
         contentHeight: mainColumn.height + 40
         clip: true
 
@@ -34,7 +39,6 @@ CutiePage {
                 width: parent.width
             }
 
-            // --- SECTION 1: INTERFACE LAYOUT ---
             CutieLabel {
                 text: qsTr("Interface Layout")
                 font.pixelSize: 18
@@ -44,87 +48,79 @@ CutiePage {
             }
 
             Rectangle {
-                id: masterGreenBox
                 width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
-                height: innerLayout.implicitHeight + (innerGap * 2)
-                
+                height: layoutRow.implicitHeight + innerGap * 2
                 color: "transparent"
-                border.color: "#80008000" // 50% transparent green
+                border.color: "#80008000"
                 border.width: 2
                 radius: 10
 
                 RowLayout {
-                    id: innerLayout
+                    id: layoutRow
                     anchors.fill: parent
                     anchors.margins: innerGap
                     spacing: 20
 
-                    // Split Button
-                    ColumnLayout {
-                        Layout.fillWidth: true; Layout.preferredWidth: 3; spacing: 12
-                        CutieButton {
-                            Layout.fillWidth: true; implicitHeight: commonHeight
-                            onClicked: {
-                                let data = favoriteStore.data;
-                                data.InterfaceMode = split;
-                                favoriteStore.data = data;
-                            }
-                            background: Rectangle {
-                                color: "transparent"
-                                border.color: "blue"
-                                border.width: isSplitMode ? 2 : 1
-                                radius: 8
-                            }
-                            contentItem: RowLayout {
-                                anchors.fill: parent; anchors.margins: 4; spacing: 4
-                                Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
-                                Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
-                                Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
-                            }
-                        }
-                        CutieLabel {
-                            text: qsTr("Split"); Layout.alignment: Qt.AlignHCenter
-                            font.pixelSize: 16; font.bold: isSplitMode
-                            opacity: isSplitMode ? 1.0 : 0.4
-                        }
-                    }
+                    Repeater {
+                        model: [
+                            { label: qsTr("Split"),  mode: split,  blocks: 3, color: "blue" },
+                            { label: qsTr("Merged"), mode: merged, blocks: 2, color: "red" }
+                        ]
 
-                    // Merged Button
-                    ColumnLayout {
-                        Layout.fillWidth: true; Layout.preferredWidth: 2; spacing: 12
-                        CutieButton {
-                            Layout.fillWidth: true; implicitHeight: commonHeight
-                            onClicked: {
-                                let data = favoriteStore.data;
-                                data.InterfaceMode = merged;
-                                favoriteStore.data = data;
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 12
+
+                            CutieButton {
+                                Layout.fillWidth: true
+                                implicitHeight: commonHeight
+                                onClicked: setInterfaceMode(modelData.mode)
+
+                                background: Rectangle {
+                                    color: "transparent"
+                                    border.color: "blue"
+                                    border.width: isSplitMode === modelData.mode ? 2 : 1
+                                    radius: 8
+                                }
+
+                                contentItem: RowLayout {
+                                    anchors.fill: parent
+                                    anchors.margins: 4
+                                    spacing: 4
+
+                                    Repeater {
+                                        model: modelData.blocks
+                                        Rectangle {
+                                            Layout.fillWidth: true
+                                            Layout.fillHeight: true
+                                            color: "transparent"
+                                            border.color: "#cccccc"
+                                            radius: 4
+                                        }
+                                    }
+                                }
                             }
-                            background: Rectangle {
-                                color: "transparent"
-                                border.color: "red"
-                                border.width: !isSplitMode ? 2 : 1
-                                radius: 8
+
+                            CutieLabel {
+                                text: modelData.label
+                                Layout.alignment: Qt.AlignHCenter
+                                font.pixelSize: 16
+                                font.bold: isSplitMode === modelData.mode
+                                opacity: isSplitMode === modelData.mode ? 1.0 : 0.4
                             }
-                            contentItem: RowLayout {
-                                anchors.fill: parent; anchors.margins: 4; spacing: 4
-                                Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
-                                Rectangle { Layout.fillWidth: true; Layout.fillHeight: true; color: "transparent"; border.color: "#cccccc"; radius: 4 }
-                            }
-                        }
-                        CutieLabel {
-                            text: qsTr("Merged"); Layout.alignment: Qt.AlignHCenter
-                            font.pixelSize: 16; font.bold: !isSplitMode
-                            opacity: !isSplitMode ? 1.0 : 0.4
                         }
                     }
-                } 
+                }
             }
 
             CutieLabel {
-                id: layoutDescription
-                text: qsTr("Note: Choose 'Split' to separate favorite apps and running apps into distinct views, or 'Merged' to combine them into a single streamlined view.")
-                font.pixelSize: 11; opacity: 0.6; width: parent.width * 0.7
+                text: qsTr(
+                    "Note: Choose 'Split' to separate favorite apps and running apps into distinct views, or 'Merged' to combine them into a single streamlined view."
+                )
+                font.pixelSize: 11
+                opacity: 0.6
+                width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
                 wrapMode: Text.WordWrap
             }
