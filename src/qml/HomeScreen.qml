@@ -41,8 +41,6 @@ CutiePage {
 
             CutieLabel {
                 text: qsTr("Interface Layout")
-                font.pixelSize: 18
-                font.bold: true
                 width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
             }
