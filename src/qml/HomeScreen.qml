@@ -79,7 +79,7 @@ CutiePage {
 
                                 background: Rectangle {
                                     color: "transparent"
-                                    border.color: "blue"
+                                    border.color: modelData.color
                                     border.width: isSplitMode === modelData.mode ? 2 : 1
                                     radius: 8
                                 }
@@ -92,7 +92,7 @@ CutiePage {
                                     Repeater {
                                         model: modelData.blocks
                                         Rectangle {
-                                            Layout.fillWidth: true
+                                            Layout.preferredWidth: 20   // 🔹 same size for all boxes
                                             Layout.fillHeight: true
                                             color: "transparent"
                                             border.color: "#cccccc"
