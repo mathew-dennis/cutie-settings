@@ -50,7 +50,7 @@ CutiePage {
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: layoutRow.implicitHeight + innerGap * 2
                 color: "transparent"
-                border.color: "#80008000"
+                border.color: Atmosphere.primaryAlphaColor
                 border.width: 2
                 radius: 10
 
@@ -62,8 +62,8 @@ CutiePage {
 
                     Repeater {
                         model: [
-                            { label: qsTr("Split"),  mode: split,  blocks: 3, color: "blue" },
-                            { label: qsTr("Merged"), mode: merged, blocks: 2, color: "red" }
+                            { label: qsTr("Split"),  mode: split,  blocks: 3, color: Atmosphere.secondaryAlphaColor },
+                            { label: qsTr("Merged"), mode: merged, blocks: 2, color: Atmosphere.secondaryAlphaColor }
                         ]
 
                         ColumnLayout {
