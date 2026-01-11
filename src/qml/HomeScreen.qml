@@ -92,6 +92,7 @@ CutiePage {
                                         Rectangle {
                                             Layout.preferredWidth: 40   // 🔹 same size for all boxes
                                             Layout.fillHeight: true
+                                            color: "transparent"
                                             border.color: "#cccccc"
                                             radius: 4
                                         }
@@ -102,7 +103,6 @@ CutiePage {
                             CutieLabel {
                                 text: modelData.label
                                 Layout.alignment: Qt.AlignHCenter
-                                font.pixelSize: 16
                                 font.bold: isSplitMode === modelData.mode
                                 opacity: isSplitMode === modelData.mode ? 1.0 : 0.4
                             }
