@@ -92,7 +92,7 @@ CutiePage {
                                     Repeater {
                                         model: modelData.blocks
                                         Rectangle {
-                                            Layout.preferredWidth: 20   // 🔹 same size for all boxes
+                                            Layout.preferredWidth: 40   // 🔹 same size for all boxes
                                             Layout.fillHeight: true
                                             color: "transparent"
                                             border.color: "#cccccc"
