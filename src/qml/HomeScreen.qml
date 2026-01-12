@@ -127,8 +127,6 @@ CutiePage {
 
             CutieLabel {
                 text: qsTr("Dock Size")
-                font.pixelSize: 16
-                font.bold: true
                 width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
                 topPadding: 10
