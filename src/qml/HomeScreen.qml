@@ -13,6 +13,9 @@ CutiePage {
     property int commonHeight: 60
     property int innerGap: 10
 
+    property real dockScale: ("dockScale" in favoriteStore.data) 
+                             ? favoriteStore.data.dockScale : 1.0
+
     property bool isSplitMode: ("InterfaceMode" in favoriteStore.data)
                                ? favoriteStore.data.InterfaceMode === split
                                : merged
@@ -90,7 +93,7 @@ CutiePage {
                                     Repeater {
                                         model: modelData.blocks
                                         Rectangle {
-                                            Layout.preferredWidth: 40   // 🔹 same size for all boxes
+                                            Layout.preferredWidth: 40
                                             Layout.fillHeight: true
                                             color: "transparent"
                                             border.color: "#cccccc"
@@ -120,6 +123,34 @@ CutiePage {
                 width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
                 wrapMode: Text.WordWrap
+            }
+
+            CutieLabel {
+                text: qsTr("Dock Size")
+                font.pixelSize: 16
+                font.bold: true
+                width: parent.width * 0.7
+                anchors.horizontalCenter: parent.horizontalCenter
+                topPadding: 10
+                bottomPadding: 4
+            }
+
+            CutieSlider {
+                id: dockSizeSlider
+                width: parent.width * 0.7
+                anchors.horizontalCenter: parent.horizontalCenter
+                from: 0.5
+                to: 2.0
+                stepSize: 0.1
+                value: dockScale
+
+                onMoved: {
+                    dockScale = value
+
+                    let d = favoriteStore.data
+                    d.dockScale = value
+                    favoriteStore.data = d
+                }
             }
         }
     }
