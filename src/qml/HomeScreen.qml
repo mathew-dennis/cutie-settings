@@ -141,7 +141,7 @@ CutiePage {
                 CutieSlider {
                     id: dockSizeSlider
                     width: parent.width
-                    from: 0.5
+                    from: 0.1
                     to: 2.0
                     stepSize: 0.1
                     value: dockScale
@@ -152,12 +152,12 @@ CutiePage {
                         let d = favoriteStore.data
                         d.dockScale = value
                         favoriteStore.data = d
+                        console.log("Dock Size slider value:", value)
                     }
                 }
 
                 CutieLabel {
                     text: "1.0"
-                    font.pixelSize: 12
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
