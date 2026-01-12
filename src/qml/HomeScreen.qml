@@ -135,21 +135,32 @@ CutiePage {
                 bottomPadding: 4
             }
 
-            CutieSlider {
-                id: dockSizeSlider
+            Column {
                 width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
-                from: 0.5
-                to: 2.0
-                stepSize: 0.1
-                value: dockScale
+                spacing: 4
 
-                onMoved: {
-                    dockScale = value
+                CutieSlider {
+                    id: dockSizeSlider
+                    width: parent.width
+                    from: 0.5
+                    to: 2.0
+                    stepSize: 0.1
+                    value: dockScale
 
-                    let d = favoriteStore.data
-                    d.dockScale = value
-                    favoriteStore.data = d
+                    onMoved: {
+                        dockScale = value
+
+                        let d = favoriteStore.data
+                        d.dockScale = value
+                        favoriteStore.data = d
+                    }
+                }
+
+                CutieLabel {
+                    text: "1.0"
+                    font.pixelSize: 12
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
         }
