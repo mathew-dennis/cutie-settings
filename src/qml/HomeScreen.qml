@@ -142,7 +142,7 @@ CutiePage {
                     id: dockSizeSlider
                     width: parent.width
                     from: 0.1
-                    to: 2.0
+                    to: 2.1
                     stepSize: 0.1
                     value: dockScale
 
