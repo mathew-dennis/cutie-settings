@@ -180,6 +180,9 @@ CutiePage {
                     id: panelModeToggle
                     checked: panelMode
                     Layout.alignment: Qt.AlignVCenter
+                    width: 60 
+                    height: 30
+                    implicitHeight: 30
 
                     onToggled: {
                         let d = favoriteStore.data
