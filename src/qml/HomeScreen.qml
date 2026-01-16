@@ -16,6 +16,10 @@ CutiePage {
     property real dockScale: ("dockScale" in favoriteStore.data) 
                              ? favoriteStore.data.dockScale : 1.0
 
+    property bool panelMode: ("PanelMode" in favoriteStore.data) 
+                             ? favoriteStore.data.PanelMode 
+                             : false
+
     property bool isSplitMode: ("InterfaceMode" in favoriteStore.data)
                                ? favoriteStore.data.InterfaceMode === split
                                : merged
@@ -157,10 +161,48 @@ CutiePage {
                 }
 
                 CutieLabel {
-                    text: "1.0"
+                    text: dockScale.toFixed(1)
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
+
+            RowLayout {
+                width: parent.width * 0.7
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 10
+
+                CutieLabel {
+                    text: qsTr("Panel Mode")
+                    Layout.alignment: Qt.AlignVCenter
+                }
+
+                CutieToggle {
+                    id: panelModeToggle
+                    checked: panelMode
+                    Layout.alignment: Qt.AlignVCenter
+
+                    onToggled: {
+                        panelMode = checked
+
+                        let d = favoriteStore.data
+                        d.PanelMode = checked
+                        favoriteStore.data = d
+                    }
+                }
+            }
+
+            CutieLabel {
+                text: qsTr(
+                    "Note: Enable Panel Mode to stretch the dock to full width. " +
+                    "When disabled, the dock width adjusts based on the number of apps."
+                )
+                font.pixelSize: 11
+                opacity: 0.6
+                width: parent.width * 0.7
+                anchors.horizontalCenter: parent.horizontalCenter
+                wrapMode: Text.WordWrap
+            }
+
         }
     }
 
