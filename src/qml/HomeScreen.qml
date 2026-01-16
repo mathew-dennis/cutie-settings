@@ -166,33 +166,41 @@ CutiePage {
                 }
             }
 
-            RowLayout {
-                width: parent.width * 0.7
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 1
+Rectangle {
+    width: parent.width * 0.7
+    height: 40                     // adjust as needed
+    anchors.horizontalCenter: parent.horizontalCenter
+    color: "transparent"
 
-                CutieLabel {
-                    text: qsTr("Panel Mode")
-                    Layout.alignment: Qt.AlignVCenter
-                }
+    CutieLabel {
+        id: panelLabel
+        text: qsTr("Panel Mode")
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+    }
 
-                CutieToggle {
-                    id: panelModeToggle
-                    checked: panelMode
+    CutieToggle {
+        id: panelModeToggle
 					anchors.right: parent.right
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.verticalCenterOffset: 5
 					anchors.rightMargin: 15
 
-                    onToggled: {
-                        let d = favoriteStore.data
-                        d.PanelMode = checked
-                        favoriteStore.data = d
-                        console.log("settings - panelMode updated. Current state:", checked === true ? "panel mode" : "dock mode");        
+        // Initialize once from store
+        Component.onCompleted: {
+            checked = ("PanelMode" in favoriteStore.data) ? favoriteStore.data.PanelMode : false
+        }
 
-                    }
-                }
-            }
+        onToggled: {
+            let d = favoriteStore.data
+            d.PanelMode = checked
+            favoriteStore.data = d
+            console.log("settings - panelMode updated. Current state:", checked ? "panel mode" : "dock mode")
+        }
+    }
+}
+
 
             CutieLabel {
                 text: qsTr(
