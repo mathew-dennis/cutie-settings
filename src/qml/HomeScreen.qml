@@ -186,13 +186,13 @@ CutiePage {
                     anchors.rightMargin: 15
 
                     Component.onCompleted: {
-                    checked = ("PanelModee" in favoriteStore.data) ? favoriteStore.data.PanelModee : true
+                    checked = ("PanelMode" in favoriteStore.data) ? favoriteStore.data.PanelMode : true
                     }
                     onToggled: {
                         let d = favoriteStore.data
-                        d.PanelModee = !d.PanelModee
+                        d.PanelMode = !d.PanelMode
                         favoriteStore.data = d
-                        console.log("settings - panelMode updated. Current state:", favoriteStore.data.PanelModee ? "panel mode" : "dock mode")
+                        console.log("settings - panelMode updated. Current state:", favoriteStore.data.PanelMode ? "panel mode" : "dock mode")
                     }
                 }
             }
