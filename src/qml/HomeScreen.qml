@@ -193,7 +193,7 @@ CutiePage {
                         let d = favoriteStore.data
                         d.PanelMode = checked
                         favoriteStore.data = d
-                        console.log("settings - panelMode updated. Current state:", checked ? "panel mode" : "dock mode")
+                        console.log("settings - panelMode updated. Current state:", favoriteStore.data.PanelMode ? "panel mode" : "dock mode")
                     }
                 }
             }
