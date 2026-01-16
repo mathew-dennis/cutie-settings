@@ -166,40 +166,35 @@ CutiePage {
                 }
             }
 
-Rectangle {
-    width: parent.width * 0.7
-    height: 40                     // adjust as needed
-    anchors.horizontalCenter: parent.horizontalCenter
-    color: "transparent"
+            Rectangle {
+                width: parent.width * 0.7
+                height: 40
+                anchors.horizontalCenter: parent.horizontalCenter
+                color: "transparent"
 
-    CutieLabel {
-        id: panelLabel
-        text: qsTr("Panel Mode")
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.left: parent.left
-        anchors.leftMargin: 10
-    }
+                CutieLabel {
+                    id: panelLabel
+                    text: qsTr("Panel Mode")
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                }
 
-    CutieToggle {
-        id: panelModeToggle
-					anchors.right: parent.right
-					anchors.verticalCenter: parent.verticalCenter
-					anchors.verticalCenterOffset: 5
-					anchors.rightMargin: 15
-
-        // Initialize once from store
-        Component.onCompleted: {
-            checked = ("PanelMode" in favoriteStore.data) ? favoriteStore.data.PanelMode : false
-        }
-
-        onToggled: {
-            let d = favoriteStore.data
-            d.PanelMode = checked
-            favoriteStore.data = d
-            console.log("settings - panelMode updated. Current state:", checked ? "panel mode" : "dock mode")
-        }
-    }
-}
+                CutieToggle {
+                    id: panelModeToggle
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.verticalCenterOffset: 5
+                        anchors.rightMargin: 15
+                        checked = panelMode
+                    onToggled: {
+                        let d = favoriteStore.data
+                        d.PanelMode = checked
+                        favoriteStore.data = d
+                        console.log("settings - panelMode updated. Current state:", checked ? "panel mode" : "dock mode")
+                    }
+                }
+            }
 
 
             CutieLabel {
