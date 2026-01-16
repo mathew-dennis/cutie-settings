@@ -18,7 +18,7 @@ CutiePage {
 
     property bool panelMode: ("PanelMode" in favoriteStore.data) 
                              ? favoriteStore.data.PanelMode 
-                             : true
+                             : false
 
     property bool isSplitMode: ("InterfaceMode" in favoriteStore.data)
                                ? favoriteStore.data.InterfaceMode === split
