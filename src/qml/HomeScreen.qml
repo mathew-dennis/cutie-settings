@@ -16,10 +16,6 @@ CutiePage {
     property real dockScale: ("dockScale" in favoriteStore.data) 
                              ? favoriteStore.data.dockScale : 1.0
 
-    property bool panelMode: ("PanelMode" in favoriteStore.data) 
-                             ? favoriteStore.data.PanelMode 
-                             : false
-
     property bool isSplitMode: ("InterfaceMode" in favoriteStore.data)
                                ? favoriteStore.data.InterfaceMode === split
                                : merged
@@ -188,7 +184,9 @@ CutiePage {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: 15
-
+                    Component.onCompleted: {
+                        checked = ("PanelMode" in favoriteStore.data) ? favoriteStore.data.PanelMode : false
+                    }
                     onToggled: {
                         let d = favoriteStore.data
                         d.PanelMode = checked
