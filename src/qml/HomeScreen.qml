@@ -179,10 +179,10 @@ CutiePage {
                 CutieToggle {
                     id: panelModeToggle
                     checked: panelMode
-                    Layout.alignment: Qt.AlignVCenter
-                    width: 60 
-                    height: 30
-                    implicitHeight: 30
+					anchors.right: parent.right
+					anchors.verticalCenter: parent.verticalCenter
+					anchors.verticalCenterOffset: 5
+					anchors.rightMargin: 15
 
                     onToggled: {
                         let d = favoriteStore.data
