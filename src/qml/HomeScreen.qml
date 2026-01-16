@@ -169,7 +169,7 @@ CutiePage {
             RowLayout {
                 width: parent.width * 0.7
                 anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 10
+                spacing: 1
 
                 CutieLabel {
                     text: qsTr("Panel Mode")
