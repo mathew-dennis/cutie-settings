@@ -189,9 +189,6 @@ CutiePage {
                     anchors.right: parent.right
                     anchors.rightMargin: 15
 
-                    Component.onCompleted: {
-                        checked = ("PanelMode" in favoriteStore.data) ? favoriteStore.data.PanelMode : false
-                    }
                     onToggled: {
                         let d = favoriteStore.data
                         d.PanelMode = checked
