@@ -178,11 +178,10 @@ CutiePage {
 
                 CutieToggle {
                     id: panelModeToggle
-                    checked: panelMode
+                    checked: ("PanelMode" in favoriteStore.data) ? favoriteStore.data.PanelMode : false
                     Layout.alignment: Qt.AlignVCenter
 
                     onCheckedChanged: {
-                        panelMode = checked
                         let d = favoriteStore.data
                         d.PanelMode = checked
                         favoriteStore.data = d
