@@ -189,7 +189,7 @@ CutiePage {
                     }
                     onToggled: {
                         let d = favoriteStore.data
-                        d.PanelMode = checked
+                        d.PanelMode = !checked
                         favoriteStore.data = d
                         console.log("settings - panelMode updated. Current state:", favoriteStore.data.PanelMode ? "panel mode" : "dock mode")
                     }
