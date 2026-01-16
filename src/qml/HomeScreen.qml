@@ -24,6 +24,8 @@ CutiePage {
         let data = favoriteStore.data
         data.InterfaceMode = mode
         favoriteStore.data = data
+        console.log("settings - InterfaceMode updated. Current state:", favoriteStore.data.InterfaceMode ? "Split" : "Merged")
+
     }
 
     Flickable {
