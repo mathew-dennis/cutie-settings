@@ -46,7 +46,7 @@ CutiePage {
 
             CutieLabel {
                 text: qsTr("Interface Layout")
-                width: parent.width * 0.7
+                width: parent.width
                 anchors.horizontalCenter: parent.horizontalCenter
             }
 
@@ -129,7 +129,7 @@ CutiePage {
 
             CutieLabel {
                 text: qsTr("Dock Size")
-                width: parent.width * 0.7
+                width: parent.width
                 anchors.horizontalCenter: parent.horizontalCenter
                 topPadding: 10
                 bottomPadding: 4
