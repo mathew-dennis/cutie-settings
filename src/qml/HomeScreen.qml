@@ -13,18 +13,18 @@ CutiePage {
     property int commonHeight: 60
     property int innerGap: 10
 
-    property real dockScale: ("dockScale" in favoriteStore.data) 
-                             ? favoriteStore.data.dockScale : 1.0
+    property real dockScale: ("dockScale" in homeConfigStore.data) 
+                             ? homeConfigStore.data.dockScale : 1.0
 
-    property bool isSplitMode: ("InterfaceMode" in favoriteStore.data)
-                               ? favoriteStore.data.InterfaceMode === split
+    property bool isSplitMode: ("InterfaceMode" in homeConfigStore.data)
+                               ? homeConfigStore.data.InterfaceMode === split
                                : merged
 
     function setInterfaceMode(mode) {
-        let data = favoriteStore.data
+        let data = homeConfigStore.data
         data.InterfaceMode = mode
-        favoriteStore.data = data
-        console.log("settings - InterfaceMode updated. Current state:", favoriteStore.data.InterfaceMode ? "Split" : "Merged")
+        homeConfigStore.data = data
+        console.log("settings - InterfaceMode updated. Current state:", homeConfigStore.data.InterfaceMode ? "Split" : "Merged")
 
     }
 
@@ -151,9 +151,9 @@ CutiePage {
                     onMoved: {
                         dockScale = value
 
-                        let d = favoriteStore.data
+                        let d = homeConfigStore.data
                         d.dockScale = value
-                        favoriteStore.data = d
+                        homeConfigStore.data = d
                         console.log("Dock Size slider value:", value)
                     }
                 }
@@ -188,13 +188,13 @@ CutiePage {
                     anchors.rightMargin: 15
 
                     Component.onCompleted: {
-                    checked = ("PanelMode" in favoriteStore.data) ? favoriteStore.data.PanelMode : true
+                    checked = ("PanelMode" in homeConfigStore.data) ? homeConfigStore.data.PanelMode : true
                     }
                     onToggled: {
-                        let d = favoriteStore.data
+                        let d = homeConfigStore.data
                         d.PanelMode = !d.PanelMode
-                        favoriteStore.data = d
-                        console.log("settings - panelMode updated. Current state:", favoriteStore.data.PanelMode ? "panel mode" : "dock mode")
+                        homeConfigStore.data = d
+                        console.log("settings - panelMode updated. Current state:", homeConfigStore.data.PanelMode ? "panel mode" : "dock mode")
                     }
                 }
             }
@@ -216,8 +216,8 @@ CutiePage {
     }
 
     CutieStore {
-        id: favoriteStore
-        appName: "cutie-launcher"
-        storeName: "favoriteItems"
+        id: homeConfigStore
+        appName: "cutie-home"
+        storeName: "homeConfigs"
     }
 }
