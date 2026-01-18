@@ -25,8 +25,7 @@ CutiePage {
         let data = homeConfigStore.data
         data.InterfaceMode = mode
         homeConfigStore.data = data
-        console.log("settings - InterfaceMode updated. Current state:", isSplitMode ? "Split" : "Merged")
-
+        console.log("settings - InterfaceMode updated. Current state:", mode === split ? "Split" : "Merged")
     }
 
     Flickable {
