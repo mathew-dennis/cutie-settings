@@ -194,7 +194,7 @@ CutiePage {
                     }
                     onToggled: {
                         let d = homeConfigStore.data
-                        d.PanelMode = !d.PanelMode
+                        d.PanelMode = checked
                         homeConfigStore.data = d
                         console.log("settings - panelMode updated. Current state:", homeConfigStore.data.PanelMode ? "panel mode" : "dock mode")
                     }
