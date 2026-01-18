@@ -184,10 +184,7 @@ CutiePage {
                 }
 
                 CutieToggle {
-                    id: panelModeToggle
-                    width: 60       // explicit width
-                    height: 30      // explicit height
-                    implicitHeight: 30
+
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.right
                     anchors.rightMargin: 15
