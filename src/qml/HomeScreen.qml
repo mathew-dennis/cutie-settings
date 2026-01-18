@@ -13,10 +13,11 @@ CutiePage {
     property int commonHeight: 60
     property int innerGap: 10
 
-    property real dockScale: ("dockScale" in homeConfigStore.data) 
-                             ? homeConfigStore.data.dockScale : 1.0
+    property real dockScale: homeConfigStore.data && ("dockScale" in homeConfigStore.data) 
+                             ? homeConfigStore.data.dockScale 
+                             : 1.0
 
-    property bool isSplitMode: ("InterfaceMode" in homeConfigStore.data)
+    property bool isSplitMode: homeConfigStore.data &&  ("InterfaceMode" in homeConfigStore.data)
                                ? homeConfigStore.data.InterfaceMode === split
                                : merged
 
@@ -24,7 +25,7 @@ CutiePage {
         let data = homeConfigStore.data
         data.InterfaceMode = mode
         homeConfigStore.data = data
-        console.log("settings - InterfaceMode updated. Current state:", homeConfigStore.data.InterfaceMode ? "Split" : "Merged")
+        console.log("settings - InterfaceMode updated. Current state:", isSplitMode ? "Split" : "Merged")
 
     }
 
@@ -48,6 +49,8 @@ CutiePage {
                 text: qsTr("Interface Layout")
                 width: parent.width
                 anchors.horizontalCenter: parent.horizontalCenter
+                anchors.rightMargin: 15
+
             }
 
             Rectangle {
@@ -176,6 +179,8 @@ CutiePage {
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 10
+                    anchors.rightMargin: 15
+
                 }
 
                 CutieToggle {
