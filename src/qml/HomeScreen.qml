@@ -177,7 +177,7 @@ CutiePage {
                 color: secondaryAlphaLightColor
                 radius: cardRadius
 
-                ColumnLayout {
+                Column {
                     id: dockLayout
                     anchors {
                         left: parent.left
@@ -201,17 +201,14 @@ CutiePage {
                         Layout.fillWidth: true
                     }
 
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 12
-
-                        CutieSlider {
+                    CutieSlider {
                             id: dockSizeSlider
                             Layout.fillWidth: true
                             from: 0.1
                             to: 2.1
                             stepSize: 0.1
                             value: dockScale
+
 
                             onMoved: {
                                 let d = homeConfigStore.data
@@ -225,7 +222,7 @@ CutiePage {
                             text: qsTr(dockSizeSlider.value.toFixed(1))
                             font.pixelSize: 14
                         }
-                    }
+                    
                 }
             }
 
