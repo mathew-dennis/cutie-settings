@@ -284,7 +284,7 @@ CutiePage {
 
                     CutieToggle {
                         Layout.alignment: Qt.AlignVCenter
-                        checked=panelMode
+                        checked: panelMode
 
                         onToggled: {
                             let d = homeConfigStore.data
