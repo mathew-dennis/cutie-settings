@@ -208,12 +208,7 @@ CutiePage {
                             from: 0.1
                             to: 2.1
                             stepSize: 0.1
-
-                            Component.onCompleted: {
-                                value = homeConfigStore.data && ("dockScale" in homeConfigStore.data)
-                                        ? homeConfigStore.data.dockScale
-                                        : 1.0
-                            }
+                            value: dockScale
 
                             onMoved: {
                                 let d = homeConfigStore.data
@@ -224,11 +219,12 @@ CutiePage {
                         }
 
                         CutieLabel {
-                            text: dockSizeSlider.value.toFixed(1)
-                            color: Atmosphere.primaryColor
+                            text:qsTr( dockSizeSlider.value.toFixed(1) )
                             font.pixelSize: 14
                         }
                     }
+
+                    Item { width: 1; height: 10 }
                 }
             }
 
