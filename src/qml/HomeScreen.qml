@@ -283,10 +283,8 @@ CutiePage {
                     }
 
                     CutieToggle {
-					anchors.right: parent.right
-					anchors.verticalCenter: parent.verticalCenter
-					anchors.verticalCenterOffset: 5
-					anchors.rightMargin: 15
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.minimumWidth: 50
                         checked: panelMode
 
                         onToggled: {
