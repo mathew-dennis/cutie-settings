@@ -10,14 +10,15 @@ CutiePage {
     readonly property bool split: true
     readonly property bool merged: false
 
-    property int commonHeight: 60
-    property int innerGap: 10
+    property int commonHeight: 50
+    property int cardRadius: 16
+    property int cardPadding: 20
 
-    property real dockScale: homeConfigStore.data && ("dockScale" in homeConfigStore.data) 
-                             ? homeConfigStore.data.dockScale 
+    property real dockScale: homeConfigStore.data && ("dockScale" in homeConfigStore.data)
+                             ? homeConfigStore.data.dockScale
                              : 1.0
 
-    property bool isSplitMode: homeConfigStore.data &&  ("InterfaceMode" in homeConfigStore.data)
+    property bool isSplitMode: homeConfigStore.data && ("InterfaceMode" in homeConfigStore.data)
                                ? homeConfigStore.data.InterfaceMode === split
                                : merged
 
@@ -36,46 +37,59 @@ CutiePage {
         Column {
             id: mainColumn
             width: parent.width
-            spacing: 20
+            spacing: 0
 
+            // ── Page Header ─────────────────────────────────────────────
             CutiePageHeader {
                 id: header
                 title: qsTr("Home Screen")
+                description: qsTr("Customize how your home screen looks and behaves.")
                 width: parent.width
             }
 
-            CutieLabel {
-                text: qsTr("Interface Layout")
-                width: parent.width
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.rightMargin: 15
+            Item { width: 1; height: 24 }
 
-            }
-
+            // ── Interface Layout Card ────────────────────────────────────
             Rectangle {
-                width: parent.width * 0.7
+                width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
-                height: layoutRow.implicitHeight + innerGap * 2
-                color: "transparent"
-                border.color: Atmosphere.primaryAlphaColor
-                border.width: 2
-                radius: 10
+                height: interfaceLayout.implicitHeight + cardPadding * 2
+                color: Atmosphere.secondaryAlphaColor
+                radius: cardRadius
 
-                RowLayout {
-                    id: layoutRow
-                    anchors.fill: parent
-                    anchors.margins: innerGap
-                    spacing: 20
+                ColumnLayout {
+                    id: interfaceLayout
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        top: parent.top
+                        margins: cardPadding
+                    }
+                    spacing: 14
 
-                    Repeater {
-                        model: [
-                            { label: qsTr("Split"),  mode: split,  blocks: 3, color: Atmosphere.secondaryAlphaColor },
-                            { label: qsTr("Merged"), mode: merged, blocks: 2, color: Atmosphere.secondaryAlphaColor }
-                        ]
+                    CutieLabel {
+                        text: qsTr("Interface Layout")
+                        font.bold: true
+                        font.pixelSize: 16
+                    }
 
-                        ColumnLayout {
-                            Layout.fillWidth: true
-                            spacing: 12
+                    CutieLabel {
+                        text: qsTr("Choose how apps are arranged on the home screen.")
+                        font.pixelSize: 13
+                        opacity: 0.7
+                        wrapMode: Text.WordWrap
+                        Layout.fillWidth: true
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 10
+
+                        Repeater {
+                            model: [
+                                { label: qsTr("Split"),  mode: split  },
+                                { label: qsTr("Merged"), mode: merged }
+                            ]
 
                             CutieButton {
                                 Layout.fillWidth: true
@@ -83,136 +97,186 @@ CutiePage {
                                 onClicked: setInterfaceMode(modelData.mode)
 
                                 background: Rectangle {
-                                    color: "transparent"
-                                    border.color: modelData.color
-                                    border.width: isSplitMode === modelData.mode ? 2 : 1
-                                    radius: 8
+                                    color: isSplitMode === modelData.mode
+                                           ? Atmosphere.primaryColor
+                                           : "transparent"
+                                    border.color: Atmosphere.primaryColor
+                                    border.width: 2
+                                    radius: commonHeight / 2
                                 }
 
-                                contentItem: RowLayout {
-                                    anchors.fill: parent
-                                    anchors.margins: 4
-                                    spacing: 4
-
-                                    Repeater {
-                                        model: modelData.blocks
-                                        Rectangle {
-                                            Layout.preferredWidth: 40
-                                            Layout.fillHeight: true
-                                            color: "transparent"
-                                            border.color: "#cccccc"
-                                            radius: 4
-                                        }
-                                    }
+                                contentItem: Text {
+                                    text: modelData.label
+                                    color: "white"
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    font.bold: isSplitMode === modelData.mode
+                                    font.pixelSize: 14
                                 }
-                            }
-
-                            CutieLabel {
-                                text: modelData.label
-                                Layout.alignment: Qt.AlignHCenter
-                                font.bold: isSplitMode === modelData.mode
-                                opacity: isSplitMode === modelData.mode ? 1.0 : 0.4
                             }
                         }
                     }
                 }
             }
 
+            // Note
+            Item { width: 1; height: 10 }
             CutieLabel {
-                text: qsTr(
-                    "Note: Choose 'Split' to separate favorite apps and running apps into distinct views, or 'Merged' to combine them into a single streamlined view."
-                )
+                text: qsTr("Note: Split to separate favorite apps and running apps into " +
+                           "distinct views, or Merged to combine them into a single streamlined view.")
                 font.pixelSize: 11
                 opacity: 0.6
-                width: parent.width * 0.7
+                width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 wrapMode: Text.WordWrap
             }
 
-            CutieLabel {
-                text: qsTr("Dock Size")
-                width: parent.width
-                anchors.horizontalCenter: parent.horizontalCenter
-                topPadding: 10
-                bottomPadding: 4
-            }
+            Item { width: 1; height: 24 }
 
-            Column {
-                width: parent.width * 0.7
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 4
-
-                CutieSlider {
-                    id: dockSizeSlider
-                    width: parent.width
-                    from: 0.1
-                    to: 2.1
-                    stepSize: 0.1
-                    value: dockScale
-
-                    onMoved: {
-                        dockScale = value
-
-                        let d = homeConfigStore.data
-                        d.dockScale = value
-                        homeConfigStore.data = d
-                        console.log("Dock Size slider value:", value)
-                    }
-                }
-
-                CutieLabel {
-                    text: dockScale.toFixed(1)
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-            }
-
+            // ── Dock Size Card ───────────────────────────────────────────
             Rectangle {
-                width: parent.width * 0.7
-                height: 40
+                width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
-                color: "transparent"
+                height: dockLayout.implicitHeight + cardPadding * 2
+                color: Atmosphere.secondaryAlphaColor
+                radius: cardRadius
 
-                CutieLabel {
-                    id: panelLabel
-                    text: qsTr("Panel Mode")
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10
-                    anchors.rightMargin: 15
-
-                }
-
-                CutieToggle {
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.right
-                    anchors.rightMargin: 15
-
-                    Component.onCompleted: {
-                    checked = ("PanelMode" in homeConfigStore.data) ? homeConfigStore.data.PanelMode : true
+                ColumnLayout {
+                    id: dockLayout
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        top: parent.top
+                        margins: cardPadding
                     }
-                    onToggled: {
-                        let d = homeConfigStore.data
-                        d.PanelMode = checked
-                        homeConfigStore.data = d
-                        console.log("settings - panelMode updated. Current state:", homeConfigStore.data.PanelMode ? "panel mode" : "dock mode")
+                    spacing: 14
+
+                    CutieLabel {
+                        text: qsTr("Dock Size")
+                        font.bold: true
+                        font.pixelSize: 16
+                    }
+
+                    CutieLabel {
+                        text: qsTr("Adjust the width of the dock.")
+                        font.pixelSize: 13
+                        opacity: 0.7
+                        wrapMode: Text.WordWrap
+                        Layout.fillWidth: true
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 12
+
+                        CutieSlider {
+                            id: dockSizeSlider
+                            Layout.fillWidth: true
+                            from: 0.1
+                            to: 2.1
+                            stepSize: 0.1
+                            value: dockScale
+
+                            onMoved: {
+                                dockScale = value
+                                let d = homeConfigStore.data
+                                d.dockScale = value
+                                homeConfigStore.data = d
+                                console.log("Dock Size slider value:", value)
+                            }
+                        }
+
+                        CutieLabel {
+                            text: dockScale.toFixed(1)
+                            color: Atmosphere.primaryColor
+                            font.pixelSize: 14
+                        }
                     }
                 }
             }
 
-
+            // Note
+            Item { width: 1; height: 10 }
             CutieLabel {
-                text: qsTr(
-                    "Note: Enable Panel Mode to stretch the dock to full width. " +
-                    "When disabled, the dock width adjusts based on the number of apps."
-                )
+                text: qsTr("Note: Changes the dock width. Available in Panel Mode.")
                 font.pixelSize: 11
                 opacity: 0.6
-                width: parent.width * 0.7
+                width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 wrapMode: Text.WordWrap
             }
 
+            Item { width: 1; height: 24 }
+
+            // ── Panel Mode Card ──────────────────────────────────────────
+            Rectangle {
+                width: parent.width - 32
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: panelLayout.implicitHeight + cardPadding * 2
+                color: Atmosphere.secondaryAlphaColor
+                radius: cardRadius
+
+                RowLayout {
+                    id: panelLayout
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        top: parent.top
+                        margins: cardPadding
+                    }
+                    spacing: 16
+
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 6
+
+                        CutieLabel {
+                            text: qsTr("Panel Mode")
+                            font.bold: true
+                            font.pixelSize: 16
+                        }
+
+                        CutieLabel {
+                            text: qsTr("Enable or disable the dock to stretch to full width.")
+                            font.pixelSize: 13
+                            opacity: 0.7
+                            wrapMode: Text.WordWrap
+                            Layout.fillWidth: true
+                        }
+                    }
+
+                    CutieToggle {
+                        Layout.alignment: Qt.AlignVCenter
+
+                        Component.onCompleted: {
+                            checked = ("PanelMode" in homeConfigStore.data)
+                                      ? homeConfigStore.data.PanelMode
+                                      : true
+                        }
+
+                        onToggled: {
+                            let d = homeConfigStore.data
+                            d.PanelMode = checked
+                            homeConfigStore.data = d
+                            console.log("settings - panelMode updated. Current state:",
+                                        homeConfigStore.data.PanelMode ? "panel mode" : "dock mode")
+                        }
+                    }
+                }
+            }
+
+            // Note
+            Item { width: 1; height: 10 }
+            CutieLabel {
+                text: qsTr("Note: When disabled, the dock width adjusts based on the number of apps.")
+                font.pixelSize: 11
+                opacity: 0.6
+                width: parent.width - 32
+                anchors.horizontalCenter: parent.horizontalCenter
+                wrapMode: Text.WordWrap
+            }
+
+            Item { width: 1; height: 24 }
         }
     }
 
