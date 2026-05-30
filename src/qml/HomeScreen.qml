@@ -174,11 +174,11 @@ CutiePage {
             Rectangle {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
-                height: dockLayout.implicitHeight + cardPadding * 2
+                height: dockLayout.childrenRect.height + cardPadding * 2
                 color: secondaryAlphaLightColor
                 radius: cardRadius
 
-                ColumnLayout {
+                Column {
                     id: dockLayout
                     anchors {
                         left: parent.left
@@ -198,32 +198,30 @@ CutiePage {
                         text: qsTr("Adjust the width of the dock.")
                         font.pixelSize: 13
                         opacity: 0.7
+                        width: parent.width
                         wrapMode: Text.WordWrap
-                        Layout.fillWidth: true
                     }
 
+                    CutieSlider {
+                        id: dockSizeSlider
+                        width: parent.width
+                        to: 2.1
+                        stepSize: 0.1
+                        value: dockScale
 
-                        CutieSlider {
-                            id: dockSizeSlider
-                            Layout.fillWidth: true
-                            from: 0.1
-                            to: 2.1
-                            stepSize: 0.1
-                            value: dockScale
-
-
-                            onMoved: {
-                                let d = homeConfigStore.data
-                                d.dockScale = value
-                                homeConfigStore.data = d
-                                console.log("Dock Size slider value:", value)
-                            }
+                        onMoved: {
+                            let d = homeConfigStore.data
+                            d.dockScale = value
+                            homeConfigStore.data = d
+                            console.log("Dock Size slider value:", value)
                         }
+                    }
 
-                        CutieLabel {
-                            text: qsTr(dockSizeSlider.value.toFixed(1))
-                            font.pixelSize: 14
-                        }
+                    CutieLabel {
+                        text: qsTr(dockSizeSlider.value.toFixed(1))
+                        font.pixelSize: 14
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
                 }
             }
 
