@@ -13,7 +13,7 @@ CutiePage {
         Atmosphere.secondaryAlphaColor.r,
         Atmosphere.secondaryAlphaColor.g,
         Atmosphere.secondaryAlphaColor.b,
-        0.4
+        0.1
     )
 
     property int commonHeight: 50
