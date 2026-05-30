@@ -110,20 +110,23 @@ CutiePage {
                                         radius: 8
                                     }
 
-                                    contentItem: RowLayout {
+                                    contentItem: Item {
                                         anchors.fill: parent
-                                        anchors.margins: 6
-                                        spacing: 4
 
-                                        Repeater {
-                                            model: modelData.blocks
-                                            Rectangle {
-                                                Layout.fillWidth: true
-                                                Layout.fillHeight: true
-                                                color: "transparent"
-                                                border.color: "white"
-                                                opacity: isSplitMode === modelData.mode ? 0.9 : 0.4
-                                                radius: 4
+                                        Row {
+                                            anchors.centerIn: parent
+                                            spacing: 5
+
+                                            Repeater {
+                                                model: modelData.blocks
+                                                Rectangle {
+                                                    width: 30
+                                                    height: commonHeight - 14
+                                                    color: "transparent"
+                                                    border.color: "white"
+                                                    opacity: isSplitMode === modelData.mode ? 0.9 : 0.4
+                                                    radius: 4
+                                                }
                                             }
                                         }
                                     }
@@ -198,10 +201,14 @@ CutiePage {
                             from: 0.1
                             to: 2.1
                             stepSize: 0.1
-                            value: dockScale
+
+                            Component.onCompleted: {
+                                value = homeConfigStore.data && ("dockScale" in homeConfigStore.data)
+                                        ? homeConfigStore.data.dockScale
+                                        : 1.0
+                            }
 
                             onMoved: {
-                                dockScale = value
                                 let d = homeConfigStore.data
                                 d.dockScale = value
                                 homeConfigStore.data = d
@@ -210,7 +217,7 @@ CutiePage {
                         }
 
                         CutieLabel {
-                            text: dockScale.toFixed(1)
+                            text: dockSizeSlider.value.toFixed(1)
                             color: Atmosphere.primaryColor
                             font.pixelSize: 14
                         }
