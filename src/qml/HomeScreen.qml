@@ -81,7 +81,7 @@ CutiePage {
                     CutieLabel {
                         text: qsTr("Choose how apps are arranged on the home screen.")
                         font.pixelSize: 13
-                        opacity: 0.7
+                        opacity: 0.9
                         wrapMode: Text.WordWrap
                         Layout.fillWidth: true
                     }
@@ -131,7 +131,7 @@ CutiePage {
                                                     height: commonHeight - 14
                                                     color: "transparent"
                                                     border.color: "white"
-                                                    opacity: isSplitMode === modelData.mode ? 0.9 : 0.4
+                                                    opacity: isSplitMode === modelData.mode ? 1.0 : 0.5
                                                     radius: 4
                                                 }
                                             }
@@ -143,7 +143,7 @@ CutiePage {
                                     text: modelData.label
                                     Layout.alignment: Qt.AlignHCenter
                                     font.bold: isSplitMode === modelData.mode
-                                    opacity: isSplitMode === modelData.mode ? 1.0 : 0.5
+                                    opacity: isSplitMode === modelData.mode ? 1.0 : 0.7
                                 }
                             }
                         }
@@ -157,7 +157,7 @@ CutiePage {
                 text: qsTr("Note: Split to separate favorite apps and running apps into " +
                            "distinct views, or Merged to combine them into a single streamlined view.")
                 font.pixelSize: 11
-                opacity: 0.6
+                opacity: 0.9
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 wrapMode: Text.WordWrap
@@ -237,7 +237,7 @@ CutiePage {
             CutieLabel {
                 text: qsTr("Note: Changes the dock width. Available in Panel Mode.")
                 font.pixelSize: 11
-                opacity: 0.6
+                opacity: 0.9
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 wrapMode: Text.WordWrap
