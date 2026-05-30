@@ -34,12 +34,6 @@ CutiePage {
         homeConfigStore.data = data
         console.log("settings - InterfaceMode updated. Current state:", mode === split ? "Split" : "Merged")
     }
-    let secondaryAlphaLightColor= Qt.rgba(
-            Atmosphere.secondaryAlphaColor.r,
-            Atmosphere.secondaryAlphaColor.g,
-            Atmosphere.secondaryAlphaColor.b,
-            0.4   
-    )
 
     Flickable {
         anchors.fill: parent
