@@ -129,7 +129,7 @@ CutiePage {
                                                 Rectangle {
                                                     width: 30
                                                     height: commonHeight - 14
-                                                    color: "transparent"
+                                                    color: "blue"
                                                     border.color: "white"
                                                     opacity: isSplitMode === modelData.mode ? 0.9 : 0.4
                                                     radius: 4
