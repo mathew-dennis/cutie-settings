@@ -284,6 +284,7 @@ CutiePage {
 
                     CutieToggle {
                         Layout.alignment: Qt.AlignVCenter
+                        Layout.minimumWidth: 50
                         checked: panelMode
 
                         onToggled: {
