@@ -43,7 +43,6 @@ CutiePage {
             CutiePageHeader {
                 id: header
                 title: qsTr("Home Screen")
-                description: qsTr("Customize how your home screen looks and behaves.")
                 width: parent.width
             }
 
@@ -87,31 +86,54 @@ CutiePage {
 
                         Repeater {
                             model: [
-                                { label: qsTr("Split"),  mode: split  },
-                                { label: qsTr("Merged"), mode: merged }
+                                { label: qsTr("Split"),  mode: split,  blocks: 3 },
+                                { label: qsTr("Merged"), mode: merged, blocks: 2 }
                             ]
 
-                            CutieButton {
+                            ColumnLayout {
                                 Layout.fillWidth: true
-                                implicitHeight: commonHeight
-                                onClicked: setInterfaceMode(modelData.mode)
+                                spacing: 8
 
-                                background: Rectangle {
-                                    color: isSplitMode === modelData.mode
-                                           ? Atmosphere.primaryColor
-                                           : "transparent"
-                                    border.color: Atmosphere.primaryColor
-                                    border.width: 2
-                                    radius: commonHeight / 2
+                                CutieButton {
+                                    Layout.fillWidth: true
+                                    implicitHeight: commonHeight
+                                    onClicked: setInterfaceMode(modelData.mode)
+
+                                    background: Rectangle {
+                                        color: isSplitMode === modelData.mode
+                                               ? Atmosphere.primaryColor
+                                               : "transparent"
+                                        border.color: isSplitMode === modelData.mode
+                                                      ? Atmosphere.primaryColor
+                                                      : Atmosphere.secondaryAlphaColor
+                                        border.width: 2
+                                        radius: 8
+                                    }
+
+                                    contentItem: RowLayout {
+                                        anchors.fill: parent
+                                        anchors.margins: 6
+                                        spacing: 4
+
+                                        Repeater {
+                                            model: modelData.blocks
+                                            Rectangle {
+                                                Layout.fillWidth: true
+                                                Layout.fillHeight: true
+                                                color: "transparent"
+                                                border.color: "white"
+                                                opacity: isSplitMode === modelData.mode ? 0.9 : 0.4
+                                                radius: 4
+                                            }
+                                        }
+                                    }
                                 }
 
-                                contentItem: Text {
+                                CutieLabel {
                                     text: modelData.label
-                                    color: "white"
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
+                                    Layout.alignment: Qt.AlignHCenter
                                     font.bold: isSplitMode === modelData.mode
-                                    font.pixelSize: 14
+                                    opacity: isSplitMode === modelData.mode ? 1.0 : 0.5
                                 }
                             }
                         }
@@ -147,6 +169,7 @@ CutiePage {
                         left: parent.left
                         right: parent.right
                         top: parent.top
+                        bottom: parent.bottom
                         margins: cardPadding
                     }
                     spacing: 14
@@ -247,6 +270,8 @@ CutiePage {
 
                     CutieToggle {
                         Layout.alignment: Qt.AlignVCenter
+                        implicitWidth: 56
+                        implicitHeight: 32
 
                         Component.onCompleted: {
                             checked = ("PanelMode" in homeConfigStore.data)
