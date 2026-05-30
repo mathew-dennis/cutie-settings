@@ -9,6 +9,12 @@ CutiePage {
 
     readonly property bool split: true
     readonly property bool merged: false
+    readonly property color secondaryAlphaLightColor: Qt.rgba (
+        Atmosphere.secondaryAlphaColor.r,
+        Atmosphere.secondaryAlphaColor.g,
+        Atmosphere.secondaryAlphaColor.b,
+        0.4
+    )
 
     property int commonHeight: 50
     property int cardRadius: 16
@@ -28,6 +34,12 @@ CutiePage {
         homeConfigStore.data = data
         console.log("settings - InterfaceMode updated. Current state:", mode === split ? "Split" : "Merged")
     }
+    let secondaryAlphaLightColor= Qt.rgba(
+            Atmosphere.secondaryAlphaColor.r,
+            Atmosphere.secondaryAlphaColor.g,
+            Atmosphere.secondaryAlphaColor.b,
+            0.4   
+    )
 
     Flickable {
         anchors.fill: parent
@@ -53,7 +65,7 @@ CutiePage {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: interfaceLayout.implicitHeight + cardPadding * 2
-                color: Atmosphere.secondaryAlphaColor
+                color: secondaryAlphaLightColor
                 radius: cardRadius
 
                 ColumnLayout {
@@ -92,6 +104,7 @@ CutiePage {
 
                             ColumnLayout {
                                 Layout.fillWidth: true
+                                Layout.preferredWidth: 0
                                 spacing: 8
 
                                 CutieButton {
@@ -163,7 +176,7 @@ CutiePage {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: dockLayout.implicitHeight + cardPadding * 2
-                color: Atmosphere.secondaryAlphaColor
+                color: secondaryAlphaLightColor
                 radius: cardRadius
 
                 ColumnLayout {
@@ -243,7 +256,7 @@ CutiePage {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: panelLayout.implicitHeight + cardPadding * 2
-                color: Atmosphere.secondaryAlphaColor
+                color: secondaryAlphaLightColor
                 radius: cardRadius
 
                 RowLayout {
