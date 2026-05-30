@@ -40,6 +40,7 @@ CutiePage {
     }
 
     Flickable {
+        id: pageFlickable
         anchors.fill: parent
         contentHeight: mainColumn.height + 40
         clip: true
@@ -177,7 +178,7 @@ CutiePage {
                 color: secondaryAlphaLightColor
                 radius: cardRadius
 
-                Column {
+                ColumnLayout {
                     id: dockLayout
                     anchors {
                         left: parent.left
@@ -201,7 +202,8 @@ CutiePage {
                         Layout.fillWidth: true
                     }
 
-                    CutieSlider {
+
+                        CutieSlider {
                             id: dockSizeSlider
                             Layout.fillWidth: true
                             from: 0.1
@@ -222,7 +224,6 @@ CutiePage {
                             text: qsTr(dockSizeSlider.value.toFixed(1))
                             font.pixelSize: 14
                         }
-                    
                 }
             }
 
@@ -286,7 +287,6 @@ CutiePage {
                             id: panelToggle
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.verticalCenterOffset: 5    
                             
                             checked: panelMode
 
