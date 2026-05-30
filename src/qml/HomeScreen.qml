@@ -292,9 +292,7 @@ CutiePage {
                             id: panelToggle
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.verticalCenterOffset: 5
-                            anchors.rightMargin: 15
-                            
+                            anchors.verticalCenterOffset: 5                            
                             checked: panelMode
 
                             onToggled: {
