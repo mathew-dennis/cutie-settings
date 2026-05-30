@@ -253,50 +253,53 @@ CutiePage {
                 color: secondaryAlphaLightColor
                 radius: cardRadius
 
-                RowLayout {
-                    id: panelLayout
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.top
-                        margins: cardPadding
-                    }
-                    spacing: 16
+RowLayout {
+    id: panelLayout
+    anchors {
+        left: parent.left
+        right: parent.right
+        top: parent.top
+        margins: cardPadding
+    }
+    spacing: 16
 
-                    ColumnLayout {
-                        Layout.fillWidth: true
-                        spacing: 6
+    ColumnLayout {
+        Layout.fillWidth: true
+        Layout.preferredWidth: 70
+        spacing: 6
 
-                        CutieLabel {
-                            text: qsTr("Panel Mode")
-                            font.bold: true
-                            font.pixelSize: 16
+        CutieLabel {
+            text: qsTr("Panel Mode")
+            font.bold: true
+            font.pixelSize: 16
+        }
+
+        CutieLabel {
+            text: qsTr("Enable or disable the dock to stretch to full width.")
+            font.pixelSize: 13
+            opacity: 0.7
+            wrapMode: Text.WordWrap
+            Layout.fillWidth: true
+        }
+    }
+
+    CutieToggle {
+        Layout.fillWidth: true
+        Layout.preferredWidth: 30
+        Layout.alignment: Qt.AlignVCenter
+        Layout.minimumWidth: 50 
+        checked: panelMode
+
+        onToggled: {
+            let d = homeConfigStore.data
+            d.PanelMode = checked
+            homeConfigStore.data = d
+            console.log("settings - panelMode updated. Current state:",
+                        homeConfigStore.data.PanelMode ? "panel mode" : "dock mode")
                         }
-
-                        CutieLabel {
-                            text: qsTr("Enable or disable the dock to stretch to full width.")
-                            font.pixelSize: 13
-                            opacity: 0.7
-                            wrapMode: Text.WordWrap
-                            Layout.fillWidth: true
-                        }
-                    }
-
-                    CutieToggle {
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.minimumWidth: 50
-                        checked: panelMode
-
-                        onToggled: {
-                            let d = homeConfigStore.data
-                            d.PanelMode = checked
-                            homeConfigStore.data = d
-                            console.log("settings - panelMode updated. Current state:",
-                                        homeConfigStore.data.PanelMode ? "panel mode" : "dock mode")
-                        }
-                    }
-                }
-            }
+        }
+    }
+}
 
             // Note
             Item { width: 1; height: 10 }
