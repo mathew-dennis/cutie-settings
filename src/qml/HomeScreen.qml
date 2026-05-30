@@ -183,7 +183,6 @@ CutiePage {
                         left: parent.left
                         right: parent.right
                         top: parent.top
-                        bottom: parent.bottom
                         margins: cardPadding
                     }
                     spacing: 14
@@ -227,8 +226,6 @@ CutiePage {
                             font.pixelSize: 14
                         }
                     }
-
-                    Item { width: 1; height: 10 }
                 }
             }
 
@@ -292,7 +289,9 @@ CutiePage {
                             id: panelToggle
                             anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
-                            anchors.verticalCenterOffset: 5                            
+                            anchors.verticalCenterOffset: 5
+                            anchors.rightMargin: 15
+                            
                             checked: panelMode
 
                             onToggled: {
@@ -305,7 +304,7 @@ CutiePage {
                         }
                     }
                 }
-            }
+            } 
 
             // Note
             Item { width: 1; height: 10 }
