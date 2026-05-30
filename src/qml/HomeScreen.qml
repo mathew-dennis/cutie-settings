@@ -284,7 +284,6 @@ RowLayout {
     }
 
     CutieToggle {
-        Layout.fillWidth: true
         Layout.alignment: Qt.AlignVCenter
         checked: panelMode
 
