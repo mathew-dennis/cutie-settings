@@ -28,6 +28,10 @@ CutiePage {
                                ? homeConfigStore.data.InterfaceMode === split
                                : merged
 
+    property bool panelMode:   homeConfigStore.data && ("PanelMode" in homeConfigStore.data)
+                               ? homeConfigStore.data.PanelMode === split
+                               : true
+
     function setInterfaceMode(mode) {
         let data = homeConfigStore.data
         data.InterfaceMode = mode
@@ -280,14 +284,7 @@ CutiePage {
 
                     CutieToggle {
                         Layout.alignment: Qt.AlignVCenter
-                        implicitWidth: 56
-                        implicitHeight: 32
-
-                        Component.onCompleted: {
-                            checked = ("PanelMode" in homeConfigStore.data)
-                                      ? homeConfigStore.data.PanelMode
-                                      : true
-                        }
+                        checked=panelMode
 
                         onToggled: {
                             let d = homeConfigStore.data
