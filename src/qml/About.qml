@@ -136,8 +136,8 @@ CutiePage {
                         InfoRow { label: qsTr("Device Model"); value: systemInfo.hwInfo.device }
                         InfoRow { label: qsTr("Processor"); value: systemInfo.hwInfo.processor }
                         InfoRow { label: qsTr("Memory"); value: systemInfo.hwInfo.memory }
-                        InfoRow { label: qsTr("Storage Capacity"); value: systemInfo.hwInfo.storage }
-                        InfoRow { label: qsTr("Display Resolution"); value: systemInfo.hwInfo.display }
+                        InfoRow { label: qsTr("Storage"); value: systemInfo.hwInfo.storage }
+                        InfoRow { label: qsTr("Display"); value: systemInfo.hwInfo.display }
                         InfoRow { label: qsTr("Battery Status"); value: systemInfo.hwInfo.battery }
                     }
                 }
