@@ -2,6 +2,7 @@ import Cutie
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import Cutie.Systeminfo
 
 CutiePage {
     id: aboutPage
@@ -16,6 +17,11 @@ CutiePage {
     property int commonHeight: 50
     property int cardRadius: 16
     property int cardPadding: 20
+
+    // Backend Plugin Instantiation
+    CutieSystemInfo {
+        id: systemInfo
+    }
 
     // Fixed Page Header stays on top
     CutiePageHeader {
@@ -89,11 +95,10 @@ CutiePage {
                         Layout.fillWidth: true
                         spacing: 10
 
-                        // Hardcoded values for static UI visual testing
-                        InfoRow { label: qsTr("OS Name");        value: "Droidian Linux" }
-                        InfoRow { label: qsTr("Kernel Version"); value: "4.19.157-cutie-core" }
-                        InfoRow { label: qsTr("Build Version");  value: "20260613-bookworm" }
-                        InfoRow { label: qsTr("Update Channel"); value: "Testing" }
+                        InfoRow { label: qsTr("OS Name"); value: systemInfo.osInfo.osName }
+                        InfoRow { label: qsTr("Kernel Version"); value: systemInfo.osInfo.kernel }
+                        InfoRow { label: qsTr("Build Version"); value: systemInfo.osInfo.build }
+                        InfoRow { label: qsTr("Update Channel"); value: systemInfo.osInfo.channel }
                     }
                 }
             }
@@ -128,13 +133,12 @@ CutiePage {
                         Layout.fillWidth: true
                         spacing: 10
 
-                        // Hardcoded values for static UI visual testing
-                        InfoRow { label: qsTr("Device Model");      value: "Galaxy S20 FE" }
-                        InfoRow { label: qsTr("Processor");         value: "Snapdragon 865" }
-                        InfoRow { label: qsTr("Memory");            value: "6.0 GB" }
-                        InfoRow { label: qsTr("Storage Capacity");  value: "128 GB" }
-                        InfoRow { label: qsTr("Display Resolution"); value: "1080x2400" }
-                        InfoRow { label: qsTr("Battery Status");    value: "85%" }
+                        InfoRow { label: qsTr("Device Model"); value: systemInfo.hwInfo.device }
+                        InfoRow { label: qsTr("Processor"); value: systemInfo.hwInfo.processor }
+                        InfoRow { label: qsTr("Memory"); value: systemInfo.hwInfo.memory }
+                        InfoRow { label: qsTr("Storage Capacity"); value: systemInfo.hwInfo.storage }
+                        InfoRow { label: qsTr("Display Resolution"); value: systemInfo.hwInfo.display }
+                        InfoRow { label: qsTr("Battery Status"); value: systemInfo.hwInfo.battery }
                     }
                 }
             }
