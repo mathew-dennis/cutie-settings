@@ -147,28 +147,33 @@ CutiePage {
         }
     }
 
-    // ── Inline Row Component for Layout Consistency ─────────────────────
+    // ── Inline Row Component with Overflow Safety ─────────────────────
     component InfoRow : RowLayout {
         id: rowRoot
         property string label: ""
         property string value: ""
 
         Layout.fillWidth: true
-        height: 24
+        spacing: 12
 
         CutieLabel {
             text: rowRoot.label
             font.pixelSize: 14
             opacity: 0.7
-            Layout.fillWidth: true
+            Layout.preferredWidth: parent.width * 0.35
+            elide: Text.ElideRight
         }
 
         CutieLabel {
             text: rowRoot.value
             font.pixelSize: 14
             font.bold: true
-            Layout.alignment: Qt.AlignRight
+            Layout.fillWidth: true
             horizontalAlignment: Text.AlignRight
+            
+            // Fix: Cleanly cuts off ultra-long system strings using "..."
+            elide: Text.ElideRight
+            maximumLineCount: 1
         }
     }
 }
