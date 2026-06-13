@@ -159,7 +159,7 @@ CutiePage {
         CutieLabel {
             text: rowRoot.label
             font.pixelSize: 14
-            opacity: 0.7
+            opacity: 0.9
             Layout.preferredWidth: parent.width * 0.35
             elide: Text.ElideRight
         }
