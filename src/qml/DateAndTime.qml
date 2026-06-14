@@ -152,9 +152,9 @@ CutiePage {
                                 visibleItemCount: 3
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: secondsTumbler.currentIndex === index ? 26 : 18 // Made bigger
+                                    font.pixelSize: secondsTumbler.currentIndex === index ? 40 : 18 // Made bigger
                                     font.bold: secondsTumbler.currentIndex === index
-                                    opacity: secondsTumbler.currentIndex === index ? 1.0 : 0.3
+                                    opacity: secondsTumbler.currentIndex === index ? 1.0 : 0.5
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
