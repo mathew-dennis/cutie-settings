@@ -389,6 +389,7 @@ CutiePage {
                             }
                         }
 
+                        // Direct instantaneous apply pattern
                         Switch {
                             id: ntpSwitch
                             checked: CutieDateTime.ntpEnabled
@@ -416,10 +417,10 @@ CutiePage {
                     }
                 }
 
-                // 6. Time Zone
+                // 6. Time Zone (Refactored to mirror instantaneous application)
                 Rectangle {
                     Layout.fillWidth: true
-                    height: 130
+                    height: 115
                     color: cardColor
                     radius: 16
                     clip: true
@@ -427,6 +428,7 @@ CutiePage {
                     ColumnLayout {
                         anchors.fill: parent
                         anchors.margins: 15
+                        spacing: 8
 
                         Text {
                             text: "Time Zone"
@@ -435,53 +437,30 @@ CutiePage {
                             font.bold: true
                         }
 
-                        RowLayout {
+                        ComboBox {
+                            id: timezoneCombo
                             Layout.fillWidth: true
-                            spacing: 10
+                            model: CutieDateTime.availableTimezones()
+                            
+                            // Declarative state binding: updates automatically if the backend value changes
+                            currentIndex: model.indexOf(CutieDateTime.currentTimezone)
 
-                            ComboBox {
-                                id: timezoneCombo
-                                Layout.fillWidth: true
-                                model: CutieDateTime.availableTimezones()
+                            // Explicit user interaction patterns run immediately without a "Set" button
+                            onActivated: CutieDateTime.setTimezone(currentText)
 
-                                Component.onCompleted: {
-                                    var idx = model.indexOf(CutieDateTime.currentTimezone)
-                                    if (idx >= 0)
-                                        currentIndex = idx
-                                }
-
-                                background: Rectangle {
-                                    color: "#0A1118"
-                                    radius: 8
-                                    implicitHeight: 40
-                                    border.color: "#2C3E50"
-                                    border.width: 1
-                                }
-                                contentItem: Text {
-                                    text: parent.displayText
-                                    color: textColor
-                                    verticalAlignment: Text.AlignVCenter
-                                    elide: Text.ElideRight
-                                    leftPadding: 10
-                                }
+                            background: Rectangle {
+                                color: "#0A1118"
+                                radius: 12 // Standardized with the 12px layout button pattern
+                                implicitHeight: 40
+                                border.color: "#2C3E50"
+                                border.width: 1
                             }
-
-                            Button {
-                                text: "Set"
-                                onClicked: CutieDateTime.setTimezone(timezoneCombo.currentText)
-                                contentItem: Text {
-                                    text: parent.text
-                                    color: "#000000"
-                                    font.bold: true
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
-                                }
-                                background: Rectangle {
-                                    color: accentColor
-                                    radius: 8
-                                    implicitWidth: 60
-                                    implicitHeight: 40
-                                }
+                            contentItem: Text {
+                                text: parent.displayText
+                                color: textColor
+                                verticalAlignment: Text.AlignVCenter
+                                elide: Text.ElideRight
+                                leftPadding: 10
                             }
                         }
 
@@ -489,7 +468,6 @@ CutiePage {
                             text: "Applies immediately to the system clock."
                             color: subTextColor
                             font.pixelSize: 12
-                            Layout.topMargin: 5
                         }
                     }
                 }
