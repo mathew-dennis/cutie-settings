@@ -18,7 +18,7 @@ CutiePage {
     property int cardRadius: 16
     property int cardPadding: 14 
 
-    // ── Static & Safe Initialization Models (Prevents Parser Lockups) ───
+    // ── Static & Safe Initialization Models ──────────────────────────────
     property var daysModel: ["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
     property var monthsModel: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     property var yearsModel: ["2024","2025","2026","2027","2028","2029","2030","2031","2032","2033","2034","2035","2036","2037","2038","2039","2040"]
@@ -81,6 +81,7 @@ CutiePage {
                 height: pickerLayout.implicitHeight + cardPadding * 2
                 color: secondaryAlphaLightColor
                 radius: cardRadius
+                enabled: !automaticToggle.checked 
 
                 ColumnLayout {
                     id: pickerLayout
@@ -90,22 +91,16 @@ CutiePage {
                         top: parent.top
                         margins: cardPadding
                     }
-                    spacing: 12
-                    enabled: !automaticToggle.checked 
+                    spacing: 16
 
-                    // Time Row Section (Brought numbers closer safely via delegate)
+                    // Time Row Section (Centered, Larger Clock Numbers)
                     RowLayout {
                         Layout.fillWidth: true
-                        
-                        CutieLabel {
-                            text: qsTr("Time")
-                            font.bold: true
-                            font.pixelSize: 14
-                            Layout.fillWidth: true
-                        }
+                        Layout.alignment: Qt.AlignHCenter
 
                         RowLayout {
-                            spacing: 2
+                            spacing: 4
+                            Layout.alignment: Qt.AlignHCenter
 
                             Tumbler {
                                 id: hoursTumbler
@@ -113,45 +108,57 @@ CutiePage {
                                 visibleItemCount: 3
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: hoursTumbler.currentIndex === index ? 16 : 13
+                                    font.pixelSize: hoursTumbler.currentIndex === index ? 26 : 18 // Made bigger
                                     font.bold: hoursTumbler.currentIndex === index
                                     opacity: hoursTumbler.currentIndex === index ? 1.0 : 0.3
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    height: 20 // Compressed item line height directly
+                                    height: 30 // Proportional height to keep numbers close
                                 }
                             }
-                            Text { text: ":"; color: Atmosphere.textColor; font.pixelSize: 14; opacity: 0.5 }
+                            Text { 
+                                text: ":"
+                                color: Atmosphere.textColor
+                                font.pixelSize: 22 
+                                opacity: 0.5
+                                Layout.alignment: Qt.AlignVCenter
+                            }
                             Tumbler {
                                 id: minutesTumbler
                                 model: 60
                                 visibleItemCount: 3
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: minutesTumbler.currentIndex === index ? 16 : 13
+                                    font.pixelSize: minutesTumbler.currentIndex === index ? 26 : 18 // Made bigger
                                     font.bold: minutesTumbler.currentIndex === index
                                     opacity: minutesTumbler.currentIndex === index ? 1.0 : 0.3
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    height: 20
+                                    height: 30
                                 }
                             }
-                            Text { text: ":"; color: Atmosphere.textColor; font.pixelSize: 14; opacity: 0.5 }
+                            Text { 
+                                text: ":"
+                                color: Atmosphere.textColor
+                                font.pixelSize: 22 
+                                opacity: 0.5
+                                Layout.alignment: Qt.AlignVCenter
+                            }
                             Tumbler {
                                 id: secondsTumbler
                                 model: 60
                                 visibleItemCount: 3
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: secondsTumbler.currentIndex === index ? 16 : 13
+                                    font.pixelSize: secondsTumbler.currentIndex === index ? 26 : 18 // Made bigger
                                     font.bold: secondsTumbler.currentIndex === index
                                     opacity: secondsTumbler.currentIndex === index ? 1.0 : 0.3
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    height: 20
+                                    height: 30
                                 }
                             }
                         }
@@ -165,49 +172,74 @@ CutiePage {
                         opacity: 0.15
                     }
 
-                    // Date Section (Clean ComboBox drop downs)
-                    ColumnLayout {
+                    // Date Dropdowns Row (Labels removed)
+                    RowLayout {
                         Layout.fillWidth: true
-                        spacing: 6
+                        spacing: 8
 
-                        CutieLabel {
-                            text: qsTr("Date")
-                            font.bold: true
-                            font.pixelSize: 14
-                        }
-
-                        RowLayout {
+                        ComboBox {
+                            id: dayCombo
                             Layout.fillWidth: true
-                            spacing: 8
-
-                            ComboBox {
-                                id: dayCombo
-                                Layout.fillWidth: true
-                                Layout.preferredWidth: 1
-                                model: dateAndTimePage.daysModel
-                            }
-
-                            ComboBox {
-                                id: monthCombo
-                                Layout.fillWidth: true
-                                Layout.preferredWidth: 1
-                                model: dateAndTimePage.monthsModel
-                            }
-
-                            ComboBox {
-                                id: yearCombo
-                                Layout.fillWidth: true
-                                Layout.preferredWidth: 1
-                                model: dateAndTimePage.yearsModel
-                            }
+                            Layout.preferredWidth: 1
+                            model: dateAndTimePage.daysModel
                         }
+
+                        ComboBox {
+                            id: monthCombo
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 1
+                            model: dateAndTimePage.monthsModel
+                        }
+
+                        ComboBox {
+                            id: yearCombo
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 1.2
+                            model: dateAndTimePage.yearsModel
+                        }
+                    }
+                }
+            }
+
+            // ── Actions Row Block (Moved directly above Set Automatically) ──
+            Item { width: 1; height: 14; visible: !automaticToggle.checked }
+            RowLayout {
+                width: parent.width - 32
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 14
+                visible: !automaticToggle.checked 
+
+                CutieButton {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1 
+                    implicitHeight: commonHeight
+                    text: qsTr("Reset")
+                    onClicked: syncInputsToNow()
+                }
+
+                CutieButton {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1 
+                    implicitHeight: commonHeight
+                    text: qsTr("Apply Changes")
+
+                    onClicked: {
+                        var targetDate = new Date(
+                            parseInt(yearCombo.currentText),
+                            monthCombo.currentIndex,
+                            parseInt(dayCombo.currentText),
+                            hoursTumbler.currentIndex,
+                            minutesTumbler.currentIndex,
+                            secondsTumbler.currentIndex
+                        )
+                        console.log("Manual system time committed to:", targetDate.toString())
                     }
                 }
             }
 
             Item { width: 1; height: 16 }
 
-            // ── Card 2: Set Automatically (Now positioned below Picker Card) ──
+            // ── Card 2: Set Automatically ────────────────────────────────
             Rectangle {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -266,45 +298,9 @@ CutiePage {
                 }
             }
 
-            // ── Actions Row Block (ONLY section hidden via toggle) ────────
-            Item { width: 1; height: 14; visible: !automaticToggle.checked }
-            RowLayout {
-                width: parent.width - 32
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 14
-                visible: !automaticToggle.checked 
-
-                CutieButton {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 1 // Guarantees uniform layout sizing
-                    implicitHeight: commonHeight
-                    text: qsTr("Reset")
-                    onClicked: syncInputsToNow()
-                }
-
-                CutieButton {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 1 // Matches sizing perfectly with Reset
-                    implicitHeight: commonHeight
-                    text: qsTr("Apply Changes")
-
-                    onClicked: {
-                        var targetDate = new Date(
-                            parseInt(yearCombo.currentText),
-                            monthCombo.currentIndex,
-                            parseInt(dayCombo.currentText),
-                            hoursTumbler.currentIndex,
-                            minutesTumbler.currentIndex,
-                            secondsTumbler.currentIndex
-                        )
-                        console.log("Manual system time committed to:", targetDate.toString())
-                    }
-                }
-            }
-
             Item { width: 1; height: 16 }
 
-            // ── Card 3: Time Zone Card (Always visible but locks automatically) ──
+            // ── Card 3: Time Zone Card ───────────────────────────────────
             Rectangle {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
