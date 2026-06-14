@@ -1,3 +1,4 @@
+import Cutie
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -16,7 +17,7 @@ component TumblerLabel: Text {
     verticalAlignment: Text.AlignVCenter
 }
 
-Page {
+CutiePage {
     id: dateTimePage
     width: 400
     height: 800
