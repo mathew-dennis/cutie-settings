@@ -1,12 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import Cutie.Datetime
 
 // Shared delegate for every Tumbler on this page.
-// `current` highlights the centered (selected) item. `bigSize`/`smallSize`
-// and `useBold` let the Time and Date tumblers share one definition while
-// keeping their slightly different look (Time = bold + bigger digits).
 component TumblerLabel: Text {
     property bool current: false
     property int  bigSize: 24
@@ -25,6 +21,45 @@ Page {
     width: 400
     height: 800
 
+    // ==========================================
+    // MOCK BACKEND ENGINE (Replaces Cutie.Datetime)
+    // ==========================================
+    QtObject {
+        id: CutieDateTime
+        property bool ntpEnabled: false
+        property string currentTimezone: "Asia/Dubai"
+
+        signal errorOccurred(string message)
+
+        function availableTimezones() {
+            return [
+                "UTC", 
+                "Europe/London", 
+                "Europe/Paris", 
+                "America/New_York", 
+                "Asia/Dubai", 
+                "Asia/Kolkata", 
+                "Asia/Tokyo", 
+                "Australia/Sydney"
+            ]
+        }
+
+        function setTime(date) {
+            console.log("Mock Backend: System clock set to ->", date.toString())
+        }
+
+        function setNTP(enabled) {
+            ntpEnabled = enabled
+            console.log("Mock Backend: NTP Sync set to ->", enabled)
+        }
+
+        function setTimezone(tz) {
+            currentTimezone = tz
+            console.log("Mock Backend: System timezone altered to ->", tz)
+        }
+    }
+    // ==========================================
+
     // Main App Background (Dark Blue/Grey)
     background: Rectangle {
         color: "#080E14"
@@ -37,7 +72,6 @@ Page {
     readonly property color subTextColor: "#8A9AA9"
 
     // Loads the tumblers with the device's current date/time.
-    // Called once on page load and again by the "Reset" button.
     function syncTumblersToNow() {
         var now = new Date()
         hoursTumbler.currentIndex   = now.getHours()
@@ -50,8 +84,7 @@ Page {
 
     Component.onCompleted: syncTumblersToNow()
 
-    // Surfaces CutieDateTime.errorOccurred (e.g. polkit denied, D-Bus error)
-    // as a short banner under the header.
+    // Surfaces CutieDateTime.errorOccurred as a short banner under the header.
     Connections {
         target: CutieDateTime
         function onErrorOccurred(message) {
@@ -78,7 +111,7 @@ Page {
             spacing: 15
 
             ToolButton {
-                text: "←" // Placeholder for your actual back icon
+                text: "←"
                 font.pixelSize: 24
                 contentItem: Text {
                     text: parent.text
@@ -104,8 +137,9 @@ Page {
             }
 
             ToolButton {
-                text: "⚙" // Placeholder for settings icon
+                text: "⚙"
                 font.pixelSize: 20
+                onClicked: CutieDateTime.errorOccurred("Mock Error: Interactive Authentication failed (polkit denied access).")
                 contentItem: Text {
                     text: parent.text
                     font: parent.font
@@ -122,7 +156,7 @@ Page {
             }
         }
 
-        // Error feedback from CutieDateTime (hidden until errorOccurred fires)
+        // Error feedback layout block
         Label {
             id: errorBanner
             Layout.fillWidth: true
@@ -224,7 +258,7 @@ Page {
 
                             Tumbler {
                                 id: dayTumbler
-                                model: 31 // simplification: every month shown as 31 days
+                                model: 31 
                                 visibleItemCount: 3
                                 delegate: TumblerLabel {
                                     text: (modelData + 1).toString().padStart(2, '0')
@@ -282,7 +316,7 @@ Page {
                             verticalAlignment: Text.AlignVCenter
                         }
                         background: Rectangle {
-                            color: "#1A2530" // Darker grey for secondary action
+                            color: "#1A2530"
                             radius: 12
                             implicitHeight: 50
                         }
@@ -291,7 +325,6 @@ Page {
                     Button {
                         Layout.fillWidth: true
                         text: "Set"
-                        // timedated rejects SetTime while NTP is syncing the clock.
                         enabled: !CutieDateTime.ntpEnabled
                         opacity: enabled ? 1.0 : 0.5
                         onClicked: {
@@ -307,7 +340,7 @@ Page {
                         }
                         contentItem: Text {
                             text: parent.text
-                            color: "#000000" // Black text on cyan background
+                            color: "#000000"
                             font.bold: true
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
@@ -357,11 +390,6 @@ Page {
 
                         Switch {
                             id: ntpSwitch
-                            // Reflects the backend value when the page loads.
-                            // Tapping the switch breaks this binding (normal
-                            // QML behaviour) and calls setNTP() below;
-                            // ntpEnabledChanged then keeps things correct if
-                            // NTP is toggled elsewhere (e.g. by NetworkManager).
                             checked: CutieDateTime.ntpEnabled
                             onToggled: CutieDateTime.setNTP(checked)
 
@@ -388,8 +416,6 @@ Page {
                 }
 
                 // 6. Time Zone
-                // Always shown: timezone selection is independent of NTP
-                // (timedate1 has no "automatic timezone" property).
                 Rectangle {
                     Layout.fillWidth: true
                     height: 130
@@ -415,12 +441,6 @@ Page {
                             ComboBox {
                                 id: timezoneCombo
                                 Layout.fillWidth: true
-
-                                // Fetched once when the page is created. The
-                                // returned JS array is held only by this
-                                // ComboBox and is freed when the page is
-                                // destroyed — see
-                                // CutieDateTime::availableTimezones().
                                 model: CutieDateTime.availableTimezones()
 
                                 Component.onCompleted: {
@@ -473,7 +493,7 @@ Page {
                     }
                 }
 
-                // Bottom padding element to ensure scrolling clears the bottom
+                // Bottom padding
                 Item { Layout.preferredHeight: 20 }
             }
         }
