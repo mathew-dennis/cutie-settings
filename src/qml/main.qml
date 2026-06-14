@@ -25,6 +25,11 @@ CutieWindow {
 			component: Qt.createComponent("Audio.qml")
 		},		
 		{
+			text: qsTr("Time And Date"),
+			icon: "user-home-symbolic",
+			component: Qt.createComponent("DateAndTime.qml")
+		},
+		{
 			text: qsTr("Home Screen"),
 			icon: "user-home-symbolic",
 			component: Qt.createComponent("HomeScreen.qml")
