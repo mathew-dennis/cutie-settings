@@ -16,12 +16,12 @@ CutiePage {
     )
     property int commonHeight: 50
     property int cardRadius: 16
-    property int cardPadding: 14 // Reduced from 20 to make the cards smaller
+    property int cardPadding: 14 
 
-    // ── Safe Backward-Compatible Models for Dropdowns ───────────────────
-    property var daysModel: []
+    // ── Static & Safe Initialization Models (Prevents Parser Lockups) ───
+    property var daysModel: ["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
     property var monthsModel: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    property var yearsModel: []
+    property var yearsModel: ["2024","2025","2026","2027","2028","2029","2030","2031","2032","2033","2034","2035","2036","2037","2038","2039","2040"]
 
     // ── Properties & State Bindings ─────────────────────────────────────
     property bool isAutomatic: dateTimeStore.data && ("isAutomatic" in dateTimeStore.data)
@@ -38,27 +38,20 @@ CutiePage {
     function syncInputsToNow() {
         var now = new Date()
         
-        // Sync Time Tumblers
         hoursTumbler.currentIndex   = now.getHours()
         minutesTumbler.currentIndex = now.getMinutes()
         secondsTumbler.currentIndex = now.getSeconds()
         
-        // Sync Date Dropdowns
         dayCombo.currentIndex   = now.getDate() - 1
         monthCombo.currentIndex = now.getMonth()
-        yearCombo.currentIndex  = now.getFullYear() - 2000
+        
+        var yearIdx = yearsModel.indexOf(now.getFullYear().toString())
+        if (yearIdx !== -1) {
+            yearCombo.currentIndex = yearIdx
+        }
     }
 
-    Component.onCompleted: {
-        // Safely populate dropdown models loop for older JS engines
-        var d = []; for (var i = 1; i <= 31; i++) { d.push(i < 10 ? "0" + i : i.toString()); }
-        daysModel = d;
-
-        var y = []; for (var j = 2000; j <= 2049; j++) { y.push(j.toString()); }
-        yearsModel = y;
-
-        syncInputsToNow()
-    }
+    Component.onCompleted: syncInputsToNow()
 
     // ── Layout Tree ──────────────────────────────────────────────────────
     Flickable {
@@ -98,10 +91,9 @@ CutiePage {
                         margins: cardPadding
                     }
                     spacing: 12
-                    // Inputs grey out/disable when Automatic time is on, but card stays visible
                     enabled: !automaticToggle.checked 
 
-                    // Time Section (Tumblers brought closer together)
+                    // Time Row Section (Brought numbers closer safely via delegate)
                     RowLayout {
                         Layout.fillWidth: true
                         
@@ -113,62 +105,59 @@ CutiePage {
                         }
 
                         RowLayout {
-                            spacing: 4
+                            spacing: 2
 
                             Tumbler {
                                 id: hoursTumbler
                                 model: 24
                                 visibleItemCount: 3
-                                height: 70 // Forced short container height to compress layout
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    implicitHeight: 22 // Tight item height pulls numbers closer
-                                    font.pixelSize: hoursTumbler.currentIndex === index ? 18 : 14
+                                    font.pixelSize: hoursTumbler.currentIndex === index ? 16 : 13
                                     font.bold: hoursTumbler.currentIndex === index
                                     opacity: hoursTumbler.currentIndex === index ? 1.0 : 0.3
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
+                                    height: 20 // Compressed item line height directly
                                 }
                             }
-                            Text { text: ":"; color: Atmosphere.textColor; font.pixelSize: 16; opacity: 0.5 }
+                            Text { text: ":"; color: Atmosphere.textColor; font.pixelSize: 14; opacity: 0.5 }
                             Tumbler {
                                 id: minutesTumbler
                                 model: 60
                                 visibleItemCount: 3
-                                height: 70
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    implicitHeight: 22
-                                    font.pixelSize: minutesTumbler.currentIndex === index ? 18 : 14
+                                    font.pixelSize: minutesTumbler.currentIndex === index ? 16 : 13
                                     font.bold: minutesTumbler.currentIndex === index
                                     opacity: minutesTumbler.currentIndex === index ? 1.0 : 0.3
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
+                                    height: 20
                                 }
                             }
-                            Text { text: ":"; color: Atmosphere.textColor; font.pixelSize: 16; opacity: 0.5 }
+                            Text { text: ":"; color: Atmosphere.textColor; font.pixelSize: 14; opacity: 0.5 }
                             Tumbler {
                                 id: secondsTumbler
                                 model: 60
                                 visibleItemCount: 3
-                                height: 70
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    implicitHeight: 22
-                                    font.pixelSize: secondsTumbler.currentIndex === index ? 18 : 14
+                                    font.pixelSize: secondsTumbler.currentIndex === index ? 16 : 13
                                     font.bold: secondsTumbler.currentIndex === index
                                     opacity: secondsTumbler.currentIndex === index ? 1.0 : 0.3
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
+                                    height: 20
                                 }
                             }
                         }
                     }
 
-                    // Separation line spacer
+                    // Divider Separation Line
                     Rectangle {
                         Layout.fillWidth: true
                         height: 1
@@ -176,7 +165,7 @@ CutiePage {
                         opacity: 0.15
                     }
 
-                    // Date Section (Replaced with Dropdown lists)
+                    // Date Section (Clean ComboBox drop downs)
                     ColumnLayout {
                         Layout.fillWidth: true
                         spacing: 6
@@ -201,14 +190,14 @@ CutiePage {
                             ComboBox {
                                 id: monthCombo
                                 Layout.fillWidth: true
-                                Layout.preferredWidth: 1.2
+                                Layout.preferredWidth: 1
                                 model: dateAndTimePage.monthsModel
                             }
 
                             ComboBox {
                                 id: yearCombo
                                 Layout.fillWidth: true
-                                Layout.preferredWidth: 1.3
+                                Layout.preferredWidth: 1
                                 model: dateAndTimePage.yearsModel
                             }
                         }
@@ -218,7 +207,7 @@ CutiePage {
 
             Item { width: 1; height: 16 }
 
-            // ── Card 2: Set Automatically (Moved below Date & Time Card) ──
+            // ── Card 2: Set Automatically (Now positioned below Picker Card) ──
             Rectangle {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -277,17 +266,17 @@ CutiePage {
                 }
             }
 
-            // ── Action Buttons Block (ONLY hidden part when Toggled) ──────
+            // ── Actions Row Block (ONLY section hidden via toggle) ────────
             Item { width: 1; height: 14; visible: !automaticToggle.checked }
             RowLayout {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 14
-                visible: !automaticToggle.checked // Hides completely when auto time is enabled
+                visible: !automaticToggle.checked 
 
                 CutieButton {
                     Layout.fillWidth: true
-                    Layout.preferredWidth: 1 // Forces explicit matching proportional sizing
+                    Layout.preferredWidth: 1 // Guarantees uniform layout sizing
                     implicitHeight: commonHeight
                     text: qsTr("Reset")
                     onClicked: syncInputsToNow()
@@ -295,20 +284,15 @@ CutiePage {
 
                 CutieButton {
                     Layout.fillWidth: true
-                    Layout.preferredWidth: 1 // Perfectly balances layout width with Reset button
+                    Layout.preferredWidth: 1 // Matches sizing perfectly with Reset
                     implicitHeight: commonHeight
                     text: qsTr("Apply Changes")
-                    
-                    background: Rectangle {
-                        color: Atmosphere.primaryColor
-                        radius: 8
-                    }
 
                     onClicked: {
                         var targetDate = new Date(
-                            yearCombo.currentIndex + 2000,
+                            parseInt(yearCombo.currentText),
                             monthCombo.currentIndex,
-                            dayCombo.currentIndex + 1,
+                            parseInt(dayCombo.currentText),
                             hoursTumbler.currentIndex,
                             minutesTumbler.currentIndex,
                             secondsTumbler.currentIndex
@@ -320,7 +304,7 @@ CutiePage {
 
             Item { width: 1; height: 16 }
 
-            // ── Card 3: Manual Time Zone Card (Stays Visible) ────────────
+            // ── Card 3: Time Zone Card (Always visible but locks automatically) ──
             Rectangle {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
