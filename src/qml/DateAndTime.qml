@@ -92,15 +92,15 @@ CutiePage {
                     }
                     spacing: 16
 
-                    // Styled Border Rectangle Framing the Massive Clock Display
+                    // Transparent Framing Box with Borderline
                     Rectangle {
                         Layout.alignment: Qt.AlignHCenter
-                        implicitWidth: timeRowLayout.implicitWidth + 32
-                        implicitHeight: timeRowLayout.implicitHeight + 8
-                        color: Qt.rgba(Atmosphere.backgroundColor.r, Atmosphere.backgroundColor.g, Atmosphere.backgroundColor.b, 0.2)
-                        border.color: Qt.rgba(Atmosphere.textColor.r, Atmosphere.textColor.g, Atmosphere.textColor.b, 0.15)
-                        border.width: 1
-                        radius: 12
+                        implicitWidth: timeRowLayout.implicitWidth + 40
+                        implicitHeight: timeRowLayout.implicitHeight + 16
+                        color: "transparent" // Fully transparent so digits show clearly
+                        border.color: Qt.rgba(Atmosphere.textColor.r, Atmosphere.textColor.g, Atmosphere.textColor.b, 0.25)
+                        border.width: 1.5
+                        radius: 14
 
                         RowLayout {
                             id: timeRowLayout
@@ -111,17 +111,17 @@ CutiePage {
                                 id: hoursTumbler
                                 model: 24
                                 visibleItemCount: 3
-                                height: 190 // Comfortably bounds the massive text sizes
-                                Layout.preferredWidth: 110
+                                height: 270 // Expanded to scale cleanly with 85px font
+                                Layout.preferredWidth: 120
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: hoursTumbler.currentIndex === index ? 85 : 38
+                                    font.pixelSize: hoursTumbler.currentIndex === index ? 85 : 36
                                     font.bold: hoursTumbler.currentIndex === index
                                     opacity: hoursTumbler.currentIndex === index ? 1.0 : 0.2
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    height: 90 // Perfectly scaled item boundary line height
+                                    height: 90 // Matches font allocation to prevent overlapping
                                 }
                             }
 
@@ -131,18 +131,18 @@ CutiePage {
                                 font.pixelSize: 64 
                                 opacity: 0.4
                                 Layout.alignment: Qt.AlignVCenter
-                                topPadding: -8 // Optical alignment correction for large fonts
+                                topPadding: -10 
                             }
 
                             Tumbler {
                                 id: minutesTumbler
                                 model: 60
                                 visibleItemCount: 3
-                                height: 190
-                                Layout.preferredWidth: 110
+                                height: 270
+                                Layout.preferredWidth: 120
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: minutesTumbler.currentIndex === index ? 85 : 38
+                                    font.pixelSize: minutesTumbler.currentIndex === index ? 85 : 36
                                     font.bold: minutesTumbler.currentIndex === index
                                     opacity: minutesTumbler.currentIndex === index ? 1.0 : 0.2
                                     color: Atmosphere.textColor
@@ -191,7 +191,7 @@ CutiePage {
                 }
             }
 
-            // ── Actions Row Block (Positioned directly above Set Automatically) ──
+            // ── Actions Row Block (Directly above Set Automatically) ──────
             Item { width: 1; height: 14; visible: !automaticToggle.checked }
             RowLayout {
                 width: parent.width - 32
@@ -220,7 +220,7 @@ CutiePage {
                             parseInt(dayCombo.currentText),
                             hoursTumbler.currentIndex,
                             minutesTumbler.currentIndex,
-                            0 // Defaulted seconds channel down clean to zero
+                            0
                         )
                         console.log("Manual system time committed to:", targetDate.toString())
                     }
