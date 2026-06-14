@@ -40,7 +40,6 @@ CutiePage {
         
         hoursTumbler.currentIndex   = now.getHours()
         minutesTumbler.currentIndex = now.getMinutes()
-        secondsTumbler.currentIndex = now.getSeconds()
         
         dayCombo.currentIndex   = now.getDate() - 1
         monthCombo.currentIndex = now.getMonth()
@@ -93,72 +92,63 @@ CutiePage {
                     }
                     spacing: 16
 
-                    // Time Row Section (Centered, Larger Clock Numbers)
-                    RowLayout {
-                        Layout.fillWidth: true
+                    // Styled Border Rectangle Framing the Massive Clock Display
+                    Rectangle {
                         Layout.alignment: Qt.AlignHCenter
+                        implicitWidth: timeRowLayout.implicitWidth + 32
+                        implicitHeight: timeRowLayout.implicitHeight + 8
+                        color: Qt.rgba(Atmosphere.backgroundColor.r, Atmosphere.backgroundColor.g, Atmosphere.backgroundColor.b, 0.2)
+                        border.color: Qt.rgba(Atmosphere.textColor.r, Atmosphere.textColor.g, Atmosphere.textColor.b, 0.15)
+                        border.width: 1
+                        radius: 12
 
                         RowLayout {
-                            spacing: 4
-                            Layout.alignment: Qt.AlignHCenter
+                            id: timeRowLayout
+                            anchors.centerIn: parent
+                            spacing: 12
 
                             Tumbler {
                                 id: hoursTumbler
                                 model: 24
                                 visibleItemCount: 3
+                                height: 190 // Comfortably bounds the massive text sizes
+                                Layout.preferredWidth: 110
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: hoursTumbler.currentIndex === index ? 80 : 18 // Made bigger
+                                    font.pixelSize: hoursTumbler.currentIndex === index ? 85 : 38
                                     font.bold: hoursTumbler.currentIndex === index
-                                    opacity: hoursTumbler.currentIndex === index ? 1.0 : 0.3
+                                    opacity: hoursTumbler.currentIndex === index ? 1.0 : 0.2
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    height: 30 // Proportional height to keep numbers close
+                                    height: 90 // Perfectly scaled item boundary line height
                                 }
                             }
+
                             Text { 
                                 text: ":"
                                 color: Atmosphere.textColor
-                                font.pixelSize: 22 
-                                opacity: 0.5
+                                font.pixelSize: 64 
+                                opacity: 0.4
                                 Layout.alignment: Qt.AlignVCenter
+                                topPadding: -8 // Optical alignment correction for large fonts
                             }
+
                             Tumbler {
                                 id: minutesTumbler
                                 model: 60
                                 visibleItemCount: 3
+                                height: 190
+                                Layout.preferredWidth: 110
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: minutesTumbler.currentIndex === index ? 80 : 18 // Made bigger
+                                    font.pixelSize: minutesTumbler.currentIndex === index ? 85 : 38
                                     font.bold: minutesTumbler.currentIndex === index
-                                    opacity: minutesTumbler.currentIndex === index ? 1.0 : 0.3
+                                    opacity: minutesTumbler.currentIndex === index ? 1.0 : 0.2
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    height: 30
-                                }
-                            }
-                            Text { 
-                                text: ":"
-                                color: Atmosphere.textColor
-                                font.pixelSize: 22 
-                                opacity: 0.5
-                                Layout.alignment: Qt.AlignVCenter
-                            }
-                            Tumbler {
-                                id: secondsTumbler
-                                model: 60
-                                visibleItemCount: 3
-                                delegate: Text {
-                                    text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: secondsTumbler.currentIndex === index ? 80 : 18 // Made bigger
-                                    font.bold: secondsTumbler.currentIndex === index
-                                    opacity: secondsTumbler.currentIndex === index ? 1.0 : 0.5
-                                    color: Atmosphere.textColor
-                                    horizontalAlignment: Text.AlignHCenter
-                                    verticalAlignment: Text.AlignVCenter
-                                    height: 30
+                                    height: 90
                                 }
                             }
                         }
@@ -172,7 +162,7 @@ CutiePage {
                         opacity: 0.15
                     }
 
-                    // Date Dropdowns Row (Labels removed)
+                    // Date Dropdowns Row
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 8
@@ -201,7 +191,7 @@ CutiePage {
                 }
             }
 
-            // ── Actions Row Block (Moved directly above Set Automatically) ──
+            // ── Actions Row Block (Positioned directly above Set Automatically) ──
             Item { width: 1; height: 14; visible: !automaticToggle.checked }
             RowLayout {
                 width: parent.width - 32
@@ -230,7 +220,7 @@ CutiePage {
                             parseInt(dayCombo.currentText),
                             hoursTumbler.currentIndex,
                             minutesTumbler.currentIndex,
-                            secondsTumbler.currentIndex
+                            0 // Defaulted seconds channel down clean to zero
                         )
                         console.log("Manual system time committed to:", targetDate.toString())
                     }
