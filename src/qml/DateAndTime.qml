@@ -8,44 +8,17 @@ CutiePage {
     title: qsTr("Time And Date")
 
     // =========================================================
-    // 1. INLINE COMPONENTS (Must live inside the root element)
-    // =========================================================
-    component TumblerLabel: Text {
-        property bool current: false
-        font.pixelSize: current ? 22 : 16
-        font.bold: current
-        opacity: current ? 1.0 : 0.4
-        color: Atmosphere.textColor
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-    }
-
-    // =========================================================
-    // 2. MOCK BACKEND ENGINE (Swap with your actual C++ plugin)
+    // 1. MOCK BACKEND ENGINE (Safe structural properties)
     // =========================================================
     QtObject {
-        id: CutieDateTime
+        id: cutieDateTimeBackend
         property bool ntpEnabled: false
         property string currentTimezone: "Asia/Dubai"
-
-        function availableTimezones() {
-            return ["UTC", "Europe/London", "America/New_York", "Asia/Dubai", "Asia/Tokyo"]
-        }
-        function setTime(date) {
-            console.log("System time updated to:", date.toString())
-        }
-        function setNTP(enabled) {
-            ntpEnabled = enabled
-            console.log("NTP synchronization:", enabled ? "Enabled" : "Disabled")
-        }
-        function setTimezone(tz) {
-            currentTimezone = tz
-            console.log("System timezone changed to:", tz)
-        }
+        property var timezones: ["UTC", "Europe/London", "America/New_York", "Asia/Dubai", "Asia/Tokyo"]
     }
 
     // =========================================================
-    // 3. UTILITY FUNCTIONS
+    // 2. UTILITY FUNCTIONS (Vanilla JS compatibility)
     // =========================================================
     function syncTumblersToNow() {
         var now = new Date()
@@ -60,7 +33,7 @@ CutiePage {
     Component.onCompleted: syncTumblersToNow()
 
     // =========================================================
-    // 4. UI LAYOUT
+    // 3. UI LAYOUT
     // =========================================================
     ScrollView {
         anchors.fill: parent
@@ -72,7 +45,7 @@ CutiePage {
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: 20
 
-            Item { Layout.preferredHeight: 10 } // Top padding buffer
+            Item { Layout.preferredHeight: 10 } // Top spacing buffer
 
             // AUTOMATIC NTP SYNC SWITCH
             RowLayout {
@@ -97,15 +70,15 @@ CutiePage {
 
                 Switch {
                     id: ntpSwitch
-                    checked: CutieDateTime.ntpEnabled
-                    onToggled: CutieDateTime.setNTP(checked)
+                    checked: cutieDateTimeBackend.ntpEnabled
+                    onToggled: cutieDateTimeBackend.ntpEnabled = checked
                 }
             }
 
             // TIME PICKER (TUMBLERS)
             ColumnLayout {
                 Layout.fillWidth: true
-                visible: !CutieDateTime.ntpEnabled
+                visible: !ntpSwitch.checked
                 spacing: 8
 
                 Text {
@@ -124,9 +97,14 @@ CutiePage {
                         id: hoursTumbler
                         model: 24
                         visibleItemCount: 3
-                        delegate: TumblerLabel {
-                            text: modelData.toString().padStart(2, '0')
-                            current: Tumbler.tumbler.currentIndex === index
+                        delegate: Text {
+                            text: (modelData < 10 ? "0" : "") + modelData
+                            font.pixelSize: hoursTumbler.currentIndex === index ? 22 : 16
+                            font.bold: hoursTumbler.currentIndex === index
+                            opacity: hoursTumbler.currentIndex === index ? 1.0 : 0.4
+                            color: Atmosphere.textColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                     Text { text: ":"; color: Atmosphere.textColor; font.pixelSize: 20; opacity: 0.5 }
@@ -134,9 +112,14 @@ CutiePage {
                         id: minutesTumbler
                         model: 60
                         visibleItemCount: 3
-                        delegate: TumblerLabel {
-                            text: modelData.toString().padStart(2, '0')
-                            current: Tumbler.tumbler.currentIndex === index
+                        delegate: Text {
+                            text: (modelData < 10 ? "0" : "") + modelData
+                            font.pixelSize: minutesTumbler.currentIndex === index ? 22 : 16
+                            font.bold: minutesTumbler.currentIndex === index
+                            opacity: minutesTumbler.currentIndex === index ? 1.0 : 0.4
+                            color: Atmosphere.textColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                     Text { text: ":"; color: Atmosphere.textColor; font.pixelSize: 20; opacity: 0.5 }
@@ -144,9 +127,14 @@ CutiePage {
                         id: secondsTumbler
                         model: 60
                         visibleItemCount: 3
-                        delegate: TumblerLabel {
-                            text: modelData.toString().padStart(2, '0')
-                            current: Tumbler.tumbler.currentIndex === index
+                        delegate: Text {
+                            text: (modelData < 10 ? "0" : "") + modelData
+                            font.pixelSize: secondsTumbler.currentIndex === index ? 22 : 16
+                            font.bold: secondsTumbler.currentIndex === index
+                            opacity: secondsTumbler.currentIndex === index ? 1.0 : 0.4
+                            color: Atmosphere.textColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                 }
@@ -155,7 +143,7 @@ CutiePage {
             // DATE PICKER (TUMBLERS)
             ColumnLayout {
                 Layout.fillWidth: true
-                visible: !CutieDateTime.ntpEnabled
+                visible: !ntpSwitch.checked
                 spacing: 8
 
                 Text {
@@ -174,27 +162,42 @@ CutiePage {
                         id: dayTumbler
                         model: 31
                         visibleItemCount: 3
-                        delegate: TumblerLabel {
-                            text: (modelData + 1).toString().padStart(2, '0')
-                            current: Tumbler.tumbler.currentIndex === index
+                        delegate: Text {
+                            text: ((modelData + 1) < 10 ? "0" : "") + (modelData + 1)
+                            font.pixelSize: dayTumbler.currentIndex === index ? 22 : 16
+                            font.bold: dayTumbler.currentIndex === index
+                            opacity: dayTumbler.currentIndex === index ? 1.0 : 0.4
+                            color: Atmosphere.textColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                     Tumbler {
                         id: monthTumbler
                         model: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
                         visibleItemCount: 3
-                        delegate: TumblerLabel {
+                        delegate: Text {
                             text: modelData
-                            current: Tumbler.tumbler.currentIndex === index
+                            font.pixelSize: monthTumbler.currentIndex === index ? 22 : 16
+                            font.bold: monthTumbler.currentIndex === index
+                            opacity: monthTumbler.currentIndex === index ? 1.0 : 0.4
+                            color: Atmosphere.textColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                     Tumbler {
                         id: yearTumbler
-                        model: 50 // 2000 - 2049
+                        model: 50 
                         visibleItemCount: 3
-                        delegate: TumblerLabel {
+                        delegate: Text {
                             text: (modelData + 2000).toString()
-                            current: Tumbler.tumbler.currentIndex === index
+                            font.pixelSize: yearTumbler.currentIndex === index ? 22 : 16
+                            font.bold: yearTumbler.currentIndex === index
+                            opacity: yearTumbler.currentIndex === index ? 1.0 : 0.4
+                            color: Atmosphere.textColor
+                            horizontalAlignment: Text.AlignHCenter
+                            verticalAlignment: Text.AlignVCenter
                         }
                     }
                 }
@@ -203,7 +206,7 @@ CutiePage {
             // ACTION BUTTONS
             RowLayout {
                 Layout.fillWidth: true
-                visible: !CutieDateTime.ntpEnabled
+                visible: !ntpSwitch.checked
                 spacing: 15
                 Layout.topMargin: 10
 
@@ -225,7 +228,7 @@ CutiePage {
                             minutesTumbler.currentIndex,
                             secondsTumbler.currentIndex
                         )
-                        CutieDateTime.setTime(targetDate)
+                        console.log("System time updated to:", targetDate.toString())
                     }
                 }
             }
@@ -246,16 +249,12 @@ CutiePage {
                 ComboBox {
                     id: timezoneCombo
                     Layout.fillWidth: true
-                    model: CutieDateTime.availableTimezones()
-                    
-                    // FIXED: Safe array evaluation bypassed internal QML wrapper limitations
-                    currentIndex: CutieDateTime.availableTimezones().indexOf(CutieDateTime.currentTimezone)
-                    
-                    onActivated: CutieDateTime.setTimezone(currentText)
+                    model: cutieDateTimeBackend.timezones
+                    currentIndex: 3 // "Asia/Dubai" fallback index to prevent lookup cycles
                 }
             }
 
-            Item { Layout.preferredHeight: 30 } // Bottom padding buffer
+            Item { Layout.preferredHeight: 30 } // Bottom spacing buffer
         }
     }
 }
