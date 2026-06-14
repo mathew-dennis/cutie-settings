@@ -108,7 +108,7 @@ CutiePage {
                                 visibleItemCount: 3
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: hoursTumbler.currentIndex === index ? 26 : 18 // Made bigger
+                                    font.pixelSize: hoursTumbler.currentIndex === index ? 80 : 18 // Made bigger
                                     font.bold: hoursTumbler.currentIndex === index
                                     opacity: hoursTumbler.currentIndex === index ? 1.0 : 0.3
                                     color: Atmosphere.textColor
@@ -130,7 +130,7 @@ CutiePage {
                                 visibleItemCount: 3
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: minutesTumbler.currentIndex === index ? 26 : 18 // Made bigger
+                                    font.pixelSize: minutesTumbler.currentIndex === index ? 80 : 18 // Made bigger
                                     font.bold: minutesTumbler.currentIndex === index
                                     opacity: minutesTumbler.currentIndex === index ? 1.0 : 0.3
                                     color: Atmosphere.textColor
@@ -152,7 +152,7 @@ CutiePage {
                                 visibleItemCount: 3
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: secondsTumbler.currentIndex === index ? 40 : 18 // Made bigger
+                                    font.pixelSize: secondsTumbler.currentIndex === index ? 80 : 18 // Made bigger
                                     font.bold: secondsTumbler.currentIndex === index
                                     opacity: secondsTumbler.currentIndex === index ? 1.0 : 0.5
                                     color: Atmosphere.textColor
