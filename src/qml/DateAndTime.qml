@@ -3,24 +3,24 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-// Shared delegate for every Tumbler on this page.
-component TumblerLabel: Text {
-    property bool current: false
-    property int  bigSize: 24
-    property int  smallSize: 16
-    property bool useBold: true
-
-    font.pixelSize: current ? bigSize : smallSize
-    font.bold: useBold && current
-    opacity: current ? 1.0 : 0.5
-    horizontalAlignment: Text.AlignHCenter
-    verticalAlignment: Text.AlignVCenter
-}
-
 CutiePage {
     id: dateTimePage
     width: 400
     height: 800
+
+    // FIXED: Inline components must reside inside the root component container
+    component TumblerLabel: Text {
+        property bool current: false
+        property int  bigSize: 24
+        property int  smallSize: 16
+        property bool useBold: true
+
+        font.pixelSize: current ? bigSize : smallSize
+        font.bold: useBold && current
+        opacity: current ? 1.0 : 0.5
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+    }
 
     // ==========================================
     // MOCK BACKEND ENGINE (Replaces Cutie.Datetime)
@@ -114,6 +114,8 @@ CutiePage {
             ToolButton {
                 text: "←"
                 font.pixelSize: 24
+                // FIXED: Pop the page from the main stack view context
+                onClicked: mainWindow.pageStack.pop()
                 contentItem: Text {
                     text: parent.text
                     font: parent.font
@@ -389,7 +391,6 @@ CutiePage {
                             }
                         }
 
-                        // Direct instantaneous apply pattern
                         Switch {
                             id: ntpSwitch
                             checked: CutieDateTime.ntpEnabled
@@ -417,7 +418,7 @@ CutiePage {
                     }
                 }
 
-                // 6. Time Zone (Refactored to mirror instantaneous application)
+                // 6. Time Zone
                 Rectangle {
                     Layout.fillWidth: true
                     height: 115
@@ -442,15 +443,14 @@ CutiePage {
                             Layout.fillWidth: true
                             model: CutieDateTime.availableTimezones()
                             
-                            // Declarative state binding: updates automatically if the backend value changes
-                            currentIndex: model.indexOf(CutieDateTime.currentTimezone)
+                            // FIXED: Directly check native JS array index from engine instead of using model property
+                            currentIndex: CutieDateTime.availableTimezones().indexOf(CutieDateTime.currentTimezone)
 
-                            // Explicit user interaction patterns run immediately without a "Set" button
                             onActivated: CutieDateTime.setTimezone(currentText)
 
                             background: Rectangle {
                                 color: "#0A1118"
-                                radius: 12 // Standardized with the 12px layout button pattern
+                                radius: 12 
                                 implicitHeight: 40
                                 border.color: "#2C3E50"
                                 border.width: 1
@@ -472,7 +472,6 @@ CutiePage {
                     }
                 }
 
-                // Bottom padding
                 Item { Layout.preferredHeight: 20 }
             }
         }
