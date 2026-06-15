@@ -98,7 +98,7 @@ CutiePage {
                         Layout.alignment: Qt.AlignHCenter
                         implicitWidth: timeRowLayout.implicitWidth + 40
                         implicitHeight: timeRowLayout.implicitHeight + 16
-                        color: Atmosphere.primaryColor
+                        color: transparent
                         border.color: Qt.rgba(Atmosphere.textColor.r, Atmosphere.textColor.g, Atmosphere.textColor.b, 0.25)
                         border.width: 1.5
                         radius: 14
@@ -112,8 +112,8 @@ CutiePage {
                                 id: hoursTumbler
                                 model: 24
                                 visibleItemCount: 3
-                                height: 250 // Expanded to scale cleanly with 85px font
-                                Layout.preferredWidth: 100
+                                height: 270 // Expanded to scale cleanly with 85px font
+                                Layout.preferredWidth: 120
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
                                     font.pixelSize: hoursTumbler.currentIndex === index ?60 : 36
@@ -139,8 +139,8 @@ CutiePage {
                                 id: minutesTumbler
                                 model: 60
                                 visibleItemCount: 3
-                                height: 250
-                                Layout.preferredWidth: 100
+                                height: 270
+                                Layout.preferredWidth: 120
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
                                     font.pixelSize: minutesTumbler.currentIndex === index ?60 : 36
