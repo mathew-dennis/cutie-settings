@@ -111,8 +111,8 @@ CutiePage {
                                 id: hoursTumbler
                                 model: 24
                                 visibleItemCount: 3
-                                height: 270 // Expanded to scale cleanly with 85px font
-                                Layout.preferredWidth: 120
+                                height: 250 // Expanded to scale cleanly with 85px font
+                                Layout.preferredWidth: 100
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
                                     font.pixelSize: hoursTumbler.currentIndex === index ? 80 : 36
@@ -138,8 +138,8 @@ CutiePage {
                                 id: minutesTumbler
                                 model: 60
                                 visibleItemCount: 3
-                                height: 270
-                                Layout.preferredWidth: 120
+                                height: 250
+                                Layout.preferredWidth: 100
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
                                     font.pixelSize: minutesTumbler.currentIndex === index ? 80 : 36
@@ -170,21 +170,21 @@ CutiePage {
                         ComboBox {
                             id: dayCombo
                             Layout.fillWidth: true
-                            Layout.preferredWidth: 1
+                            Layout.preferredWidth: .5
                             model: dateAndTimePage.daysModel
                         }
 
                         ComboBox {
                             id: monthCombo
                             Layout.fillWidth: true
-                            Layout.preferredWidth: 1
+                            Layout.preferredWidth: .5
                             model: dateAndTimePage.monthsModel
                         }
 
                         ComboBox {
                             id: yearCombo
                             Layout.fillWidth: true
-                            Layout.preferredWidth: 1.2
+                            Layout.preferredWidth: 1
                             model: dateAndTimePage.yearsModel
                         }
                     }
