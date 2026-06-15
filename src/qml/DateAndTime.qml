@@ -98,7 +98,7 @@ CutiePage {
                         Layout.alignment: Qt.AlignHCenter
                         implicitWidth: timeRowLayout.implicitWidth + 40
                         implicitHeight: timeRowLayout.implicitHeight + 16
-                        color: "transparent" // Fully transparent so digits show clearly
+                        color: Atmosphere.primaryColor
                         border.color: Qt.rgba(Atmosphere.textColor.r, Atmosphere.textColor.g, Atmosphere.textColor.b, 0.25)
                         border.width: 1.5
                         radius: 14
