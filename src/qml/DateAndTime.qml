@@ -115,7 +115,7 @@ CutiePage {
                                 Layout.preferredWidth: 100
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: hoursTumbler.currentIndex === index ? 80 : 36
+                                    font.pixelSize: hoursTumbler.currentIndex === index ?60 : 36
                                     font.bold: hoursTumbler.currentIndex === index
                                     opacity: hoursTumbler.currentIndex === index ? 1.0 : 0.2
                                     color: Atmosphere.textColor
@@ -142,7 +142,7 @@ CutiePage {
                                 Layout.preferredWidth: 100
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: minutesTumbler.currentIndex === index ? 80 : 36
+                                    font.pixelSize: minutesTumbler.currentIndex === index ?60 : 36
                                     font.bold: minutesTumbler.currentIndex === index
                                     opacity: minutesTumbler.currentIndex === index ? 1.0 : 0.2
                                     color: Atmosphere.textColor
