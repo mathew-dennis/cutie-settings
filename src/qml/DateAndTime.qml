@@ -7,6 +7,79 @@ import Cutie.Store
 CutiePage {
     id: dateAndTimePage
 
+    // ── Inline Reusable Component (Qt 5.15+) ─────────────────────────────
+    component CutieDropdownList: ComboBox {
+        id: control
+
+        // 1. Half-Sized Selection Button Text
+        contentItem: CutieLabel {
+            text: control.currentText
+            font.pixelSize: 11 // Shrunk to fit the smaller button
+            color: Atmosphere.textColor
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignLeft
+            leftPadding: 6  // Tighter padding
+            rightPadding: 16 // Less space for the arrow
+            elide: Text.ElideRight
+        }
+
+        // 2. Half-Sized Selection Button Background
+        background: Rectangle {
+            implicitHeight: 20 // Sliced nearly in half (down from 36)
+            color: Atmosphere.secondaryColor 
+            border.color: control.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
+            border.width: control.visualFocus ? 2 : 1
+            radius: 4 // Sharper radius for a tinier element
+        }
+
+        // 3. Dropdown List Items (Scaled to match)
+        delegate: ItemDelegate {
+            id: delegateItem
+            width: parent ? parent.width - 4 : 100
+            height: 20 // Matches the new selection button height
+            anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
+
+            contentItem: CutieLabel {
+                text: modelData
+                color: delegateItem.highlighted ? Atmosphere.primaryColor : Atmosphere.textColor
+                font.bold: delegateItem.highlighted
+                font.pixelSize: 11 // Matched font scaling
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                leftPadding: 6
+            }
+
+            background: Rectangle {
+                color: delegateItem.highlighted ? Qt.rgba(Atmosphere.secondaryAlphaColor.r, Atmosphere.secondaryAlphaColor.g, Atmosphere.secondaryAlphaColor.b, 0.1) : "transparent"
+                radius: 4
+            }
+        }
+
+        // 4. Dropdown Menu Window
+        popup: Popup {
+            y: control.height + 2
+            width: control.width
+            implicitHeight: Math.min(contentItem.implicitHeight + 8, 200) // Slightly shorter max-height
+            padding: 4
+            
+            background: Rectangle {
+                color: Atmosphere.secondaryColor
+                border.color: Atmosphere.secondaryAlphaColor
+                border.width: 1
+                radius: 6 // Tighter corners
+            }
+            
+            contentItem: ListView {
+                clip: true
+                implicitHeight: contentHeight
+                model: control.popup.visible ? control.delegateModel : null
+                currentIndex: control.highlightedIndex
+                ScrollIndicator.vertical: ScrollIndicator { }
+            }
+        }
+    }
+    // ─────────────────────────────────────────────────────────────────────
+
     // ── Design System Constants ──────────────────────────────────────────
     readonly property color secondaryAlphaLightColor: Qt.rgba (
         Atmosphere.secondaryAlphaColor.r,
@@ -14,7 +87,6 @@ CutiePage {
         Atmosphere.secondaryAlphaColor.b,
         0.1
     )
-    property int commonHeight: 50
     property int cardRadius: 16
     property int cardPadding: 14 
 
@@ -51,31 +123,6 @@ CutiePage {
     }
 
     Component.onCompleted: syncInputsToNow()
-
-    // ── Shared Dropdown List Item Theme ──────────────────────────────────
-    Component {
-        id: themedDropdownDelegate
-        ItemDelegate {
-            id: delegateItem
-            width: parent ? parent.width - 12 : 100
-            height: 40
-            anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
-
-            contentItem: CutieLabel {
-                text: modelData
-                color: delegateItem.highlighted ? Atmosphere.primaryColor : Atmosphere.textColor
-                font.bold: delegateItem.highlighted
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignLeft
-                leftPadding: 8
-            }
-
-            background: Rectangle {
-                color: delegateItem.highlighted ? secondaryAlphaLightColor : "transparent"
-                radius: 8
-            }
-        }
-    }
 
     // ── Layout Tree ──────────────────────────────────────────────────────
     Flickable {
@@ -188,150 +235,30 @@ CutiePage {
                         opacity: 0.15
                     }
 
-                    // Date Dropdowns Row
+                    // Date Dropdowns Row using Inline Component
                     RowLayout {
                         Layout.fillWidth: true
                         spacing: 8
 
-                        ComboBox {
+                        CutieDropdownList {
                             id: dayCombo
                             Layout.fillWidth: true
                             Layout.preferredWidth: .5
                             model: dateAndTimePage.daysModel
-                            delegate: themedDropdownDelegate
-                            
-                            // Visual Button Theme Setup
-                            contentItem: CutieLabel {
-                                text: dayCombo.currentText
-                                font.pixelSize: 14
-                                color: Atmosphere.textColor
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignLeft
-                                leftPadding: 12
-                                rightPadding: 30
-                                elide: Text.ElideRight
-                            }
-                            background: Rectangle {
-                                implicitHeight: commonHeight
-                                color: Atmosphere.secondaryColor 
-                                border.color: dayCombo.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
-                                border.width: dayCombo.visualFocus ? 2 : 1
-                                radius: 10
-                            }
-                            
-                            popup: Popup {
-                                y: dayCombo.height + 4
-                                width: dayCombo.width
-                                implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
-                                padding: 6
-                                background: Rectangle {
-                                    color: Atmosphere.secondaryColor
-                                    border.color: Atmosphere.secondaryAlphaColor
-                                    border.width: 1
-                                    radius: 12
-                                }
-                                contentItem: ListView {
-                                    clip: true
-                                    implicitHeight: contentHeight
-                                    model: dayCombo.popup.visible ? dayCombo.delegateModel : null
-                                    currentIndex: dayCombo.highlightedIndex
-                                    ScrollIndicator.vertical: ScrollIndicator { }
-                                }
-                            }
                         }
 
-                        ComboBox {
+                        CutieDropdownList {
                             id: monthCombo
                             Layout.fillWidth: true
                             Layout.preferredWidth: .5
                             model: dateAndTimePage.monthsModel
-                            delegate: themedDropdownDelegate
-
-                            // Visual Button Theme Setup
-                            contentItem: CutieLabel {
-                                text: monthCombo.currentText
-                                font.pixelSize: 14
-                                color: Atmosphere.textColor
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignLeft
-                                leftPadding: 12
-                                rightPadding: 30
-                                elide: Text.ElideRight
-                            }
-                            background: Rectangle {
-                                implicitHeight: commonHeight
-                                color: Atmosphere.secondaryColor 
-                                border.color: monthCombo.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
-                                border.width: monthCombo.visualFocus ? 2 : 1
-                                radius: 10
-                            }
-
-                            popup: Popup {
-                                y: monthCombo.height + 4
-                                width: monthCombo.width
-                                implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
-                                padding: 6
-                                background: Rectangle {
-                                    color: Atmosphere.secondaryColor
-                                    border.color: Atmosphere.secondaryAlphaColor
-                                    border.width: 1
-                                    radius: 12
-                                }
-                                contentItem: ListView {
-                                    clip: true
-                                    implicitHeight: contentHeight
-                                    model: monthCombo.popup.visible ? monthCombo.delegateModel : null
-                                    currentIndex: monthCombo.highlightedIndex
-                                    ScrollIndicator.vertical: ScrollIndicator { }
-                                }
-                            }
                         }
 
-                        ComboBox {
+                        CutieDropdownList {
                             id: yearCombo
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             model: dateAndTimePage.yearsModel
-                            delegate: themedDropdownDelegate
-
-                            // Visual Button Theme Setup
-                            contentItem: CutieLabel {
-                                text: yearCombo.currentText
-                                font.pixelSize: 14
-                                color: Atmosphere.textColor
-                                verticalAlignment: Text.AlignVCenter
-                                horizontalAlignment: Text.AlignLeft
-                                leftPadding: 12
-                                rightPadding: 30
-                                elide: Text.ElideRight
-                            }
-                            background: Rectangle {
-                                implicitHeight: commonHeight
-                                color: Atmosphere.secondaryColor 
-                                border.color: yearCombo.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
-                                border.width: yearCombo.visualFocus ? 2 : 1
-                                radius: 10
-                            }
-
-                            popup: Popup {
-                                y: yearCombo.height + 4
-                                width: yearCombo.width
-                                implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
-                                padding: 6
-                                background: Rectangle {
-                                    color: Atmosphere.secondaryColor
-                                    border.color: Atmosphere.secondaryAlphaColor
-                                    border.width: 1
-                                    radius: 12
-                                }
-                                contentItem: ListView {
-                                    clip: true
-                                    implicitHeight: contentHeight
-                                    model: yearCombo.popup.visible ? yearCombo.delegateModel : null
-                                    currentIndex: yearCombo.highlightedIndex
-                                    ScrollIndicator.vertical: ScrollIndicator { }
-                                }
-                            }
                         }
                     }
                 }
@@ -340,23 +267,16 @@ CutiePage {
             // ── Actions Row Block ─────────────────────────────────────────
             Item { width: 1; height: 14; visible: !automaticToggle.checked }
             RowLayout {
-                width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 14
                 visible: !automaticToggle.checked 
 
                 CutieButton {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 1 
-                    implicitHeight: commonHeight
                     text: qsTr("Reset")
                     onClicked: syncInputsToNow()
                 }
 
                 CutieButton {
-                    Layout.fillWidth: true
-                    Layout.preferredWidth: 1 
-                    implicitHeight: commonHeight
                     text: qsTr("Apply Changes")
 
                     onClicked: {
@@ -461,51 +381,11 @@ CutiePage {
                         font.pixelSize: 15
                     }
 
-                    ComboBox {
+                    CutieDropdownList {
                         id: timezoneCombo
                         Layout.fillWidth: true
                         model: dateAndTimePage.availableTimezones
                         currentIndex: dateAndTimePage.availableTimezones.indexOf(dateAndTimePage.currentTimezone)
-                        delegate: themedDropdownDelegate
-
-                        // Visual Button Theme Setup
-                        contentItem: CutieLabel {
-                            text: timezoneCombo.currentText
-                            font.pixelSize: 14
-                            color: Atmosphere.textColor
-                            verticalAlignment: Text.AlignVCenter
-                            horizontalAlignment: Text.AlignLeft
-                            leftPadding: 12
-                            rightPadding: 30
-                            elide: Text.ElideRight
-                        }
-                        background: Rectangle {
-                            implicitHeight: commonHeight
-                            color: Atmosphere.secondaryColor 
-                            border.color: timezoneCombo.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
-                            border.width: timezoneCombo.visualFocus ? 2 : 1
-                            radius: 10
-                        }
-
-                        popup: Popup {
-                            y: timezoneCombo.height + 4
-                            width: timezoneCombo.width
-                            implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
-                            padding: 6
-                            background: Rectangle {
-                                color: Atmosphere.secondaryColor
-                                border.color: Atmosphere.secondaryAlphaColor
-                                border.width: 1
-                                radius: 12
-                            }
-                            contentItem: ListView {
-                                clip: true
-                                implicitHeight: contentHeight
-                                model: timezoneCombo.popup.visible ? timezoneCombo.delegateModel : null
-                                currentIndex: timezoneCombo.highlightedIndex
-                                ScrollIndicator.vertical: ScrollIndicator { }
-                            }
-                        }
                         
                         onActivated: {
                             let d = dateTimeStore.data
