@@ -84,6 +84,7 @@ CutiePage {
 
                 ColumnLayout {
                     id: pickerLayout
+                    width: parent.width - 32
                     anchors {
                         left: parent.left
                         right: parent.right
