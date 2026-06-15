@@ -52,6 +52,32 @@ CutiePage {
 
     Component.onCompleted: syncInputsToNow()
 
+    // ── Reusable Component-level Style for ComboBox ─────────────────────
+    // This defines how the popup menu list items look and behave
+    Component {
+        id: themedDropdownDelegate
+        ItemDelegate {
+            id: delegateItem
+            width: parent ? parent.width - 12 : 100
+            height: 40
+            anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
+
+            contentItem: CutieLabel {
+                text: modelData
+                color: delegateItem.highlighted ? Atmosphere.primaryColor : Atmosphere.textColor
+                font.bold: delegateItem.highlighted
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                leftPadding: 8
+            }
+
+            background: Rectangle {
+                color: delegateItem.highlighted ? secondaryAlphaLightColor : "transparent"
+                radius: 8
+            }
+        }
+    }
+
     // ── Layout Tree ──────────────────────────────────────────────────────
     Flickable {
         id: pageFlickable
@@ -98,7 +124,7 @@ CutiePage {
                         Layout.alignment: Qt.AlignHCenter
                         implicitWidth: timeRowLayout.implicitWidth + cardPadding * 2
                         implicitHeight: timeRowLayout.implicitHeight +  cardPadding * 2
-                        color:  "transparent" // Fully transparent so digits show clearly
+                        color:  "transparent"
                         border.color: Atmosphere.primaryColor
                         border.width: 2
                         radius: 14
@@ -112,17 +138,17 @@ CutiePage {
                                 id: hoursTumbler
                                 model: 24
                                 visibleItemCount: 3
-                                height: 270 // Expanded to scale cleanly with 85px font
+                                height: 270 
                                 Layout.preferredWidth: 100
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: hoursTumbler.currentIndex === index ?60 : 36
+                                    font.pixelSize: hoursTumbler.currentIndex === index ? 60 : 36
                                     font.bold: hoursTumbler.currentIndex === index
                                     opacity: hoursTumbler.currentIndex === index ? 1.0 : 0.2
                                     color: Atmosphere.textColor
                                     horizontalAlignment: Text.AlignHCenter
                                     verticalAlignment: Text.AlignVCenter
-                                    height: 90 // Matches font allocation to prevent overlapping
+                                    height: 90 
                                 }
                             }
 
@@ -143,7 +169,7 @@ CutiePage {
                                 Layout.preferredWidth: 100
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: minutesTumbler.currentIndex === index ?60 : 36
+                                    font.pixelSize: minutesTumbler.currentIndex === index ? 60 : 36
                                     font.bold: minutesTumbler.currentIndex === index
                                     opacity: minutesTumbler.currentIndex === index ? 1.0 : 0.2
                                     color: Atmosphere.textColor
@@ -173,6 +199,27 @@ CutiePage {
                             Layout.fillWidth: true
                             Layout.preferredWidth: .5
                             model: dateAndTimePage.daysModel
+                            delegate: themedDropdownDelegate
+                            
+                            popup: Popup {
+                                y: dayCombo.height + 4
+                                width: dayCombo.width
+                                implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+                                padding: 6
+                                background: Rectangle {
+                                    color: Atmosphere.secondaryColor
+                                    border.color: Atmosphere.secondaryAlphaColor
+                                    border.width: 1
+                                    radius: 12
+                                }
+                                contentItem: ListView {
+                                    clip: true
+                                    implicitHeight: contentHeight
+                                    model: dayCombo.popup.visible ? dayCombo.delegateModel : null
+                                    currentIndex: dayCombo.highlightedIndex
+                                    ScrollIndicator.vertical: ScrollIndicator { }
+                                }
+                            }
                         }
 
                         ComboBox {
@@ -180,6 +227,27 @@ CutiePage {
                             Layout.fillWidth: true
                             Layout.preferredWidth: .5
                             model: dateAndTimePage.monthsModel
+                            delegate: themedDropdownDelegate
+
+                            popup: Popup {
+                                y: monthCombo.height + 4
+                                width: monthCombo.width
+                                implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+                                padding: 6
+                                background: Rectangle {
+                                    color: Atmosphere.secondaryColor
+                                    border.color: Atmosphere.secondaryAlphaColor
+                                    border.width: 1
+                                    radius: 12
+                                }
+                                contentItem: ListView {
+                                    clip: true
+                                    implicitHeight: contentHeight
+                                    model: monthCombo.popup.visible ? monthCombo.delegateModel : null
+                                    currentIndex: monthCombo.highlightedIndex
+                                    ScrollIndicator.vertical: ScrollIndicator { }
+                                }
+                            }
                         }
 
                         ComboBox {
@@ -187,12 +255,33 @@ CutiePage {
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             model: dateAndTimePage.yearsModel
+                            delegate: themedDropdownDelegate
+
+                            popup: Popup {
+                                y: yearCombo.height + 4
+                                width: yearCombo.width
+                                implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+                                padding: 6
+                                background: Rectangle {
+                                    color: Atmosphere.secondaryColor
+                                    border.color: Atmosphere.secondaryAlphaColor
+                                    border.width: 1
+                                    radius: 12
+                                }
+                                contentItem: ListView {
+                                    clip: true
+                                    implicitHeight: contentHeight
+                                    model: yearCombo.popup.visible ? yearCombo.delegateModel : null
+                                    currentIndex: yearCombo.highlightedIndex
+                                    ScrollIndicator.vertical: ScrollIndicator { }
+                                }
+                            }
                         }
                     }
                 }
             }
 
-            // ── Actions Row Block (Directly above Set Automatically) ──────
+            // ── Actions Row Block ─────────────────────────────────────────
             Item { width: 1; height: 14; visible: !automaticToggle.checked }
             RowLayout {
                 width: parent.width - 32
@@ -321,6 +410,27 @@ CutiePage {
                         Layout.fillWidth: true
                         model: dateAndTimePage.availableTimezones
                         currentIndex: dateAndTimePage.availableTimezones.indexOf(dateAndTimePage.currentTimezone)
+                        delegate: themedDropdownDelegate
+
+                        popup: Popup {
+                            y: timezoneCombo.height + 4
+                            width: timezoneCombo.width
+                            implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+                            padding: 6
+                            background: Rectangle {
+                                color: Atmosphere.secondaryColor
+                                border.color: Atmosphere.secondaryAlphaColor
+                                border.width: 1
+                                radius: 12
+                            }
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: timezoneCombo.popup.visible ? timezoneCombo.delegateModel : null
+                                currentIndex: timezoneCombo.highlightedIndex
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+                        }
                         
                         onActivated: {
                             let d = dateTimeStore.data
