@@ -1,5 +1,58 @@
-// ── Reusable Theme Components ────────────────────────────────────────
-    
+import Cutie
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import Cutie.Store
+
+CutiePage {
+    id: dateAndTimePage
+
+    // ── Design System Constants ──────────────────────────────────────────
+    readonly property color secondaryAlphaLightColor: Qt.rgba (
+        Atmosphere.secondaryAlphaColor.r,
+        Atmosphere.secondaryAlphaColor.g,
+        Atmosphere.secondaryAlphaColor.b,
+        0.1
+    )
+    property int commonHeight: 50
+    property int cardRadius: 16
+    property int cardPadding: 14 
+
+    // ── Static & Safe Initialization Models ──────────────────────────────
+    property var daysModel: ["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"]
+    property var monthsModel: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    property var yearsModel: ["2024","2025","2026","2027","2028","2029","2030","2031","2032","2033","2034","2035","2036","2037","2038","2039","2040"]
+
+    // ── Properties & State Bindings ─────────────────────────────────────
+    property bool isAutomatic: dateTimeStore.data && ("isAutomatic" in dateTimeStore.data)
+                               ? dateTimeStore.data.isAutomatic
+                               : false
+
+    property string currentTimezone: dateTimeStore.data && ("timezone" in dateTimeStore.data)
+                                     ? dateTimeStore.data.timezone
+                                     : "Asia/Dubai"
+
+    property var availableTimezones: ["UTC", "Europe/London", "America/New_York", "Asia/Dubai", "Asia/Tokyo"]
+
+    // ── Helper Functions ────────────────────────────────────────────────
+    function syncInputsToNow() {
+        var now = new Date()
+        
+        hoursTumbler.currentIndex   = now.getHours()
+        minutesTumbler.currentIndex = now.getMinutes()
+        
+        dayCombo.currentIndex   = now.getDate() - 1
+        monthCombo.currentIndex = now.getMonth()
+        
+        var yearIdx = yearsModel.indexOf(now.getFullYear().toString())
+        if (yearIdx !== -1) {
+            yearCombo.currentIndex = yearIdx
+        }
+    }
+
+    Component.onCompleted: syncInputsToNow()
+
+    // ── Shared Dropdown List Item Theme ──────────────────────────────────
     Component {
         id: themedDropdownDelegate
         ItemDelegate {
@@ -24,30 +77,95 @@
         }
     }
 
-    Component {
-        id: themedButtonBackground
-        Rectangle {
-            // We'll pass the focus state explicitly from the specific ComboBox now
-            property bool isFocused: false 
-            implicitHeight: commonHeight
-            color: Atmosphere.secondaryColor 
-            border.color: isFocused ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
-            border.width: isFocused ? 2 : 1
-            radius: 10
-        }
-    }
+    // ── Layout Tree ──────────────────────────────────────────────────────
+    Flickable {
+        id: pageFlickable
+        anchors.fill: parent
+        contentHeight: mainColumn.height + 40
+        clip: true
 
-    Component {
-        id: themedButtonContent
-        CutieLabel {
-            property string comboText: "" // We will feed the text directly from the ComboBox ID
-            text: comboText
-            font.pixelSize: 14
-            color: Atmosphere.textColor
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignLeft
-            leftPadding: 12
-            rightPadding: 30 
-            elide: Text.ElideRight
-        }
-    }
+        Column {
+            id: mainColumn
+            width: parent.width
+            spacing: 0
+
+            // ── Page Header ─────────────────────────────────────────────
+            CutiePageHeader {
+                id: header
+                title: qsTr("Time And Date")
+                width: parent.width
+            }
+
+            Item { width: 1; height: 16 }
+
+            // ── Card 1: Compact Date & Time Picker Box ───────────────────
+            Rectangle {
+                width: parent.width - 32
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: pickerLayout.implicitHeight + cardPadding * 2
+                color: secondaryAlphaLightColor
+                radius: cardRadius
+                enabled: !automaticToggle.checked 
+
+                ColumnLayout {
+                    id: pickerLayout
+                    Layout.fillWidth: true
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        top: parent.top
+                        margins: cardPadding
+                    }
+                    spacing: 16
+
+                    // Transparent Framing Box with Borderline
+                    Rectangle {
+                        Layout.alignment: Qt.AlignHCenter
+                        implicitWidth: timeRowLayout.implicitWidth + cardPadding * 2
+                        implicitHeight: timeRowLayout.implicitHeight +  cardPadding * 2
+                        color:  "transparent"
+                        border.color: Atmosphere.primaryColor
+                        border.width: 2
+                        radius: 14
+
+                        RowLayout {
+                            id: timeRowLayout
+                            anchors.centerIn: parent
+                            spacing: 12
+
+                            Tumbler {
+                                id: hoursTumbler
+                                model: 24
+                                visibleItemCount: 3
+                                height: 270 
+                                Layout.preferredWidth: 100
+                                delegate: Text {
+                                    text: (modelData < 10 ? "0" : "") + modelData
+                                    font.pixelSize: hoursTumbler.currentIndex === index ? 60 : 36
+                                    font.bold: hoursTumbler.currentIndex === index
+                                    opacity: hoursTumbler.currentIndex === index ? 1.0 : 0.2
+                                    color: Atmosphere.textColor
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    height: 90 
+                                }
+                            }
+
+                            Text { 
+                                text: ":"
+                                color: Atmosphere.textColor
+                                font.pixelSize: 64 
+                                opacity: 0.4
+                                Layout.alignment: Qt.AlignVCenter
+                                topPadding: -10 
+                            }
+
+                            Tumbler {
+                                id: minutesTumbler
+                                model: 60
+                                visibleItemCount: 3
+                                height: 270
+                                Layout.preferredWidth: 100
+                                delegate: Text {
+                                    text: (modelData < 10 ? "0" : "") + modelData
+                                    font.pixelSize: minutesTumbler.currentIndex === index ?
