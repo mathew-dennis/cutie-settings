@@ -168,4 +168,363 @@ CutiePage {
                                 Layout.preferredWidth: 100
                                 delegate: Text {
                                     text: (modelData < 10 ? "0" : "") + modelData
-                                    font.pixelSize: minutesTumbler.currentIndex === index ?
+                                    font.pixelSize: minutesTumbler.currentIndex === index ? 60 : 36
+                                    font.bold: minutesTumbler.currentIndex === index
+                                    opacity: minutesTumbler.currentIndex === index ? 1.0 : 0.2
+                                    color: Atmosphere.textColor
+                                    horizontalAlignment: Text.AlignHCenter
+                                    verticalAlignment: Text.AlignVCenter
+                                    height: 90
+                                }
+                            }
+                        }
+                    }
+
+                    // Divider Separation Line
+                    Rectangle {
+                        Layout.fillWidth: true
+                        height: 1
+                        color: Atmosphere.secondaryAlphaColor
+                        opacity: 0.15
+                    }
+
+                    // Date Dropdowns Row
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+
+                        ComboBox {
+                            id: dayCombo
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: .5
+                            model: dateAndTimePage.daysModel
+                            delegate: themedDropdownDelegate
+                            
+                            // Visual Button Theme Setup
+                            contentItem: CutieLabel {
+                                text: dayCombo.currentText
+                                font.pixelSize: 14
+                                color: Atmosphere.textColor
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                leftPadding: 12
+                                rightPadding: 30
+                                elide: Text.ElideRight
+                            }
+                            background: Rectangle {
+                                implicitHeight: commonHeight
+                                color: Atmosphere.secondaryColor 
+                                border.color: dayCombo.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
+                                border.width: dayCombo.visualFocus ? 2 : 1
+                                radius: 10
+                            }
+                            
+                            popup: Popup {
+                                y: dayCombo.height + 4
+                                width: dayCombo.width
+                                implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+                                padding: 6
+                                background: Rectangle {
+                                    color: Atmosphere.secondaryColor
+                                    border.color: Atmosphere.secondaryAlphaColor
+                                    border.width: 1
+                                    radius: 12
+                                }
+                                contentItem: ListView {
+                                    clip: true
+                                    implicitHeight: contentHeight
+                                    model: dayCombo.popup.visible ? dayCombo.delegateModel : null
+                                    currentIndex: dayCombo.highlightedIndex
+                                    ScrollIndicator.vertical: ScrollIndicator { }
+                                }
+                            }
+                        }
+
+                        ComboBox {
+                            id: monthCombo
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: .5
+                            model: dateAndTimePage.monthsModel
+                            delegate: themedDropdownDelegate
+
+                            // Visual Button Theme Setup
+                            contentItem: CutieLabel {
+                                text: monthCombo.currentText
+                                font.pixelSize: 14
+                                color: Atmosphere.textColor
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                leftPadding: 12
+                                rightPadding: 30
+                                elide: Text.ElideRight
+                            }
+                            background: Rectangle {
+                                implicitHeight: commonHeight
+                                color: Atmosphere.secondaryColor 
+                                border.color: monthCombo.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
+                                border.width: monthCombo.visualFocus ? 2 : 1
+                                radius: 10
+                            }
+
+                            popup: Popup {
+                                y: monthCombo.height + 4
+                                width: monthCombo.width
+                                implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+                                padding: 6
+                                background: Rectangle {
+                                    color: Atmosphere.secondaryColor
+                                    border.color: Atmosphere.secondaryAlphaColor
+                                    border.width: 1
+                                    radius: 12
+                                }
+                                contentItem: ListView {
+                                    clip: true
+                                    implicitHeight: contentHeight
+                                    model: monthCombo.popup.visible ? monthCombo.delegateModel : null
+                                    currentIndex: monthCombo.highlightedIndex
+                                    ScrollIndicator.vertical: ScrollIndicator { }
+                                }
+                            }
+                        }
+
+                        ComboBox {
+                            id: yearCombo
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 1
+                            model: dateAndTimePage.yearsModel
+                            delegate: themedDropdownDelegate
+
+                            // Visual Button Theme Setup
+                            contentItem: CutieLabel {
+                                text: yearCombo.currentText
+                                font.pixelSize: 14
+                                color: Atmosphere.textColor
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignLeft
+                                leftPadding: 12
+                                rightPadding: 30
+                                elide: Text.ElideRight
+                            }
+                            background: Rectangle {
+                                implicitHeight: commonHeight
+                                color: Atmosphere.secondaryColor 
+                                border.color: yearCombo.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
+                                border.width: yearCombo.visualFocus ? 2 : 1
+                                radius: 10
+                            }
+
+                            popup: Popup {
+                                y: yearCombo.height + 4
+                                width: yearCombo.width
+                                implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+                                padding: 6
+                                background: Rectangle {
+                                    color: Atmosphere.secondaryColor
+                                    border.color: Atmosphere.secondaryAlphaColor
+                                    border.width: 1
+                                    radius: 12
+                                }
+                                contentItem: ListView {
+                                    clip: true
+                                    implicitHeight: contentHeight
+                                    model: yearCombo.popup.visible ? yearCombo.delegateModel : null
+                                    currentIndex: yearCombo.highlightedIndex
+                                    ScrollIndicator.vertical: ScrollIndicator { }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // ── Actions Row Block ─────────────────────────────────────────
+            Item { width: 1; height: 14; visible: !automaticToggle.checked }
+            RowLayout {
+                width: parent.width - 32
+                anchors.horizontalCenter: parent.horizontalCenter
+                spacing: 14
+                visible: !automaticToggle.checked 
+
+                CutieButton {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1 
+                    implicitHeight: commonHeight
+                    text: qsTr("Reset")
+                    onClicked: syncInputsToNow()
+                }
+
+                CutieButton {
+                    Layout.fillWidth: true
+                    Layout.preferredWidth: 1 
+                    implicitHeight: commonHeight
+                    text: qsTr("Apply Changes")
+
+                    onClicked: {
+                        var targetDate = new Date(
+                            parseInt(yearCombo.currentText),
+                            monthCombo.currentIndex,
+                            parseInt(dayCombo.currentText),
+                            hoursTumbler.currentIndex,
+                            minutesTumbler.currentIndex,
+                            0
+                        )
+                        console.log("Manual system time committed to:", targetDate.toString())
+                    }
+                }
+            }
+
+            Item { width: 1; height: 16 }
+
+            // ── Card 2: Set Automatically ────────────────────────────────
+            Rectangle {
+                width: parent.width - 32
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: ntpLayout.implicitHeight + cardPadding * 2
+                color: secondaryAlphaLightColor
+                radius: cardRadius
+
+                RowLayout {
+                    id: ntpLayout
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        top: parent.top
+                        margins: cardPadding
+                    }
+                    spacing: 16
+
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 4
+
+                        CutieLabel {
+                            text: qsTr("Set Automatically")
+                            font.bold: true
+                            font.pixelSize: 15
+                        }
+
+                        CutieLabel {
+                            text: qsTr("Use network-provided time (NTP)")
+                            font.pixelSize: 12
+                            opacity: 0.6
+                            wrapMode: Text.WordWrap
+                            Layout.fillWidth: true
+                        }
+                    }
+
+                    Item {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.fillWidth: true      
+                        Layout.preferredWidth: 30
+
+                        CutieToggle {   
+                            id: automaticToggle
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            checked: dateAndTimePage.isAutomatic
+
+                            onToggled: {
+                                let d = dateTimeStore.data
+                                d.isAutomatic = checked
+                                dateTimeStore.data = d
+                                console.log("System time sync updated:", checked ? "Automatic" : "Manual")
+                            }
+                        }
+                    }
+                }
+            }
+
+            Item { width: 1; height: 16 }
+
+            // ── Card 3: Time Zone Card ───────────────────────────────────
+            Rectangle {
+                width: parent.width - 32
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: tzLayout.implicitHeight + cardPadding * 2
+                color: secondaryAlphaLightColor
+                radius: cardRadius
+                enabled: !automaticToggle.checked
+
+                ColumnLayout {
+                    id: tzLayout
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        top: parent.top
+                        margins: cardPadding
+                    }
+                    spacing: 8
+
+                    CutieLabel {
+                        text: qsTr("Time Zone")
+                        font.bold: true
+                        font.pixelSize: 15
+                    }
+
+                    ComboBox {
+                        id: timezoneCombo
+                        Layout.fillWidth: true
+                        model: dateAndTimePage.availableTimezones
+                        currentIndex: dateAndTimePage.availableTimezones.indexOf(dateAndTimePage.currentTimezone)
+                        delegate: themedDropdownDelegate
+
+                        // Visual Button Theme Setup
+                        contentItem: CutieLabel {
+                            text: timezoneCombo.currentText
+                            font.pixelSize: 14
+                            color: Atmosphere.textColor
+                            verticalAlignment: Text.AlignVCenter
+                            horizontalAlignment: Text.AlignLeft
+                            leftPadding: 12
+                            rightPadding: 30
+                            elide: Text.ElideRight
+                        }
+                        background: Rectangle {
+                            implicitHeight: commonHeight
+                            color: Atmosphere.secondaryColor 
+                            border.color: timezoneCombo.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
+                            border.width: timezoneCombo.visualFocus ? 2 : 1
+                            radius: 10
+                        }
+
+                        popup: Popup {
+                            y: timezoneCombo.height + 4
+                            width: timezoneCombo.width
+                            implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+                            padding: 6
+                            background: Rectangle {
+                                color: Atmosphere.secondaryColor
+                                border.color: Atmosphere.secondaryAlphaColor
+                                border.width: 1
+                                radius: 12
+                            }
+                            contentItem: ListView {
+                                clip: true
+                                implicitHeight: contentHeight
+                                model: timezoneCombo.popup.visible ? timezoneCombo.delegateModel : null
+                                currentIndex: timezoneCombo.highlightedIndex
+                                ScrollIndicator.vertical: ScrollIndicator { }
+                            }
+                        }
+                        
+                        onActivated: {
+                            let d = dateTimeStore.data
+                            d.timezone = currentText
+                            dateTimeStore.data = d
+                            console.log("System timezone changed to:", currentText)
+                        }
+                    }
+                }
+            }
+
+            Item { width: 1; height: 24 }
+        }
+    }
+
+    // ── Persistent Storage Context ───────────────────────────────────────
+    CutieStore {
+        id: dateTimeStore
+        appName: "cutie-settings"
+        storeName: "datetimeConfigs"
+    }
+}
