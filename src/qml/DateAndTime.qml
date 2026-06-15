@@ -52,8 +52,9 @@ CutiePage {
 
     Component.onCompleted: syncInputsToNow()
 
-    // ── Reusable Component-level Style for ComboBox ─────────────────────
-    // This defines how the popup menu list items look and behave
+    // ── Reusable Theme Components ────────────────────────────────────────
+    
+    // 1. Style for Individual Items inside the Dropdown menu list
     Component {
         id: themedDropdownDelegate
         ItemDelegate {
@@ -75,6 +76,33 @@ CutiePage {
                 color: delegateItem.highlighted ? secondaryAlphaLightColor : "transparent"
                 radius: 8
             }
+        }
+    }
+
+    // 2. Style for the Main Selection Button Background
+    Component {
+        id: themedButtonBackground
+        Rectangle {
+            implicitHeight: commonHeight
+            color: Atmosphere.secondaryColor // Background color of the button box
+            border.color: parent.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
+            border.width: parent.visualFocus ? 2 : 1
+            radius: 10
+        }
+    }
+
+    // 3. Style for the Text inside the Selection Button
+    Component {
+        id: themedButtonContent
+        CutieLabel {
+            text: parent.currentText
+            font.pixelSize: 14
+            color: Atmosphere.textColor
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignLeft
+            leftPadding: 12
+            rightPadding: 30 // Leave space for the arrow indicator
+            elide: Text.ElideRight
         }
     }
 
@@ -199,7 +227,10 @@ CutiePage {
                             Layout.fillWidth: true
                             Layout.preferredWidth: .5
                             model: dateAndTimePage.daysModel
+                            
                             delegate: themedDropdownDelegate
+                            background: themedButtonBackground
+                            contentItem: themedButtonContent
                             
                             popup: Popup {
                                 y: dayCombo.height + 4
@@ -227,7 +258,10 @@ CutiePage {
                             Layout.fillWidth: true
                             Layout.preferredWidth: .5
                             model: dateAndTimePage.monthsModel
+                            
                             delegate: themedDropdownDelegate
+                            background: themedButtonBackground
+                            contentItem: themedButtonContent
 
                             popup: Popup {
                                 y: monthCombo.height + 4
@@ -255,7 +289,10 @@ CutiePage {
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             model: dateAndTimePage.yearsModel
+                            
                             delegate: themedDropdownDelegate
+                            background: themedButtonBackground
+                            contentItem: themedButtonContent
 
                             popup: Popup {
                                 y: yearCombo.height + 4
@@ -410,7 +447,10 @@ CutiePage {
                         Layout.fillWidth: true
                         model: dateAndTimePage.availableTimezones
                         currentIndex: dateAndTimePage.availableTimezones.indexOf(dateAndTimePage.currentTimezone)
+                        
                         delegate: themedDropdownDelegate
+                        background: themedButtonBackground
+                        contentItem: themedButtonContent
 
                         popup: Popup {
                             y: timezoneCombo.height + 4
