@@ -84,6 +84,7 @@ CutiePage {
 
                 ColumnLayout {
                     id: pickerLayout
+                    Layout.fillWidth: true
                     anchors {
                         left: parent.left
                         right: parent.right
@@ -98,8 +99,8 @@ CutiePage {
                         implicitWidth: timeRowLayout.implicitWidth + cardPadding * 2
                         implicitHeight: timeRowLayout.implicitHeight +  cardPadding * 2
                         color:  "transparent" // Fully transparent so digits show clearly
-                        border.color: Qt.rgba(Atmosphere.textColor.r, Atmosphere.textColor.g, Atmosphere.textColor.b, 0.25)
-                        border.width: 1.5
+                        border.color: Atmosphere.primaryColor
+                        border.width: 2
                         radius: 14
 
                         RowLayout {
