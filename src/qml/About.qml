@@ -11,63 +11,62 @@ CutiePage {
     component CutieDropdownList: ComboBox {
         id: control
 
-        // 1. Smaller Selection Button Text
+        // 1. Half-Sized Selection Button Text
         contentItem: CutieLabel {
             text: control.currentText
-            font.pixelSize: 13 
+            font.pixelSize: 11 // Shrunk to fit the smaller button
             color: Atmosphere.textColor
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignLeft
-            leftPadding: 10
-            rightPadding: 24
+            leftPadding: 6  // Tighter padding
+            rightPadding: 16 // Less space for the arrow
             elide: Text.ElideRight
         }
 
-        // 2. Smaller Selection Button Background
+        // 2. Half-Sized Selection Button Background
         background: Rectangle {
-            implicitHeight: 36 // Reduced height
+            implicitHeight: 20 // Sliced nearly in half (down from 36)
             color: Atmosphere.secondaryColor 
             border.color: control.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
             border.width: control.visualFocus ? 2 : 1
-            radius: 8 
+            radius: 4 // Sharper radius for a tinier element
         }
 
-        // 3. Dropdown List Items
+        // 3. Dropdown List Items (Scaled to match)
         delegate: ItemDelegate {
             id: delegateItem
-            width: parent ? parent.width - 8 : 100
-            height: 36 // Match new smaller height
+            width: parent ? parent.width - 4 : 100
+            height: 20 // Matches the new selection button height
             anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
             contentItem: CutieLabel {
                 text: modelData
                 color: delegateItem.highlighted ? Atmosphere.primaryColor : Atmosphere.textColor
                 font.bold: delegateItem.highlighted
-                font.pixelSize: 13
+                font.pixelSize: 11 // Matched font scaling
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
-                leftPadding: 8
+                leftPadding: 6
             }
 
             background: Rectangle {
-                // Computed inline alpha color
                 color: delegateItem.highlighted ? Qt.rgba(Atmosphere.secondaryAlphaColor.r, Atmosphere.secondaryAlphaColor.g, Atmosphere.secondaryAlphaColor.b, 0.1) : "transparent"
-                radius: 6
+                radius: 4
             }
         }
 
         // 4. Dropdown Menu Window
         popup: Popup {
-            y: control.height + 4
+            y: control.height + 2
             width: control.width
-            implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+            implicitHeight: Math.min(contentItem.implicitHeight + 8, 200) // Slightly shorter max-height
             padding: 4
             
             background: Rectangle {
                 color: Atmosphere.secondaryColor
                 border.color: Atmosphere.secondaryAlphaColor
                 border.width: 1
-                radius: 10
+                radius: 6 // Tighter corners
             }
             
             contentItem: ListView {
