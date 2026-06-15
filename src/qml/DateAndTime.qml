@@ -11,62 +11,62 @@ CutiePage {
     component CutieDropdownList: ComboBox {
         id: control
 
-        // 1. Half-Sized Selection Button Text
+        // 1. Increased Selection Button Text
         contentItem: CutieLabel {
             text: control.currentText
-            font.pixelSize: 11 // Shrunk to fit the smaller button
+            font.pixelSize: 14 // Increased for better readability
             color: Atmosphere.textColor
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignLeft
-            leftPadding: 6  // Tighter padding
-            rightPadding: 16 // Less space for the arrow
+            leftPadding: 10
+            rightPadding: 20
             elide: Text.ElideRight
         }
 
-        // 2. Half-Sized Selection Button Background
+        // 2. Increased Selection Button Background (30px = 20px * 1.5)
         background: Rectangle {
-            implicitHeight: 20 // Sliced nearly in half (down from 36)
+            implicitHeight: 30 
             color: Atmosphere.secondaryColor 
             border.color: control.visualFocus ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
             border.width: control.visualFocus ? 2 : 1
-            radius: 4 // Sharper radius for a tinier element
+            radius: 6 // Slightly larger radius
         }
 
-        // 3. Dropdown List Items (Scaled to match)
+        // 3. Increased Dropdown List Items
         delegate: ItemDelegate {
             id: delegateItem
-            width: parent ? parent.width - 4 : 100
-            height: 20 // Matches the new selection button height
+            width: parent ? parent.width - 6 : 100
+            height: 30 // Matches the 30px height
             anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
             contentItem: CutieLabel {
                 text: modelData
                 color: delegateItem.highlighted ? Atmosphere.primaryColor : Atmosphere.textColor
                 font.bold: delegateItem.highlighted
-                font.pixelSize: 11 // Matched font scaling
+                font.pixelSize: 14
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
-                leftPadding: 6
+                leftPadding: 10
             }
 
             background: Rectangle {
                 color: delegateItem.highlighted ? Qt.rgba(Atmosphere.secondaryAlphaColor.r, Atmosphere.secondaryAlphaColor.g, Atmosphere.secondaryAlphaColor.b, 0.1) : "transparent"
-                radius: 4
+                radius: 6
             }
         }
 
         // 4. Dropdown Menu Window
         popup: Popup {
-            y: control.height + 2
+            y: control.height + 4
             width: control.width
-            implicitHeight: Math.min(contentItem.implicitHeight + 8, 200) // Slightly shorter max-height
-            padding: 4
+            implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+            padding: 6
             
             background: Rectangle {
                 color: Atmosphere.secondaryColor
                 border.color: Atmosphere.secondaryAlphaColor
                 border.width: 1
-                radius: 6 // Tighter corners
+                radius: 8
             }
             
             contentItem: ListView {
