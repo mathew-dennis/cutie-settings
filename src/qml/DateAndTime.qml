@@ -100,6 +100,10 @@ CutiePage {
                                ? dateTimeStore.data.isAutomatic
                                : false
 
+    property bool isTimezoneAutomatic: dateTimeStore.data && ("isTimezoneAutomatic" in dateTimeStore.data)
+                               ? dateTimeStore.data.isTimezoneAutomatic
+                               : false
+
     property string currentTimezone: dateTimeStore.data && ("timezone" in dateTimeStore.data)
                                      ? dateTimeStore.data.timezone
                                      : "Asia/Dubai"
@@ -356,6 +360,67 @@ CutiePage {
 
             Item { width: 1; height: 16 }
 
+            // ── Card 2b: Set Time Zone Automatically ─────────────────────
+            Rectangle {
+                width: parent.width - 32
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: tzAutoLayout.implicitHeight + cardPadding * 2
+                color: secondaryAlphaLightColor
+                radius: cardRadius
+
+                RowLayout {
+                    id: tzAutoLayout
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        top: parent.top
+                        margins: cardPadding
+                    }
+                    spacing: 16
+
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 4
+
+                        CutieLabel {
+                            text: qsTr("Set Automatically")
+                            font.bold: true
+                            font.pixelSize: 15
+                        }
+
+                        CutieLabel {
+                            text: qsTr("Use network-provided time zone")
+                            font.pixelSize: 12
+                            opacity: 0.6
+                            wrapMode: Text.WordWrap
+                            Layout.fillWidth: true
+                        }
+                    }
+
+                    Item {
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.fillWidth: true      
+                        Layout.preferredWidth: 30
+
+                        CutieToggle {   
+                            id: automaticTimezoneToggle
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            checked: dateAndTimePage.isTimezoneAutomatic
+
+                            onToggled: {
+                                let d = dateTimeStore.data
+                                d.isTimezoneAutomatic = checked
+                                dateTimeStore.data = d
+                                console.log("Timezone sync updated:", checked ? "Automatic" : "Manual")
+                            }
+                        }
+                    }
+                }
+            }
+
+            Item { width: 1; height: 16 }
+
             // ── Card 3: Time Zone Card ───────────────────────────────────
             Rectangle {
                 width: parent.width - 32
@@ -363,7 +428,7 @@ CutiePage {
                 height: tzLayout.implicitHeight + cardPadding * 2
                 color: secondaryAlphaLightColor
                 radius: cardRadius
-                enabled: !automaticToggle.checked
+                enabled: !automaticTimezoneToggle.checked
 
                 ColumnLayout {
                     id: tzLayout
