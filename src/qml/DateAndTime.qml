@@ -96,8 +96,8 @@ CutiePage {
                     // Transparent Framing Box with Borderline
                     Rectangle {
                         Layout.alignment: Qt.AlignHCenter
-                        implicitWidth: timeRowLayout.implicitWidth + 40
-                        implicitHeight: timeRowLayout.implicitHeight + 16
+                        implicitWidth: timeRowLayout.implicitWidth + cardPadding * 2
+                        implicitHeight: timeRowLayout.implicitHeight +  cardPadding * 2
                         color:  "transparent" // Fully transparent so digits show clearly
                         border.color: Qt.rgba(Atmosphere.textColor.r, Atmosphere.textColor.g, Atmosphere.textColor.b, 0.25)
                         border.width: 1.5
