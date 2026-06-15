@@ -257,7 +257,7 @@ CutiePage {
                         CutieDropdownList {
                             id: yearCombo
                             Layout.fillWidth: true
-                            Layout.preferredWidth: .5
+                            Layout.preferredWidth: 1
                             model: dateAndTimePage.yearsModel
                         }
                     }
