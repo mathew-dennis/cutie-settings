@@ -431,43 +431,55 @@ CutiePage {
             Item { width: 1; height: 16 }
 
             // ── Card 3: Time Zone Card ───────────────────────────────────
-            Rectangle {
-                width: parent.width - 32
-                anchors.horizontalCenter: parent.horizontalCenter
-                height: tzLayout.implicitHeight + cardPadding * 2
-                color: secondaryAlphaLightColor
-                radius: cardRadius
-                enabled: !automaticTimezoneToggle.checked
-
-                ColumnLayout {
-                    id: tzLayout
-                    anchors {
-                        left: parent.left
-                        right: parent.right
-                        top: parent.top
-                        margins: cardPadding
-                    }
-                    spacing: 8
-
-                    CutieLabel {
-                        text: qsTr("Time Zone")
-                        font.bold: true
-                        font.pixelSize: 15
-                    }
-
-                    CutieDropdownList {
-                        id: timezoneCombo
-                        Layout.fillWidth: true
-                        model: dateAndTimePage.availableTimezones
-                        currentIndex: dateAndTimePage.availableTimezones.indexOf(dateAndTimePage.currentTimezone)
-                        
-                        onActivated: {
-                            CutieDateTime.setTimezone(currentText)
-                            console.log("System timezone changed to:", currentText)
-                        }
-                    }
-                }
-            }
+			Rectangle {
+			    width: parent.width - 32
+			    anchors.horizontalCenter: parent.horizontalCenter
+			    height: tzLayout.implicitHeight + cardPadding * 2
+			    color: secondaryAlphaLightColor
+			    radius: cardRadius
+			    // This disables the whole card if automatic timezone is on
+			    enabled: !automaticTimezoneToggle.checked
+			
+			    ColumnLayout {
+			        id: tzLayout
+			        anchors {
+			            left: parent.left
+			            right: parent.right
+			            top: parent.top
+			            margins: cardPadding
+			        }
+			        spacing: 8
+			
+			        CutieLabel {
+			            text: qsTr("Time Zone")
+			            font.bold: true
+			            font.pixelSize: 15
+			        }
+			
+			        // RowLayout added to hold both the dropdown and the button
+			        RowLayout {
+			            Layout.fillWidth: true
+			            spacing: 8
+			
+			            CutieDropdownList {
+			                id: timezoneCombo
+			                Layout.fillWidth: true
+			                model: dateAndTimePage.availableTimezones
+			                currentIndex: dateAndTimePage.availableTimezones.indexOf(dateAndTimePage.currentTimezone)
+			            }
+			
+			            CutieButton {
+			                text: qsTr("Set")
+			                // Only enabled if automatic mode is disabled
+			                enabled: !automaticTimezoneToggle.checked
+			                onClicked: {
+			                    CutieDateTime.setTimezone(timezoneCombo.currentText)
+			                    console.log("System timezone changed to:", timezoneCombo.currentText)
+			                }
+			            }
+			        }
+			    }
+			}
 
             Item { width: 1; height: 24 }
         }
