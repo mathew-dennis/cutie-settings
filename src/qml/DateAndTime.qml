@@ -176,7 +176,7 @@ CutiePage {
                     }
                     spacing: 16
                     // add some freespace
-                    Item { width: 1; height: 24 }
+                    Item { width: 1; height: 12 }
                     // Transparent Framing Box with Borderline
                     Rectangle {
                         Layout.alignment: Qt.AlignHCenter
