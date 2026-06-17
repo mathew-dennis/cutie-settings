@@ -175,7 +175,8 @@ CutiePage {
                         margins: cardPadding
                     }
                     spacing: 16
-
+                    // add some freespace
+                    Item { width: 1; height: 24 }
                     // Transparent Framing Box with Borderline
                     Rectangle {
                         Layout.alignment: Qt.AlignHCenter
