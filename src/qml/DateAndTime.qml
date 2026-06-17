@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import Cutie.Store
+import Cutie.Datetime
 
 CutiePage {
     id: dateAndTimePage
@@ -96,19 +97,22 @@ CutiePage {
     property var yearsModel: ["2024","2025","2026","2027","2028","2029","2030","2031","2032","2033","2034","2035","2036","2037","2038","2039","2040"]
 
     // ── Properties & State Bindings ─────────────────────────────────────
-    property bool isAutomatic: dateTimeStore.data && ("isAutomatic" in dateTimeStore.data)
-                               ? dateTimeStore.data.isAutomatic
-                               : false
+    // NTP state and the active timezone now come straight from the
+    // CutieDateTime singleton (org.freedesktop.timedate1 over D-Bus),
+    // replacing the mock CutieStore-backed values.
+    property bool isAutomatic: CutieDateTime.ntpEnabled
 
+    // timedate1 has no "automatic timezone" concept of its own (that's
+    // normally a geoclue-driven feature layered on top, which CutieDateTime
+    // doesn't expose yet). Left on the local store for now — see chat.
     property bool isTimezoneAutomatic: dateTimeStore.data && ("isTimezoneAutomatic" in dateTimeStore.data)
                                ? dateTimeStore.data.isTimezoneAutomatic
                                : false
 
-    property string currentTimezone: dateTimeStore.data && ("timezone" in dateTimeStore.data)
-                                     ? dateTimeStore.data.timezone
-                                     : "Asia/Dubai"
+    property string currentTimezone: CutieDateTime.currentTimezone
 
-    property var availableTimezones: ["UTC", "Europe/London", "America/New_York", "Asia/Dubai", "Asia/Tokyo"]
+    // Populated once from CutieDateTime.availableTimezones() below.
+    property var availableTimezones: []
 
     // ── Helper Functions ────────────────────────────────────────────────
     function syncInputsToNow() {
@@ -126,7 +130,10 @@ CutiePage {
         }
     }
 
-    Component.onCompleted: syncInputsToNow()
+    Component.onCompleted: {
+        syncInputsToNow()
+        availableTimezones = CutieDateTime.availableTimezones()
+    }
 
     // ── Layout Tree ──────────────────────────────────────────────────────
     Flickable {
@@ -292,7 +299,9 @@ CutiePage {
                             minutesTumbler.currentIndex,
                             0
                         )
-                        console.log("Manual system time committed to:", targetDate.toString())
+                        if (CutieDateTime.setTime(targetDate)) {
+                            console.log("Manual system time committed to:", targetDate.toString())
+                        }
                     }
                 }
             }
@@ -348,9 +357,7 @@ CutiePage {
                             checked: dateAndTimePage.isAutomatic
 
                             onToggled: {
-                                let d = dateTimeStore.data
-                                d.isAutomatic = checked
-                                dateTimeStore.data = d
+                                CutieDateTime.setNTP(checked)
                                 console.log("System time sync updated:", checked ? "Automatic" : "Manual")
                             }
                         }
@@ -409,6 +416,7 @@ CutiePage {
                             checked: dateAndTimePage.isTimezoneAutomatic
 
                             onToggled: {
+                                // TODO: no CutieDateTime hook for this yet — see notes above.
                                 let d = dateTimeStore.data
                                 d.isTimezoneAutomatic = checked
                                 dateTimeStore.data = d
@@ -453,9 +461,7 @@ CutiePage {
                         currentIndex: dateAndTimePage.availableTimezones.indexOf(dateAndTimePage.currentTimezone)
                         
                         onActivated: {
-                            let d = dateTimeStore.data
-                            d.timezone = currentText
-                            dateTimeStore.data = d
+                            CutieDateTime.setTimezone(currentText)
                             console.log("System timezone changed to:", currentText)
                         }
                     }
@@ -463,6 +469,15 @@ CutiePage {
             }
 
             Item { width: 1; height: 24 }
+        }
+    }
+
+    // ── Backend Error Surface ──────────────────────────────────────────
+    Connections {
+        target: CutieDateTime
+        function onErrorOccurred(message) {
+            console.warn("CutieDateTime error:", message)
+            // TODO: surface via toast/snackbar once Cutie has one
         }
     }
 
