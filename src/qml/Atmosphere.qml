@@ -6,6 +6,12 @@ import QtQuick.Controls
 CutiePage {
     id: atmospherePage
 
+    readonly property color secondaryAlphaLightColor: Qt.rgba(
+        Atmosphere.secondaryAlphaColor.r,
+        Atmosphere.secondaryAlphaColor.g,
+        Atmosphere.secondaryAlphaColor.b,
+        0.1
+    )
     property int cardRadius:  16
     property int cardPadding: 20
 
@@ -33,7 +39,7 @@ CutiePage {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: pickerLayout.implicitHeight + cardPadding * 2
-                color: Atmosphere.primaryAlphaColor
+                color: secondaryAlphaLightColor
                 radius: cardRadius
 
                 Behavior on color {
@@ -51,7 +57,7 @@ CutiePage {
                     spacing: 16
 
                     Text {
-                        text: qsTr("Atmosphere")
+                        text: qsTr("Default Atmosphere")
                         font.pixelSize: 24
                         font.family: "Lato"
                         font.weight: Font.Black
@@ -130,27 +136,33 @@ CutiePage {
                             }
                         }
                     }
+
+                    Text {
+                        text: qsTr("Custom Atmosphere")
+                        font.pixelSize: 24
+                        font.family: "Lato"
+                        font.weight: Font.Black
+                        color: Atmosphere.textColor
+
+                        Behavior on color {
+                            ColorAnimation { duration: 500; easing.type: Easing.InOutQuad }
+                        }
+                    }
+                    Text {
+                        text: qsTr("comming soon...")
+                        font.pixelSize: 20
+                        font.family: "Lato"
+                        color: Atmosphere.textColor
+                        opacity: 0.9
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        wrapMode: Text.WordWrap
+
+                        Behavior on color {
+                            ColorAnimation { duration: 500; easing.type: Easing.InOutQuad }
+                        }
+                    }
                 }
             }
-
-            Item { width: 1; height: 10 }
-
-            Text {
-                text: qsTr("Changes apply immediately.")
-                font.pixelSize: 11
-                font.family: "Lato"
-                color: Atmosphere.textColor
-                opacity: 0.55
-                width: parent.width - 32
-                anchors.horizontalCenter: parent.horizontalCenter
-                wrapMode: Text.WordWrap
-
-                Behavior on color {
-                    ColorAnimation { duration: 500; easing.type: Easing.InOutQuad }
-                }
-            }
-
-            Item { width: 1; height: 24 }
         }
     }
 }
