@@ -1,8 +1,10 @@
-import Cutie
-import Cutie.Desktopfileparser
+
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import Cutie
+import Cutie.Wlc
+import Cutie.Desktopfileparser
 
 CutiePage {
     id: appsPage
@@ -20,6 +22,8 @@ CutiePage {
 
     property var appsModel: null
 
+    CutieWlc { id: compositor }
+    
     Component.onCompleted: {
         appsModel = CutieDesktopFileParser.fetchAllEntriesModel()
     }

@@ -70,7 +70,7 @@ CutiePage {
                         height: 100
                         model: Atmosphere.atmosphereList
                         orientation: Qt.Horizontal
-                        clip: false
+                        clip: true
                         spacing: -20
 
                         delegate: Item {
