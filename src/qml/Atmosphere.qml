@@ -33,7 +33,6 @@ CutiePage {
                 width: parent.width - 32
                 anchors.horizontalCenter: parent.horizontalCenter
                 height: pickerLayout.implicitHeight + cardPadding * 2
-                // Match the atmosphere card colour from SettingSheet exactly
                 color: Atmosphere.primaryAlphaColor
                 radius: cardRadius
 
@@ -51,7 +50,6 @@ CutiePage {
                     }
                     spacing: 16
 
-                    // Title — matches SettingSheet's "Atmosphere" heading style
                     Text {
                         text: qsTr("Atmosphere")
                         font.pixelSize: 24
@@ -64,43 +62,49 @@ CutiePage {
                         }
                     }
 
-                    Text {
-                        text: qsTr("Select a theme to change the wallpaper and colour scheme.")
-                        font.pixelSize: 13
-                        font.family: "Lato"
-                        color: Atmosphere.textColor
-                        opacity: 0.7
-                        wrapMode: Text.WordWrap
+                    // ── Horizontal scroll strip — matches SettingSheet exactly ──
+                    // spacing: -20 + delegate width: 100 gives the same overlapping
+                    // fan effect as the original panel.
+                    ListView {
                         Layout.fillWidth: true
-                    }
+                        height: 100
+                        model: Atmosphere.atmosphereList
+                        orientation: Qt.Horizontal
+                        clip: false
+                        spacing: -20
 
-                    // ── 2-column grid of atmosphere thumbnails ────────────
-                    // Flow avoids nested-scrollview conflicts with the outer Flickable
-                    Flow {
-                        id: atmFlow
-                        Layout.fillWidth: true
-                        spacing: 12
+                        delegate: Item {
+                            width: 100
+                            height: 100
 
-                        Repeater {
-                            model: Atmosphere.atmosphereList
+                            readonly property bool isSelected: modelData.path === Atmosphere.path
 
-                            Item {
-                                id: atmTile
+                            Image {
+                                x: 20
+                                width: 60
+                                height: 80
+                                source: "file:/" + modelData.path + "/wallpaper.jpg"
+                                fillMode: Image.PreserveAspectCrop
+                                asynchronous: true
 
-                                readonly property bool isSelected: modelData.path === Atmosphere.path
-
-                                // 2-column: subtract the one gap between columns
-                                width:  (atmFlow.width - atmFlow.spacing) / 2
-                                height: width * 1.35
-
-                                // ── Selection ring (sits outside the tile bounds) ──
+                                // Dim unselected tiles
                                 Rectangle {
                                     anchors.fill: parent
-                                    anchors.margins: -3
-                                    radius: cardRadius - 2
+                                    color: "#000000"
+                                    opacity: isSelected ? 0.0 : 0.3
+
+                                    Behavior on opacity {
+                                        NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
+                                    }
+                                }
+
+                                // Selection ring
+                                Rectangle {
+                                    anchors.fill: parent
+                                    anchors.margins: -2
                                     color: "transparent"
                                     border.color: Atmosphere.textColor
-                                    border.width: atmTile.isSelected ? 2 : 0
+                                    border.width: isSelected ? 2 : 0
 
                                     Behavior on border.width {
                                         NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
@@ -110,49 +114,13 @@ CutiePage {
                                     }
                                 }
 
-                                // ── Wallpaper preview ──────────────────────
-                                Image {
-                                    id: wallpaperThumb
-                                    anchors.fill: parent
-                                    source: "file:/" + modelData.path + "/wallpaper.jpg"
-                                    fillMode: Image.PreserveAspectCrop
-                                    asynchronous: true
-                                    clip: true
-                                }
-
-                                // Dim unselected tiles slightly
-                                Rectangle {
-                                    anchors.fill: parent
-                                    color: "#000000"
-                                    opacity: atmTile.isSelected ? 0.0 : 0.25
-
-                                    Behavior on opacity {
-                                        NumberAnimation { duration: 200; easing.type: Easing.InOutQuad }
-                                    }
-                                }
-
-                                // ── Atmosphere name ────────────────────────
-                                // Colour based on variant, matching SettingSheet exactly
                                 Text {
                                     anchors.centerIn: parent
                                     text: modelData.name
                                     font.pixelSize: 14
+                                    font.bold: false
                                     font.family: "Lato"
-                                    font.bold: atmTile.isSelected
                                     color: (modelData.variant === "dark") ? "#FFFFFF" : "#000000"
-                                }
-
-                                // ── Checkmark for active atmosphere ────────
-                                Text {
-                                    anchors.top: parent.top
-                                    anchors.right: parent.right
-                                    anchors.margins: 7
-                                    text: "✓"
-                                    font.pixelSize: 13
-                                    font.family: "Lato"
-                                    font.bold: true
-                                    color: (modelData.variant === "dark") ? "#FFFFFF" : "#000000"
-                                    visible: atmTile.isSelected
                                 }
 
                                 MouseArea {
@@ -167,7 +135,6 @@ CutiePage {
 
             Item { width: 1; height: 10 }
 
-            // Note below card
             Text {
                 text: qsTr("Changes apply immediately.")
                 font.pixelSize: 11
