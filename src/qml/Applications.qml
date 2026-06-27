@@ -90,8 +90,8 @@ CutiePage {
                                 CutieButton {
                                     icon.name: model.icon
                                     icon.source: "file://" + model.icon
-                                    icon.width: 28
-                                    icon.height: 28
+                                    icon.width: 40
+                                    icon.height: 40
                                     implicitWidth: 40
                                     implicitHeight: 40
                                     background: null
