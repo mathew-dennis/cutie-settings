@@ -26,7 +26,7 @@ CutieWindow {
 		},	Atmosphere	
 		{
 			text: qsTr("Atmosphere"),
-			icon: "audio-home-symbolic",
+			icon: "user-home-symbolic",
 			component: Qt.createComponent("Atmosphere.qml")
 		},
 		{
