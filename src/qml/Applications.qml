@@ -92,8 +92,8 @@ CutiePage {
                                     icon.source: "file://" + model.icon
                                     icon.width: 40
                                     icon.height: 40
-                                    implicitWidth: 40
-                                    implicitHeight: 40
+                                    implicitWidth: 48
+                                    implicitHeight: 48
                                     background: null
                                     onClicked: compositor.execApp(model.exec)
                                 }
