@@ -9,7 +9,8 @@
         <file>MobileNetwork.qml</file>
         <file>ApnCfg.qml</file>
         <file>HomeScreen.qml</file>
+        <file>Applications.qml</file>
         <file>DateAndTime.qml</file>
-         <file>Waydroid.qml</file>
+        <file>Waydroid.qml</file>
     </qresource>
 </RCC>

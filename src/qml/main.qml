@@ -34,7 +34,12 @@ CutieWindow {
 			icon: "user-home-symbolic",
 			component: Qt.createComponent("HomeScreen.qml")
 		},
-				{
+		{
+			text: qsTr("Applications"),
+			icon: "user-home-symbolic",
+			component: Qt.createComponent("Applications.qml")
+		},
+		{
 			text: qsTr("Waydroid"),
 			icon: "help-about-symbolic",
 			component: Qt.createComponent("Waydroid.qml")
