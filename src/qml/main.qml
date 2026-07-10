@@ -51,7 +51,7 @@ CutieWindow {
 		},
 		{
 			text: qsTr("Lock Screen"),
-			icon: "changes-prevent-symbolic",
+			icon: "help-about-symbolic",
 			component: Qt.createComponent("LockScreen.qml")
 		},
 		{
