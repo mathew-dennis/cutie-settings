@@ -9,6 +9,12 @@ CutiePage {
 
 	CutieScreenLock {
 		id: lockAuthClient
+		onAvailableChanged: console.log("[DEBUG LockScreen] lockAuthClient.available changed to:", available)
+		onMethodChanged: console.log("[DEBUG LockScreen] lockAuthClient.method changed to:", method)
+	}
+
+	Component.onCompleted: {
+		console.log("[DEBUG LockScreen] Page loaded. Initial lockAuthClient.available is:", lockAuthClient.available)
 	}
 
 	readonly property var methods: [
@@ -19,8 +25,13 @@ CutiePage {
 	]
 
 	function selectMethod(targetKey) {
-		if (targetKey === lockAuthClient.method)
+		console.log("[DEBUG LockScreen] selectMethod called with targetKey:", targetKey, "| current method:", lockAuthClient.method);
+		if (targetKey === lockAuthClient.method) {
+			console.log("[DEBUG LockScreen] Target method is already the current method. Bailing out.");
 			return;
+		}
+		
+		console.log("[DEBUG LockScreen] Pushing LockScreenAuth.qml to pageStack.");
 		mainWindow.pageStack.push(
 			Qt.resolvedUrl("LockScreenAuth.qml"),
 			{ currentMethod: lockAuthClient.method, targetMethod: targetKey }
@@ -91,7 +102,10 @@ CutiePage {
 				MouseArea {
 					anchors.fill: parent
 					enabled: lockAuthClient.available
-					onClicked: lockScreenPage.selectMethod(modelData.key)
+					onClicked: {
+						console.log("[DEBUG LockScreen] MouseArea clicked for:", modelData.key, "| Component enabled:", enabled);
+						lockScreenPage.selectMethod(modelData.key);
+					}
 				}
 			}
 		}
