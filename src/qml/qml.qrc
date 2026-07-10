@@ -13,6 +13,8 @@
         <file>Waydroid.qml</file>
         <file>Applications.qml</file>
         <file>Atmosphere.qml</file>
+        <file>LockScreen.qml</file>
+        <file>LockScreenAuth.qml</file>
         
     </qresource>
 </RCC>

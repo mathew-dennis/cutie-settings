@@ -23,7 +23,7 @@ CutieWindow {
 			text: qsTr("Audio"),
 			icon: "audio-speakers-symbolic",
 			component: Qt.createComponent("Audio.qml")
-		},	
+		},		
 		{
 			text: qsTr("Atmosphere"),
 			icon: "user-home-symbolic",
@@ -48,6 +48,11 @@ CutieWindow {
 			text: qsTr("Waydroid"),
 			icon: "help-about-symbolic",
 			component: Qt.createComponent("Waydroid.qml")
+		},
+		{
+			text: qsTr("Lock Screen"),
+			icon: "changes-prevent-symbolic",
+			component: Qt.createComponent("LockScreen.qml")
 		},
 		{
 			text: qsTr("About"),
