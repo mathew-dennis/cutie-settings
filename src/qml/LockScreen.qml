@@ -30,7 +30,7 @@ CutiePage {
 	CutiePageHeader {
 		id: header
 		title: qsTr("Lock Screen")
-		description: lockAuthClient.isAvailable()
+		description: lockAuthClient.available
 					 ? qsTr("Choose how to unlock your device.")
 					 : qsTr("Cutie Panel isn't running - can't reach the lock screen service.")
 		width: parent.width
@@ -90,7 +90,7 @@ CutiePage {
 
 				MouseArea {
 					anchors.fill: parent
-					enabled: lockAuthClient.isAvailable()
+					enabled: lockAuthClient.available
 					onClicked: lockScreenPage.selectMethod(modelData.key)
 				}
 			}
