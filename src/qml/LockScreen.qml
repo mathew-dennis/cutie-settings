@@ -7,7 +7,7 @@ import QtQuick.Controls
 CutiePage {
 	id: lockScreenPage
 
-	ScreenLock {
+	CutieScreenLock {
 		id: lockAuthClient
 	}
 
