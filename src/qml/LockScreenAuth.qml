@@ -123,7 +123,7 @@ CutiePage {
 		NumberAnimation { target: authCard; property: "anchors.horizontalCenterOffset"; to: 0; duration: 50 }
 	}
 
-	Column {
+	ColumnLayout {
 		id: authCard
 		anchors.bottom: parent.bottom
 		anchors.bottomMargin: 40
@@ -131,7 +131,7 @@ CutiePage {
 		spacing: 20
 
 		CutieLabel {
-			anchors.horizontalCenter: parent.horizontalCenter
+			Layout.alignment: Qt.AlignHCenter
 			text: authPage.errorText
 			color: "#e05252"
 			font.pixelSize: 13
@@ -140,7 +140,7 @@ CutiePage {
 
 		PinPad {
 			id: pinPad
-			anchors.horizontalCenter: parent.horizontalCenter
+			Layout.alignment: Qt.AlignHCenter
 			visible: (authPage.step === "verify" && authPage.currentMethod === "pin") ||
 					 ((authPage.step === "enterNew" || authPage.step === "confirmNew") && authPage.targetMethod === "pin")
 			onPinEntered: (pin) => {
@@ -159,7 +159,7 @@ CutiePage {
 
 		PatternLock {
 			id: patternLock
-			anchors.horizontalCenter: parent.horizontalCenter
+			Layout.alignment: Qt.AlignHCenter
 			visible: (authPage.step === "verify" && authPage.currentMethod === "pattern") ||
 					 ((authPage.step === "enterNew" || authPage.step === "confirmNew") && authPage.targetMethod === "pattern")
 			onPatternEntered: (sequence) => {
@@ -178,7 +178,7 @@ CutiePage {
 
 		CutieButton {
 			buttonText: qsTr("Confirm")
-			anchors.horizontalCenter: parent.horizontalCenter
+			Layout.alignment: Qt.AlignHCenter
 			visible: authPage.step === "ready"
 			implicitWidth: 220
 			implicitHeight: 56
@@ -191,7 +191,7 @@ CutiePage {
 
 		CutieButton {
 			buttonText: qsTr("Cancel")
-			anchors.horizontalCenter: parent.horizontalCenter
+			Layout.alignment: Qt.AlignHCenter
 			implicitWidth: 220
 			implicitHeight: 56
 			font.pixelSize: 16
