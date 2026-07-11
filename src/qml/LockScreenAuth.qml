@@ -180,6 +180,9 @@ CutiePage {
 			buttonText: qsTr("Confirm")
 			anchors.horizontalCenter: parent.horizontalCenter
 			visible: authPage.step === "ready"
+			implicitWidth: 220
+			implicitHeight: 56
+			font.pixelSize: 16
 			onClicked: {
 				console.log("[DEBUG Auth] Confirm button clicked.");
 				authPage._commit();
@@ -189,6 +192,9 @@ CutiePage {
 		CutieButton {
 			buttonText: qsTr("Cancel")
 			anchors.horizontalCenter: parent.horizontalCenter
+			implicitWidth: 220
+			implicitHeight: 56
+			font.pixelSize: 16
 			onClicked: {
 				console.log("[DEBUG Auth] Cancel button clicked. Popping page.");
 				mainWindow.pageStack.pop();
