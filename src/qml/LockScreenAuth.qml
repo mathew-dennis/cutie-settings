@@ -125,8 +125,8 @@ CutiePage {
 
 	Column {
 		id: authCard
-		anchors.top: header.bottom
-		anchors.topMargin: 30
+		anchors.bottom: parent.bottom
+		anchors.bottomMargin: 40
 		anchors.horizontalCenter: parent.horizontalCenter
 		spacing: 20
 
