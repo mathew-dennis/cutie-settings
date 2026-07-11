@@ -30,12 +30,27 @@ CutiePage {
 			console.log("[DEBUG LockScreen] Target method is already the current method. Bailing out.");
 			return;
 		}
-		
-		console.log("[DEBUG LockScreen] Pushing LockScreenAuth.qml to pageStack.");
-		mainWindow.pageStack.push(
-			Qt.resolvedUrl("LockScreenAuth.qml"),
-			{ currentMethod: lockAuthClient.method, targetMethod: targetKey }
-		);
+
+		var component = Qt.createComponent(Qt.resolvedUrl("LockScreenAuth.qml"));
+		console.log("[DEBUG LockScreen] createComponent status:", component.status, "(1=Null 2=Ready 3=Loading 4=Error)");
+
+		function doPush() {
+			if (component.status === Component.Ready) {
+				console.log("[DEBUG LockScreen] Component ready, pushing to pageStack.");
+				mainWindow.pageStack.push(
+					component,
+					{ currentMethod: lockAuthClient.method, targetMethod: targetKey }
+				);
+			} else if (component.status === Component.Error) {
+				console.log("[DEBUG LockScreen] Component FAILED to load:", component.errorString());
+			}
+		}
+
+		if (component.status === Component.Ready || component.status === Component.Error) {
+			doPush();
+		} else {
+			component.statusChanged.connect(doPush);
+		}
 	}
 
 	CutiePageHeader {
