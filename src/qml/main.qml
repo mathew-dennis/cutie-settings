@@ -25,6 +25,11 @@ CutieWindow {
 			component: Qt.createComponent("Audio.qml")
 		},		
 		{
+			text: qsTr("Battery"),
+			icon: "battery-good-symbolic",
+			component: Qt.createComponent("Battery.qml")
+		},
+		{
 			text: qsTr("Atmosphere"),
 			icon: "user-home-symbolic",
 			component: Qt.createComponent("Atmosphere.qml")
