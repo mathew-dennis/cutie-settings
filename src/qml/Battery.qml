@@ -5,12 +5,7 @@ import Cutie.Battery
 CutiePage {
 	id: batteryPage
 
-	readonly property color cardColor: Qt.rgba(
-		Atmosphere.secondaryAlphaColor.r,
-		Atmosphere.secondaryAlphaColor.g,
-		Atmosphere.secondaryAlphaColor.b,
-		0.1
-	)
+	readonly property color cardColor: Qt.alpha(Atmosphere.secondaryAlphaColor, 0.1)
 	readonly property color fillColor: BatteryHistory.percentage <= 20 ? "#E57373" : "#A5D6A7"
 	readonly property bool charging: BatteryHistory.stateString === "Charging"
 
@@ -29,7 +24,7 @@ CutiePage {
 	// threshold, show that it's unreliable instead of a bogus number.
 	function timeRemainingText() {
 		if (Math.abs(BatteryHistory.energyRate) < 0.05)
-			return qsTr("Calculating…")
+			return qsTr("N/A")
 		return batteryPage.charging
 			? formatDuration(BatteryHistory.timeToFull)
 			: formatDuration(BatteryHistory.timeToEmpty)
@@ -111,7 +106,7 @@ CutiePage {
 
 						CutieLabel {
 							width: parent.width
-							text: BatteryHistory.energyRate.toFixed(1) + " W"
+							text: qsTr("%1 W").arg(BatteryHistory.energyRate.toFixed(1))
 							font.pixelSize: 30
 							font.bold: true
 							wrapMode: Text.WordWrap
@@ -154,14 +149,22 @@ CutiePage {
 					anchors.margins: 20
 					height: 180
 
-					readonly property int leftAxis: 34
-					readonly property int bottomAxis: 18
+					// Extra padding on the left ensures the graph starts AFTER scale numbers
+					readonly property int leftAxis: 45
+					readonly property int bottomAxis: 24
+
+					onWidthChanged: requestPaint()
+					onHeightChanged: requestPaint()
 
 					onPaint: {
 						var ctx = getContext("2d");
 						ctx.reset();
-						// Most recent point first (left), oldest last (right).
-						var pts = BatteryHistory.points.slice().reverse();
+
+						// Sort points chronologically: oldest first (left), newest last (right)
+						var pts = BatteryHistory.points.slice().sort(function(a, b) {
+							return a.time - b.time;
+						});
+
 						if (pts.length < 2)
 							return;
 
@@ -171,59 +174,56 @@ CutiePage {
 
 						ctx.font = "11px sans-serif";
 						ctx.fillStyle = Atmosphere.textColor;
-						ctx.strokeStyle = Qt.rgba(Atmosphere.textColor.r, Atmosphere.textColor.g, Atmosphere.textColor.b, 0.15);
+						ctx.strokeStyle = Qt.alpha(Atmosphere.textColor, 0.15);
 						ctx.lineWidth = 1;
 
-						// Y axis: linear, evenly spaced 0/25/50/75/100%.
+						// Y axis: linear grid lines 0/25/50/75/100%.
 						[0, 25, 50, 75, 100].forEach(function (pct) {
 							var y = plotH - (pct / 100) * plotH;
 							ctx.beginPath();
 							ctx.moveTo(plotX, y);
 							ctx.lineTo(width, y);
 							ctx.stroke();
-							ctx.fillText(pct + "%", 0, Math.max(y + 4, 10));
+							// Labels render to the left of plotX
+							ctx.fillText(pct + "%", 0, Math.min(Math.max(y + 4, 10), plotH));
 						});
 
-						// X axis positioning: with only 2 points there's
-						// no in-between density to represent, so stretch
-						// them across the full width rather than using
-						// their real time gap (which can be tiny and
-						// collapse the line to a single vertical stroke).
-						// With 3+ points, position by real elapsed time,
-						// anchored by the same two endpoints - UPower's
-						// samples aren't evenly spaced (bursts during
-						// screen-on, gaps otherwise), so index-based
-						// spacing would visually distort when things
-						// actually happened.
-						var newestTime = pts[0].time;
-						var oldestTime = pts[pts.length - 1].time;
+						// X axis mapping: oldest at plotX, newest at plotX + plotW
+						var oldestTime = pts[0].time;
+						var newestTime = pts[pts.length - 1].time;
 						var span = Math.max(1, newestTime - oldestTime);
+
 						function xForTime(t) {
 							if (pts.length === 2)
-								return t === newestTime ? plotX : plotX + plotW;
-							return plotX + ((newestTime - t) / span) * plotW;
+								return t === oldestTime ? plotX : plotX + plotW;
+							return plotX + ((t - oldestTime) / span) * plotW;
 						}
 
-						// X axis: first/middle/last timestamps, deduped -
-						// with few points, mid can equal first or last,
-						// which would otherwise draw the same label twice
-						// on top of itself.
+						// X axis labels (first, middle, last)
 						var mid = Math.floor(pts.length / 2);
 						var labelIdxs = [...new Set([0, mid, pts.length - 1])];
 						labelIdxs.forEach(function (i) {
 							var label = Qt.formatDateTime(new Date(pts[i].time * 1000), "hh:mm");
 							var x = xForTime(pts[i].time);
-							ctx.fillText(label, Math.min(Math.max(x - 14, plotX), width - 30), height);
+							var labelWidth = ctx.measureText(label).width;
+							
+							// Center the text under its data point, clamped within the graph boundaries
+							var labelX = Math.min(Math.max(x - labelWidth / 2, plotX), width - labelWidth);
+							ctx.fillText(label, labelX, height - 2);
 						});
 
-						// The line itself
+						// Plot graph line
 						ctx.strokeStyle = Atmosphere.textColor;
 						ctx.lineWidth = 2;
+						ctx.lineJoin = "round";
 						ctx.beginPath();
 						for (var i = 0; i < pts.length; i++) {
 							var x = xForTime(pts[i].time);
 							var y = plotH - (pts[i].value / 100) * plotH;
-							if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+							if (i === 0) 
+								ctx.moveTo(x, y); 
+							else 
+								ctx.lineTo(x, y);
 						}
 						ctx.stroke();
 					}
