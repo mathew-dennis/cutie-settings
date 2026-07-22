@@ -29,7 +29,7 @@ CutiePage {
 	// threshold, show that it's unreliable instead of a bogus number.
 	function timeRemainingText() {
 		if (Math.abs(BatteryHistory.energyRate) < 0.05)
-			return qsTr("Calculating…")
+			return qsTr("N/A")
 		return batteryPage.charging
 			? formatDuration(BatteryHistory.timeToFull)
 			: formatDuration(BatteryHistory.timeToEmpty)
@@ -66,7 +66,8 @@ CutiePage {
 					width: parent.width * (BatteryHistory.percentage / 100)
 					height: parent.height
 					color: batteryPage.fillColor
-					opacity: 0.35
+					opacity: 0.3
+                    radius: 16
 
 					Behavior on width {
 						NumberAnimation { duration: 400; easing.type: Easing.OutQuad }
