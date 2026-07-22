@@ -29,7 +29,7 @@ CutiePage {
 	// threshold, show that it's unreliable instead of a bogus number.
 	function timeRemainingText() {
 		if (Math.abs(BatteryHistory.energyRate) < 0.05)
-			return qsTr("N/A")
+			return qsTr("Calculating…")
 		return batteryPage.charging
 			? formatDuration(BatteryHistory.timeToFull)
 			: formatDuration(BatteryHistory.timeToEmpty)
@@ -66,8 +66,8 @@ CutiePage {
 					width: parent.width * (BatteryHistory.percentage / 100)
 					height: parent.height
 					color: batteryPage.fillColor
-					opacity: 0.3
-                    radius: 16
+					opacity: 0.35
+					radius: 16
 
 					Behavior on width {
 						NumberAnimation { duration: 400; easing.type: Easing.OutQuad }
@@ -181,24 +181,36 @@ CutiePage {
 							ctx.moveTo(plotX, y);
 							ctx.lineTo(width, y);
 							ctx.stroke();
-							ctx.fillText(pct + "%", 0, y + 4);
+							ctx.fillText(pct + "%", 0, Math.max(y + 4, 10));
 						});
 
-						// X axis positioning is linear in real time (by
-						// timestamp), not by point index - UPower's samples
-						// aren't evenly spaced (bursts during screen-on,
-						// gaps otherwise), so index-based spacing would
-						// visually distort when things actually happened.
+						// X axis positioning: with only 2 points there's
+						// no in-between density to represent, so stretch
+						// them across the full width rather than using
+						// their real time gap (which can be tiny and
+						// collapse the line to a single vertical stroke).
+						// With 3+ points, position by real elapsed time,
+						// anchored by the same two endpoints - UPower's
+						// samples aren't evenly spaced (bursts during
+						// screen-on, gaps otherwise), so index-based
+						// spacing would visually distort when things
+						// actually happened.
 						var newestTime = pts[0].time;
 						var oldestTime = pts[pts.length - 1].time;
 						var span = Math.max(1, newestTime - oldestTime);
 						function xForTime(t) {
+							if (pts.length === 2)
+								return t === newestTime ? plotX : plotX + plotW;
 							return plotX + ((newestTime - t) / span) * plotW;
 						}
 
-						// X axis: first/middle/last timestamps.
+						// X axis: first/middle/last timestamps, deduped -
+						// with few points, mid can equal first or last,
+						// which would otherwise draw the same label twice
+						// on top of itself.
 						var mid = Math.floor(pts.length / 2);
-						[0, mid, pts.length - 1].forEach(function (i) {
+						var labelIdxs = [...new Set([0, mid, pts.length - 1])];
+						labelIdxs.forEach(function (i) {
 							var label = Qt.formatDateTime(new Date(pts[i].time * 1000), "hh:mm");
 							var x = xForTime(pts[i].time);
 							ctx.fillText(label, Math.min(Math.max(x - 14, plotX), width - 30), height);
