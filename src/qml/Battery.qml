@@ -22,6 +22,19 @@ CutiePage {
 		return h > 0 ? qsTr("%1h %2m").arg(h).arg(m) : qsTr("%1m").arg(m)
 	}
 
+	// UPower derives timeToEmpty/timeToFull from Energy/EnergyRate. When
+	// energyRate is near zero (device hasn't settled on a rate yet, or
+	// the HAL just isn't reporting one) that division produces a huge,
+	// meaningless duration rather than an error - so below a small
+	// threshold, show that it's unreliable instead of a bogus number.
+	function timeRemainingText() {
+		if (Math.abs(BatteryHistory.energyRate) < 0.05)
+			return qsTr("Calculating…")
+		return batteryPage.charging
+			? formatDuration(BatteryHistory.timeToFull)
+			: formatDuration(BatteryHistory.timeToEmpty)
+	}
+
 	Component.onCompleted: BatteryHistory.refresh()
 
 	Flickable {
@@ -75,16 +88,18 @@ CutiePage {
 						spacing: 4
 
 						CutieLabel {
-							text: batteryPage.charging
-								? batteryPage.formatDuration(BatteryHistory.timeToFull)
-								: batteryPage.formatDuration(BatteryHistory.timeToEmpty)
-							font.pixelSize: 34
+							width: parent.width
+							text: batteryPage.timeRemainingText()
+							font.pixelSize: 30
 							font.bold: true
+							wrapMode: Text.WordWrap
 						}
 						CutieLabel {
+							width: parent.width
 							text: batteryPage.charging ? qsTr("Time to full charge") : qsTr("Time to empty")
 							font.pixelSize: 12
 							opacity: 0.7
+							wrapMode: Text.WordWrap
 						}
 					}
 
@@ -94,14 +109,18 @@ CutiePage {
 						spacing: 4
 
 						CutieLabel {
+							width: parent.width
 							text: BatteryHistory.energyRate.toFixed(1) + " W"
-							font.pixelSize: 34
+							font.pixelSize: 30
 							font.bold: true
+							wrapMode: Text.WordWrap
 						}
 						CutieLabel {
+							width: parent.width
 							text: qsTr("%1% capacity").arg(Math.round(BatteryHistory.capacity))
 							font.pixelSize: 12
 							opacity: 0.7
+							wrapMode: Text.WordWrap
 						}
 					}
 				}
