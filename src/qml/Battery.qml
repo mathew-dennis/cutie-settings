@@ -199,6 +199,26 @@ CutiePage {
 							return plotX + ((t - oldestTime) / span) * plotW;
 						}
 
+						// ── Draw vertical lines at Midnight (00:00) & Noon (12:00) ──
+						var mark = new Date(oldestTime * 1000);
+						mark.setHours(0, 0, 0, 0); // Start at midnight of the oldest date
+
+						// Advance in 12-hour steps until we reach or pass oldestTime
+						while (mark.getTime() / 1000 < oldestTime) {
+							mark.setHours(mark.getHours() + 12);
+						}
+
+						ctx.strokeStyle = Qt.alpha(Atmosphere.textColor, 0.2);
+						ctx.lineWidth = 1;
+						ctx.beginPath();
+						while (mark.getTime() / 1000 <= newestTime) {
+							var markX = xForTime(mark.getTime() / 1000);
+							ctx.moveTo(markX, 0);
+							ctx.lineTo(markX, plotH);
+							mark.setHours(mark.getHours() + 12);
+						}
+						ctx.stroke();
+
 						// X axis labels (first, middle, last)
 						var mid = Math.floor(pts.length / 2);
 						var labelIdxs = [...new Set([0, mid, pts.length - 1])];
