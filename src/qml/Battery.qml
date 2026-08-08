@@ -293,7 +293,7 @@ CutiePage {
 						font.bold: true
 					}
 
-					// Master switch: freezes apps/services and drops
+					// Master   CutieToggle: freezes apps/services and drops
 					// CPU/GPU into powersave once the screen has been
 					// off for a while.
 					Item {
@@ -322,7 +322,7 @@ CutiePage {
 							}
 						}
 
-						Switch {
+						  CutieToggle {
 							id: screenOffSwitch
 							anchors.right: parent.right
 							anchors.verticalCenter: parent.verticalCenter
@@ -359,7 +359,7 @@ CutiePage {
 							}
 						}
 
-						Switch {
+						  CutieToggle {
 							id: bluetoothSwitch
 							anchors.right: parent.right
 							anchors.verticalCenter: parent.verticalCenter
@@ -396,7 +396,7 @@ CutiePage {
 							}
 						}
 
-						Switch {
+						  CutieToggle {
 							id: radioSwitch
 							anchors.right: parent.right
 							anchors.verticalCenter: parent.verticalCenter
