@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Controls
 import Cutie
 import Cutie.Battery
 
@@ -30,7 +31,13 @@ CutiePage {
 			: formatDuration(BatteryHistory.timeToEmpty)
 	}
 
-	Component.onCompleted: BatteryHistory.refresh()
+	Component.onCompleted: {
+		BatteryHistory.refresh()
+		// PowerSaving.available reflects whether mobile-power-saver-droidian
+		// is installed - re-check on page open rather than trusting
+		// whatever it was when the singleton was first constructed.
+		PowerSaving.refresh()
+	}
 
 	Flickable {
 		anchors.fill: parent
@@ -251,6 +258,151 @@ CutiePage {
 					Connections {
 						target: BatteryHistory
 						function onPointsChanged() { graph.requestPaint(); }
+					}
+				}
+			}
+
+			// ── Power saving card ────────────────────────────────────
+			// Toggles for mobile-power-saver-droidian's org.adishatz.Mps
+			// GSettings. The whole card - not just the toggles inside it -
+			// is gated on PowerSaving.available, since none of this does
+			// anything if that package isn't installed. Column excludes
+			// invisible children from layout, so this collapses to zero
+			// height rather than leaving a gap when it's hidden.
+			Rectangle {
+				id: powerSavingCard
+				visible: PowerSaving.available
+				width: parent.width - 32
+				anchors.horizontalCenter: parent.horizontalCenter
+				height: powerSavingColumn.implicitHeight + 40
+				color: batteryPage.cardColor
+				radius: 16
+
+				Column {
+					id: powerSavingColumn
+					anchors.left: parent.left
+					anchors.right: parent.right
+					anchors.top: parent.top
+					anchors.margins: 20
+					spacing: 20
+
+					CutieLabel {
+						width: parent.width
+						text: qsTr("Power Saving")
+						font.pixelSize: 16
+						font.bold: true
+					}
+
+					// Master switch: freezes apps/services and drops
+					// CPU/GPU into powersave once the screen has been
+					// off for a while.
+					Item {
+						width: parent.width
+						height: Math.max(screenOffLabels.implicitHeight, screenOffSwitch.implicitHeight)
+
+						Column {
+							id: screenOffLabels
+							anchors.left: parent.left
+							anchors.right: screenOffSwitch.left
+							anchors.rightMargin: 12
+							anchors.verticalCenter: parent.verticalCenter
+							spacing: 2
+
+							CutieLabel {
+								width: parent.width
+								text: qsTr("Power saving when screen is off")
+								wrapMode: Text.WordWrap
+							}
+							CutieLabel {
+								width: parent.width
+								text: qsTr("Freezes apps and services and lowers CPU/GPU power once the screen has been off for a while.")
+								font.pixelSize: 12
+								opacity: 0.7
+								wrapMode: Text.WordWrap
+							}
+						}
+
+						Switch {
+							id: screenOffSwitch
+							anchors.right: parent.right
+							anchors.verticalCenter: parent.verticalCenter
+							checked: PowerSaving.screenOffPowerSaving
+							onToggled: PowerSaving.screenOffPowerSaving = checked
+						}
+					}
+
+					// Independent of the doze cycle above - tied
+					// straight to screen state.
+					Item {
+						width: parent.width
+						height: Math.max(bluetoothLabels.implicitHeight, bluetoothSwitch.implicitHeight)
+
+						Column {
+							id: bluetoothLabels
+							anchors.left: parent.left
+							anchors.right: bluetoothSwitch.left
+							anchors.rightMargin: 12
+							anchors.verticalCenter: parent.verticalCenter
+							spacing: 2
+
+							CutieLabel {
+								width: parent.width
+								text: qsTr("Bluetooth power saving")
+								wrapMode: Text.WordWrap
+							}
+							CutieLabel {
+								width: parent.width
+								text: qsTr("Reduces Bluetooth power use while the screen is off.")
+								font.pixelSize: 12
+								opacity: 0.7
+								wrapMode: Text.WordWrap
+							}
+						}
+
+						Switch {
+							id: bluetoothSwitch
+							anchors.right: parent.right
+							anchors.verticalCenter: parent.verticalCenter
+							checked: PowerSaving.bluetoothPowerSaving
+							onToggled: PowerSaving.bluetoothPowerSaving = checked
+						}
+					}
+
+					// Off by default upstream - lowering the modem's
+					// data mode can add call/SMS latency on some modems.
+					Item {
+						width: parent.width
+						height: Math.max(radioLabels.implicitHeight, radioSwitch.implicitHeight)
+
+						Column {
+							id: radioLabels
+							anchors.left: parent.left
+							anchors.right: radioSwitch.left
+							anchors.rightMargin: 12
+							anchors.verticalCenter: parent.verticalCenter
+							spacing: 2
+
+							CutieLabel {
+								width: parent.width
+								text: qsTr("Radio power saving")
+								wrapMode: Text.WordWrap
+							}
+							CutieLabel {
+								width: parent.width
+								text: qsTr("Lowers the modem to a slower data mode while the screen is off. May increase call or SMS latency.")
+								font.pixelSize: 12
+								opacity: 0.7
+								wrapMode: Text.WordWrap
+							}
+						}
+
+						Switch {
+							id: radioSwitch
+							anchors.right: parent.right
+							anchors.verticalCenter: parent.verticalCenter
+							checked: PowerSaving.radioPowerSaving
+							onToggled: PowerSaving.radioPowerSaving = checked
+						}
 					}
 				}
 			}
