@@ -285,7 +285,7 @@ CutiePage {
                         visible: currentTab === 1 && customAtmospheres.length === 0
                         Layout.fillWidth: true
                         text: qsTr("Click the + icon to add custom themes")
-                        font.pixelSize: 16
+                        font.pixelSize: 8
                         opacity: 0.9
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WordWrap
@@ -395,8 +395,7 @@ CutiePage {
                 CutieTextField {
                     Layout.fillWidth: true
                     placeholderText: qsTr("Theme name")
-                    text: newAtmospherePopup.themeName
-                    onTextChanged: newAtmospherePopup.themeName = text
+                    onAccepted: newAtmospherePopup.themeName = text
                 }
 
                 // Wallpaper picker / preview
