@@ -14,7 +14,7 @@ CutiePage {
     )
     property int cardRadius:  16
     property int cardPadding: 20
-    property int tabHeight:   52
+    property int tabHeight:   44
     property var newAtmosphereComponent: Qt.createComponent("NewAtmosphere.qml")
     property var newAtmospherePopup: null
 
@@ -123,7 +123,7 @@ CutiePage {
                                 text: modelData
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
-                                font.pixelSize: 18
+                                font.pixelSize: 16
                                 font.bold: tabButton.active
                                 opacity: tabButton.active ? 1.0 : 0.6
 
@@ -152,7 +152,7 @@ CutiePage {
                     ListView {
                         id: themeStrip
                         Layout.fillWidth: true
-                        Layout.preferredHeight: 100
+                        Layout.preferredHeight: 150
                         model: currentTab === 0 ? defaultAtmospheres : customAtmospheres
                         orientation: Qt.Horizontal
                         clip: true
@@ -166,14 +166,14 @@ CutiePage {
                             id: addTile
 
                             Item {
-                                width: 100
-                                height: 100
+                                width: 150
+                                height: 150
 
                                 Rectangle {
-                                    x: 16
-                                    y: 6
-                                    width: 68
-                                    height: 88
+                                    x: 24
+                                    y: 9
+                                    width: 102
+                                    height: 132
                                     radius: 8
                                     color: "transparent"
                                     border.color: Atmosphere.textColor
@@ -183,7 +183,7 @@ CutiePage {
                                     Text {
                                         anchors.centerIn: parent
                                         text: "+"
-                                        font.pixelSize: 32
+                                        font.pixelSize: 48
                                         font.family: "Lato"
                                         color: Atmosphere.textColor
                                     }
@@ -208,17 +208,17 @@ CutiePage {
                         }
 
                         delegate: Item {
-                            width: 100
-                            height: 100
+                            width: 150
+                            height: 150
 
                             readonly property bool isSelected: modelData.path === Atmosphere.path
 
                             Image {
                                 id: wallpaper
-                                x: 20
-                                y: 10
-                                width: 60
-                                height: 80
+                                x: 30
+                                y: 15
+                                width: 90
+                                height: 120
                                 source: "file:/" + modelData.path + "/wallpaper.jpg"
                                 fillMode: Image.PreserveAspectCrop
                                 asynchronous: true

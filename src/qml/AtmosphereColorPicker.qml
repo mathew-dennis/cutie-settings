@@ -14,8 +14,8 @@ Rectangle {
     signal accepted(color selectedColor)
     signal cancelled()
 
-    width: 320
-    height: 430
+    implicitWidth: 320
+    implicitHeight: 430
     radius: 16
     color: Atmosphere.primaryColor
     border.color: Atmosphere.textColor

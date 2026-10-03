@@ -7,11 +7,11 @@ import QtQuick.Dialogs
 Popup {
     id: newAtmospherePopup
     anchors.centerIn: parent
-    width: Math.min(parent ? parent.width - 40 : 360, 420)
+    width: Math.min(parent ? parent.width - 32 : 368, 420)
     height: Math.max(0, Math.min(pageContent.implicitHeight + padding * 2, parent ? parent.height - 40 : 700))
     modal: true
     focus: true
-    padding: 20
+    padding: 12
     closePolicy: Popup.CloseOnEscape
     property url wallpaperUrl: ""
     property string themeName: ""
@@ -267,6 +267,7 @@ Popup {
 
             AtmosphereColorPicker {
                 visible: newAtmospherePopup.pickingColor
+                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
                 initialColor: newAtmospherePopup[newAtmospherePopup.editingField]
                 onAccepted: function(color) {
