@@ -16,6 +16,7 @@ CutiePage {
     property int cardPadding: 20
     property int tabHeight:   52
     property var newAtmosphereComponent: Qt.createComponent("NewAtmosphere.qml")
+    property var newAtmospherePopup: null
 
     // 0 = Default, 1 = Custom
     property int currentTab: 0
@@ -190,8 +191,16 @@ CutiePage {
                                     MouseArea {
                                         anchors.fill: parent
                                         onClicked: {
-                                            if (newAtmosphereComponent.status === Component.Ready)
-                                                mainWindow.pageStack.push(newAtmosphereComponent)
+                                            if (newAtmosphereComponent.status === Component.Ready) {
+                                                if (!newAtmospherePopup)
+                                                    newAtmospherePopup = newAtmosphereComponent.createObject(atmospherePage)
+                                                if (newAtmospherePopup) {
+                                                    newAtmospherePopup.reset()
+                                                    newAtmospherePopup.open()
+                                                }
+                                            } else if (newAtmosphereComponent.status === Component.Error) {
+                                                console.warn("New atmosphere popup failed to load:", newAtmosphereComponent.errorString())
+                                            }
                                         }
                                     }
                                 }
