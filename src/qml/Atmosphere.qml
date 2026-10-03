@@ -17,6 +17,7 @@ CutiePage {
     property int tabHeight:   44
     property var newAtmosphereComponent: Qt.createComponent("NewAtmosphere.qml")
     property var newAtmospherePopup: null
+    property string deleteTargetPath: ""
 
     // 0 = Default, 1 = Custom
     property int currentTab: 0
@@ -30,6 +31,8 @@ CutiePage {
     readonly property var customAtmospheres: Atmosphere.atmosphereList.filter(
         function(item) { return item.editable === true }
     )
+
+    onCurrentTabChanged: deleteTargetPath = ""
 
     // Open on the tab that holds the active theme.
     Component.onCompleted: {
@@ -234,12 +237,51 @@ CutiePage {
                                     }
                                 }
 
+                                MouseArea {
+                                    anchors.fill: parent
+                                    property bool held: false
+                                    onPressed: held = false
+                                    onPressAndHold: {
+                                        if (modelData.editable === true) {
+                                            held = true
+                                            deleteTargetPath = modelData.path
+                                        }
+                                    }
+                                    onClicked: {
+                                        if (!held)
+                                            Atmosphere.path = modelData.path
+                                    }
+                                }
+
                                 Text {
                                     anchors.centerIn: parent
                                     text: modelData.name
+                                    visible: deleteTargetPath !== modelData.path
                                     font.pixelSize: 14
                                     font.family: "Lato"
                                     color: (modelData.variant === "dark") ? "#FFFFFF" : "#000000"
+                                }
+
+                                CutieButton {
+                                    anchors.centerIn: parent
+                                    width: 40
+                                    height: 40
+                                    visible: deleteTargetPath === modelData.path
+                                    icon.name: "user-trash-symbolic"
+                                    icon.color: "#ff3b30"
+                                    icon.width: 24
+                                    icon.height: 24
+                                    background: Rectangle {
+                                        radius: 8
+                                        color: Qt.rgba(0, 0, 0, 0.55)
+                                        border.color: "#ff3b30"
+                                        border.width: 1
+                                    }
+                                    onClicked: {
+                                        deleteConfirmation.atmosphereName = modelData.name
+                                        deleteConfirmation.errorText = ""
+                                        deleteConfirmation.open()
+                                    }
                                 }
                             }
 
@@ -251,7 +293,8 @@ CutiePage {
                                 anchors.margins: -4
                                 radius: 8
                                 color: "transparent"
-                                border.color: Atmosphere.textColor
+                                border.color: deleteTargetPath === modelData.path
+                                              ? "#ff3b30" : Atmosphere.textColor
                                 border.width: isSelected ? 2 : 1
                                 opacity: isSelected ? 1.0 : 0.6
 
@@ -266,10 +309,6 @@ CutiePage {
                                 }
                             }
 
-                            MouseArea {
-                                anchors.fill: ring
-                                onClicked: Atmosphere.path = modelData.path
-                            }
                         }
                     }
 
@@ -281,6 +320,69 @@ CutiePage {
                         opacity: 0.9
                         horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.WordWrap
+                    }
+                }
+            }
+        }
+    }
+
+    Popup {
+        id: deleteConfirmation
+        anchors.centerIn: parent
+        width: Math.min(parent ? parent.width - 32 : 320, 360)
+        modal: true
+        focus: true
+        padding: 20
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+        property string atmosphereName: ""
+        property string errorText: ""
+
+        background: Rectangle {
+            radius: 16
+            color: Atmosphere.primaryColor
+            border.color: Atmosphere.textColor
+            border.width: 1
+        }
+
+        contentItem: ColumnLayout {
+            spacing: 16
+
+            CutieLabel {
+                Layout.fillWidth: true
+                text: qsTr("Do you want to delete this theme?")
+                wrapMode: Text.WordWrap
+                font.pixelSize: 16
+            }
+
+            CutieLabel {
+                Layout.fillWidth: true
+                visible: deleteConfirmation.errorText !== ""
+                text: deleteConfirmation.errorText
+                color: "#ff5555"
+                wrapMode: Text.WordWrap
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 12
+
+                CutieButton {
+                    Layout.fillWidth: true
+                    text: qsTr("Cancel")
+                    onClicked: deleteConfirmation.close()
+                }
+
+                CutieButton {
+                    Layout.fillWidth: true
+                    text: qsTr("Delete")
+                    onClicked: {
+                        if (Atmosphere.deleteAtmosphere(deleteConfirmation.atmosphereName)) {
+                            deleteTargetPath = ""
+                            deleteConfirmation.close()
+                        } else {
+                            deleteConfirmation.errorText = qsTr("Couldn't delete this theme.")
+                        }
                     }
                 }
             }
