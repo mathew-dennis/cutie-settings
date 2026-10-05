@@ -6,6 +6,7 @@ import QtQuick.Controls
 
 CutiePage {
 	id: authPage
+	swipeNavigationEnabled: false
 
 	CutieScreenLock {
 		id: lockAuthClient
