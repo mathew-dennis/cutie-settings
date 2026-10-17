@@ -29,19 +29,29 @@ Popup {
     readonly property color pickedColor: Qt.hsva(pickHue, pickSat, pickVal, 1)
     readonly property int cardPadding: 20
 
+    // Live preview: once a wallpaper is chosen, the popup fades to the new palette
+    readonly property bool previewing: wallpaperUrl != ""
+    readonly property int previewDuration: 1200
+    property color uiPrimary: previewing ? primaryColor : Atmosphere.primaryColor
+    property color uiSecondaryAlpha: previewing ? Qt.rgba(secondaryColor.r, secondaryColor.g, secondaryColor.b, 0x65 / 255) : Atmosphere.secondaryAlphaColor
+    property color uiText: previewing ? textColorValue : Atmosphere.textColor
+    Behavior on uiPrimary { ColorAnimation { duration: newAtmospherePopup.previewDuration; easing.type: Easing.InOutQuad } }
+    Behavior on uiSecondaryAlpha { ColorAnimation { duration: newAtmospherePopup.previewDuration; easing.type: Easing.InOutQuad } }
+    Behavior on uiText { ColorAnimation { duration: newAtmospherePopup.previewDuration; easing.type: Easing.InOutQuad } }
+
     Overlay.modal: Rectangle {
         color: "#99000000"
     }
 
     background: Rectangle {
         radius: 16
-        color: Atmosphere.primaryColor
-        border.color: Atmosphere.textColor
+        color: newAtmospherePopup.uiPrimary
+        border.color: newAtmospherePopup.uiText
         border.width: 1
         Rectangle {
             anchors.fill: parent
             radius: parent.radius
-            color: Atmosphere.secondaryAlphaColor
+            color: newAtmospherePopup.uiSecondaryAlpha
         }
     }
 
@@ -91,8 +101,8 @@ Popup {
         implicitHeight: 50
         background: Rectangle {
             radius: 8
-            color: primary ? Atmosphere.primaryColor : "transparent"
-            border.color: primary ? Atmosphere.primaryColor : Atmosphere.secondaryAlphaColor
+            color: primary ? newAtmospherePopup.uiPrimary : "transparent"
+            border.color: primary ? newAtmospherePopup.uiPrimary : newAtmospherePopup.uiSecondaryAlpha
             border.width: 2
             opacity: parent.enabled ? 1.0 : 0.4
         }
@@ -114,12 +124,14 @@ Popup {
 
                 CutieLabel {
                     text: qsTr("New Atmosphere")
+                    color: newAtmospherePopup.uiText
                     font.pixelSize: 24
                     font.weight: Font.Black
                 }
 
                 CutieTextField {
                     id: themeNameField
+                    color: newAtmospherePopup.uiText
                     Layout.fillWidth: true
                     placeholderText: qsTr("Theme name")
                     onTextChanged: {
@@ -134,7 +146,7 @@ Popup {
                     Layout.preferredHeight: 160
                     radius: 12
                     color: Qt.rgba(0, 0, 0, 0.15)
-                    border.color: Atmosphere.textColor
+                    border.color: newAtmospherePopup.uiText
                     border.width: 1
                     opacity: newAtmospherePopup.wallpaperUrl == "" ? 0.8 : 1.0
 
@@ -187,7 +199,7 @@ Popup {
                                 height: 52
                                 radius: 26
                                 color: "transparent"
-                                border.color: Atmosphere.textColor
+                                border.color: newAtmospherePopup.uiText
                                 border.width: 1
                                 opacity: 0.9
 
@@ -215,6 +227,7 @@ Popup {
 
                             CutieLabel {
                                 text: modelData.label
+                                color: newAtmospherePopup.uiText
                                 font.pixelSize: 12
                                 Layout.alignment: Qt.AlignHCenter
                             }
