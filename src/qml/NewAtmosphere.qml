@@ -200,7 +200,15 @@ Popup {
 
                                 MouseArea {
                                     anchors.fill: parent
-                                    onClicked: newAtmospherePopup.beginPick(modelData.key)
+                                    onClicked: {
+                                        if (modelData.key === "textColorValue") {
+                                            var toDark = newAtmospherePopup.textColorValue.toString() === "#000000"
+                                            newAtmospherePopup.textColorValue = toDark ? "#ffffff" : "#000000"
+                                            newAtmospherePopup.variantValue = toDark ? "dark" : "light"
+                                        } else {
+                                            newAtmospherePopup.beginPick(modelData.key)
+                                        }
+                                    }
                                 }
                             }
 
