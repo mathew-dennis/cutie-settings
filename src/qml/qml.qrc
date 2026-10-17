@@ -16,6 +16,7 @@
         <file>Atmosphere.qml</file>
         <file>NewAtmosphere.qml</file>
         <file>AtmosphereColorPicker.qml</file>
+        <file>AtmosphereFilePicker.qml</file>
         <file>LockScreen.qml</file>
         <file>LockScreenAuth.qml</file>
         

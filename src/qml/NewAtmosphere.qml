@@ -2,7 +2,6 @@ import Cutie
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtQuick.Dialogs
 
 Popup {
     id: newAtmospherePopup
@@ -22,6 +21,7 @@ Popup {
     property string variantValue: "light"
     property string errorText: ""
     property bool pickingColor: false
+    property bool pickingFile: false
     property string editingField: ""
     property real pickHue: 0
     property real pickSat: 1
@@ -50,6 +50,7 @@ Popup {
         themeName = ""
         errorText = ""
         pickingColor = false
+        pickingFile = false
         themeNameField.text = ""
         primaryColor = "#cccccc"
         secondaryColor = "#999999"
@@ -107,7 +108,7 @@ Popup {
             spacing: 14
             // ── Form ─────────────────────────────────────────────────
             ColumnLayout {
-                visible: !newAtmospherePopup.pickingColor
+                visible: !newAtmospherePopup.pickingColor && !newAtmospherePopup.pickingFile
                 Layout.fillWidth: true
                 spacing: 14
 
@@ -155,7 +156,7 @@ Popup {
 
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: wallpaperFileDialog.open()
+                        onClicked: newAtmospherePopup.pickingFile = true
                     }
                 }
 
@@ -273,6 +274,18 @@ Popup {
                 }
             }
 
+            AtmosphereFilePicker {
+                visible: newAtmospherePopup.pickingFile
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter
+                onAccepted: function(fileUrl) {
+                    newAtmospherePopup.wallpaperUrl = fileUrl
+                    newAtmospherePopup.applyExtractedPalette(Atmosphere.extractPalette(fileUrl))
+                    newAtmospherePopup.pickingFile = false
+                }
+                onCancelled: newAtmospherePopup.pickingFile = false
+            }
+
             AtmosphereColorPicker {
                 visible: newAtmospherePopup.pickingColor
                 Layout.fillWidth: true
@@ -285,16 +298,6 @@ Popup {
                 onCancelled: newAtmospherePopup.pickingColor = false
             }
 
-        }
-    }
-
-    FileDialog {
-        id: wallpaperFileDialog
-        title: qsTr("Select wallpaper")
-        nameFilters: [qsTr("Image files") + " (*.jpg *.jpeg *.png *.bmp)"]
-        onAccepted: {
-            newAtmospherePopup.wallpaperUrl = selectedFile
-            newAtmospherePopup.applyExtractedPalette(Atmosphere.extractPalette(selectedFile))
         }
     }
 }

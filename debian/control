@@ -25,6 +25,8 @@ Depends: ${misc:Depends},
          qml6-module-cutievolume,
          qml6-module-cutienetworking,
          qml6-module-cutiescreenlock,
+         qml6-module-qt-labs-folderlistmodel,
+         qml6-module-qtcore,
          polkit-kde-agent-1,
 Description: This package contains Cutie Settings app.
 
