@@ -132,6 +132,7 @@ Popup {
                 CutieTextField {
                     id: themeNameField
                     color: newAtmospherePopup.uiText
+                    placeholderTextColor: Qt.alpha(newAtmospherePopup.uiText, 0.6)
                     Layout.fillWidth: true
                     placeholderText: qsTr("Theme name")
                     onTextChanged: {
