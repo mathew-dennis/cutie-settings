@@ -19,6 +19,7 @@ Popup {
     property color accentColor: "#666666"
     property color textColorValue: "#000000"
     property string variantValue: "light"
+    property string particleEffectValue: "none"
     property string errorText: ""
     property bool pickingColor: false
     property bool pickingFile: false
@@ -28,14 +29,18 @@ Popup {
     property real pickVal: 1
     readonly property color pickedColor: Qt.hsva(pickHue, pickSat, pickVal, 1)
     readonly property int cardPadding: 20
+    readonly property var particleKeys: ["none", "snow", "autumn", "spring", "rain", "night"]
+    readonly property var particleLabels: [qsTr("None"), qsTr("Snow"), qsTr("Autumn leaves"), qsTr("Spring petals"), qsTr("Rain"), qsTr("Shooting stars")]
 
     // Live preview: once a wallpaper is chosen, the popup fades to the new palette
     readonly property bool previewing: wallpaperUrl != ""
     readonly property int previewDuration: 1200
     property color uiPrimary: previewing ? primaryColor : Atmosphere.primaryColor
+    property color uiSecondary: previewing ? secondaryColor : Atmosphere.secondaryColor
     property color uiSecondaryAlpha: previewing ? Qt.rgba(secondaryColor.r, secondaryColor.g, secondaryColor.b, 0x65 / 255) : Atmosphere.secondaryAlphaColor
     property color uiText: previewing ? textColorValue : Atmosphere.textColor
     Behavior on uiPrimary { ColorAnimation { duration: newAtmospherePopup.previewDuration; easing.type: Easing.InOutQuad } }
+    Behavior on uiSecondary { ColorAnimation { duration: newAtmospherePopup.previewDuration; easing.type: Easing.InOutQuad } }
     Behavior on uiSecondaryAlpha { ColorAnimation { duration: newAtmospherePopup.previewDuration; easing.type: Easing.InOutQuad } }
     Behavior on uiText { ColorAnimation { duration: newAtmospherePopup.previewDuration; easing.type: Easing.InOutQuad } }
 
@@ -67,6 +72,8 @@ Popup {
         accentColor = "#666666"
         textColorValue = "#000000"
         variantValue = "light"
+        particleEffectValue = "none"
+        particleCombo.currentIndex = 0
     }
 
     function applyExtractedPalette(palette) {
@@ -105,6 +112,73 @@ Popup {
             border.color: primary ? newAtmospherePopup.uiPrimary : newAtmospherePopup.uiSecondaryAlpha
             border.width: 2
             opacity: parent.enabled ? 1.0 : 0.4
+        }
+    }
+
+    component CutieDropdownList: ComboBox {
+        id: control
+
+        contentItem: CutieLabel {
+            text: control.currentText
+            font.pixelSize: 14
+            color: newAtmospherePopup.uiText
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignLeft
+            leftPadding: 10
+            rightPadding: 20
+            elide: Text.ElideRight
+        }
+
+        background: Rectangle {
+            implicitHeight: 30
+            color: newAtmospherePopup.uiSecondary
+            border.color: control.visualFocus ? newAtmospherePopup.uiPrimary : newAtmospherePopup.uiSecondaryAlpha
+            border.width: control.visualFocus ? 2 : 1
+            radius: 6
+        }
+
+        delegate: ItemDelegate {
+            id: delegateItem
+            width: parent ? parent.width - 6 : 100
+            height: 30
+            anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
+
+            contentItem: CutieLabel {
+                text: modelData
+                color: delegateItem.highlighted ? newAtmospherePopup.uiPrimary : newAtmospherePopup.uiText
+                font.bold: delegateItem.highlighted
+                font.pixelSize: 14
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                leftPadding: 10
+            }
+
+            background: Rectangle {
+                color: delegateItem.highlighted ? Qt.alpha(newAtmospherePopup.uiSecondaryAlpha, 0.1) : "transparent"
+                radius: 6
+            }
+        }
+
+        popup: Popup {
+            y: control.height + 4
+            width: control.width
+            implicitHeight: Math.min(contentItem.implicitHeight + 12, 250)
+            padding: 6
+
+            background: Rectangle {
+                color: newAtmospherePopup.uiSecondary
+                border.color: newAtmospherePopup.uiSecondaryAlpha
+                border.width: 1
+                radius: 8
+            }
+
+            contentItem: ListView {
+                clip: true
+                implicitHeight: contentHeight
+                model: control.popup.visible ? control.delegateModel : null
+                currentIndex: control.highlightedIndex
+                ScrollIndicator.vertical: ScrollIndicator { }
+            }
         }
     }
 
@@ -236,6 +310,24 @@ Popup {
                     }
                 }
 
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 12
+
+                    CutieLabel {
+                        text: qsTr("Particle effect")
+                        color: newAtmospherePopup.uiText
+                        font.pixelSize: 14
+                    }
+
+                    CutieDropdownList {
+                        id: particleCombo
+                        Layout.fillWidth: true
+                        model: newAtmospherePopup.particleLabels
+                        onActivated: newAtmospherePopup.particleEffectValue = newAtmospherePopup.particleKeys[currentIndex]
+                    }
+                }
+
                 CutieLabel {
                     visible: newAtmospherePopup.errorText !== ""
                     text: newAtmospherePopup.errorText
@@ -266,7 +358,8 @@ Popup {
                                 "accentColor": newAtmospherePopup.accentColor.toString(),
                                 "textColor": newAtmospherePopup.textColorValue.toString(),
                                 "primaryAlphaColor": "#80" + newAtmospherePopup.primaryColor.toString().substring(1),
-                                "secondaryAlphaColor": "#65" + newAtmospherePopup.secondaryColor.toString().substring(1)
+                                "secondaryAlphaColor": "#65" + newAtmospherePopup.secondaryColor.toString().substring(1),
+                                "particle-effects": newAtmospherePopup.particleEffectValue
                             }
                             try {
                                 var ok = Atmosphere.saveAtmosphere(
