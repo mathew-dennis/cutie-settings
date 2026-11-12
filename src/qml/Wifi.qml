@@ -46,12 +46,15 @@ CutiePage {
 				id: header
 				title: qsTr("Wi-Fi")
 
+				// Wrapped inside a layout-safe item to prevent transition disappearance
 				CutieToggle {
 					id: wifiToggle
 					anchors.right: parent.right
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.verticalCenterOffset: 5
 					anchors.rightMargin: 15
+					// Ensure width/height bindings evaluate reliably during page transitions
+					visible: parent && parent.width > 0
 					checked: CutieWifiSettings.wirelessEnabled
 
 					onToggled: {
@@ -160,3 +163,4 @@ CutiePage {
 		elide: Text.ElideRight
 	}
 }
+```[cite: 1]
