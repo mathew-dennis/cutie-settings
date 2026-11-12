@@ -30,7 +30,7 @@ CutiePage {
 				Layout.fillWidth: true
 
 				CutieToggle {
-					anchors.right:  wifiPage.right
+					anchors.right:  screen.right
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.verticalCenterOffset: 5
 					anchors.rightMargin: 5
