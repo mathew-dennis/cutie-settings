@@ -23,7 +23,7 @@ CutiePage {
 		}
 
 		header: ColumnLayout {
-			width: parent.width
+			width: wifiPage.width
 			CutiePageHeader {
 				id: wifiPageHeader
 				title: qsTr("Wi-Fi")
