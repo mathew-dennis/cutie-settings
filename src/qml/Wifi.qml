@@ -30,12 +30,11 @@ CutiePage {
 				width: parent.width
 
 				CutieToggle {
-					anchors.right: parent.right
+					anchors.left: parent.right
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.verticalCenterOffset: 5
 					anchors.rightMargin: 5
 					checked: CutieWifiSettings.wirelessEnabled
-					visible: true
 					onToggled: {
 						CutieWifiSettings.wirelessEnabled = checked;
 					}
