@@ -27,6 +27,7 @@ CutiePage {
 			CutiePageHeader {
 				id: wifiPageHeader
 				title: qsTr("Wi-Fi")
+				Layout.fillWidth: true
 
 				CutieToggle {
 					anchors.right:  wifiPage.right
