@@ -30,6 +30,7 @@ CutiePage {
 				width: parent.width
 
 				CutieToggle {
+					id: wifiToggle
 					anchors.right: parent.right
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.verticalCenterOffset: 5
