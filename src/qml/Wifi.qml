@@ -25,16 +25,17 @@ CutiePage {
 		header: ColumnLayout {
 			width: parent.width
 			CutiePageHeader {
-				id: wifiPageHeader
+				id: header
 				title: qsTr("Wi-Fi")
-                Layout.fillWidth: true
+				Layout.fillWidth: true
 
 				CutieToggle {
-					anchors.right:  parent.right
+					anchors.right: parent.right
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.verticalCenterOffset: 5
-					anchors.rightMargin: 5
+					anchors.rightMargin: 15
 					checked: CutieWifiSettings.wirelessEnabled
+
 					onToggled: {
 						CutieWifiSettings.wirelessEnabled = checked;
 					}
