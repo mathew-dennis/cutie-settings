@@ -30,7 +30,7 @@ CutiePage {
 				width: parent.width
 
 				CutieToggle {
-					anchors.left: parent.right
+					anchors.right:  header.right
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.verticalCenterOffset: 5
 					anchors.rightMargin: 5
