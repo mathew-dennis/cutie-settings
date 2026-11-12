@@ -4,7 +4,7 @@ import QtQuick
 import QtQuick.Layouts
 
 CutiePage {
-	id: page
+	id: wifipage
 	property var pskPage: Qt.createComponent("WifiPsk.qml")
 	property var savedPage: Qt.createComponent("SavedWifis.qml")
 
@@ -33,10 +33,9 @@ CutiePage {
 					anchors.right: parent.right
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.verticalCenterOffset: 5
-					anchors.rightMargin: 45
+					anchors.rightMargin: 5
 					checked: CutieWifiSettings.wirelessEnabled
 					visible: true
-                    width: 30
 					onToggled: {
 						CutieWifiSettings.wirelessEnabled = checked;
 					}
