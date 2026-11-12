@@ -9,15 +9,16 @@ CutieWindow {
 	title: qsTr("Settings")
 
 	property var pages: [
-		{
-			text: qsTr("Wi-Fi"),
-			icon: "network-wireless-symbolic",
-			component: Qt.createComponent("Wifi.qml")
-		},
+
 		{
 			text: qsTr("Mobile Network"),
 			icon: "network-cellular-symbolic",
 			component: Qt.createComponent("MobileNetwork.qml")
+		},
+		{
+			text: qsTr("Wi-Fi"),
+			icon: "network-wireless-symbolic",
+			component: Qt.createComponent("Wifi.qml")
 		},
 		{
 			text: qsTr("Audio"),
