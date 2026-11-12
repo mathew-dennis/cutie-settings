@@ -23,11 +23,10 @@ CutiePage {
 		}
 
 		header: ColumnLayout {
-			width: wifiPage.width
+			width: screen.width
 			CutiePageHeader {
 				id: wifiPageHeader
 				title: qsTr("Wi-Fi")
-				width: wifiPage.width
 
 				CutieToggle {
 					anchors.right:  wifiPage.right
