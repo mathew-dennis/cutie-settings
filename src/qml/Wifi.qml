@@ -4,7 +4,7 @@ import QtQuick
 import QtQuick.Layouts
 
 CutiePage {
-	id: wifipage
+	id: wifiPage
 	property var pskPage: Qt.createComponent("WifiPsk.qml")
 	property var savedPage: Qt.createComponent("SavedWifis.qml")
 
