@@ -35,6 +35,7 @@ CutiePage {
 					anchors.verticalCenterOffset: 5
 					anchors.rightMargin: 5
 					checked: CutieWifiSettings.wirelessEnabled
+                    visible:false
 					onToggled: {
 						CutieWifiSettings.wirelessEnabled = checked;
 					}
