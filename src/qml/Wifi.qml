@@ -33,7 +33,7 @@ CutiePage {
 					anchors.right: parent.right
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.verticalCenterOffset: 5
-					anchors.rightMargin: 15
+					anchors.rightMargin: 45
 					checked: CutieWifiSettings.wirelessEnabled
 					visible: true
                     width: 30
