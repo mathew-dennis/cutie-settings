@@ -54,7 +54,6 @@ CutiePage {
 					anchors.verticalCenterOffset: 5
 					anchors.rightMargin: 15
 					// Ensure width/height bindings evaluate reliably during page transitions
-					visible: true
 					checked: CutieWifiSettings.wirelessEnabled
 
 					onToggled: {
